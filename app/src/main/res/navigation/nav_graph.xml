@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/navigation_home">
+    <fragment
+        android:id="@+id/navigation_home"
+        android:name="com.daya.jojoman.Fdashboard"
+        android:label="fragment_fdashboard"
+        tools:layout="@layout/fragment_fdashboard" />
+    <fragment
+        android:id="@+id/navigation_fovorite"
+        android:name="com.daya.jojoman.Ffavorite"
+        android:label="fragment_ffavorite"
+        tools:layout="@layout/fragment_ffavorite" />
+    <fragment
+        android:id="@+id/navigation_history"
+        android:name="com.daya.jojoman.Fhistory"
+        android:label="fragment_fhistory"
+        tools:layout="@layout/fragment_fhistory" />
+    <fragment
+        android:id="@+id/navigation_settings"
+        android:name="com.daya.jojoman.Fsettings"
+        android:label="fragment_fsettings"
+        tools:layout="@layout/fragment_fsettings" />
+</navigation>

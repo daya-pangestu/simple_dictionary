@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <androidx.cardview.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:elevation="3dp"
+        app:cardCornerRadius="4dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/recycler_kata"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="8dp"
+                android:textSize="24dp"
+                tools:text="kata" />
+
+            <TextView
+                android:id="@+id/recycler_penjelasan"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                tools:text="/home/daya/project/IntelliJIDEAProjects/jojoman/app/src/main/res/layout/recycler.xml/home/daya/project/IntelliJIDEAProjects/jojoman/app/src/main/res/layout/recycler.xml/home/daya/project/IntelliJIDEAProjects/jojoman/app/src/main/res/layout/recycler.xml"
+                />
+
+        </LinearLayout>
+    </androidx.cardview.widget.CardView>
+
+</LinearLayout>

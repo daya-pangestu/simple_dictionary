@@ -1,0 +1,11 @@
+<resources>
+    <string name="app_name">jojoman</string>
+    <string name="title_home">Home</string>
+    <string name="favorite">favorite</string>
+    <string name="history">history</string>
+    <string name="setting">settings</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="search">search</string>
+</resources>
