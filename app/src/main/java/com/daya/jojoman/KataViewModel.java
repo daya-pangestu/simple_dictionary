@@ -18,16 +18,24 @@ import androidx.lifecycle.LiveData;
 public class KataViewModel extends AndroidViewModel {
 
     private DictRepository dictRepository;
+    private LiveData<List<DictIndonesia>> limitRandomKata;
     private LiveData<List<DictIndonesia>> allKata;
+
 
 
     public KataViewModel(@NonNull Application application) {
         super(application);
         dictRepository = new DictRepository(application);
+        limitRandomKata = dictRepository.getLimitRandomKata();
         allKata = dictRepository.getAllKata();
+
     }
 
-    public LiveData<List<DictIndonesia>> getAllKataKata() {
+    public LiveData<List<DictIndonesia>> getLimitRandomKata() {
+        return limitRandomKata;
+    }
+
+    public LiveData<List<DictIndonesia>> getAllKata() {
         return allKata;
     }
 

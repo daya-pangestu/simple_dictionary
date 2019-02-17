@@ -10,10 +10,8 @@ import androidx.room.Delete;
 import androidx.room.Insert;
 import androidx.room.Query;
 import androidx.room.RoomWarnings;
-import androidx.room.Transaction;
 import androidx.room.Update;
 
-import static android.content.ContentValues.TAG;
 
 @Dao
 public interface DictIdDao {
@@ -24,7 +22,7 @@ public interface DictIdDao {
 
     @Query("SELECT  idIndo,kata FROM  DictIndonesia ORDER BY RANDOM() LIMIT 15")
     @SuppressWarnings(RoomWarnings.CURSOR_MISMATCH)
-    LiveData<List<DictIndonesia>> getkataRandom();
+    LiveData<List<DictIndonesia>> get15kataRandom();
 
     @Insert
     void insert(DictIndonesia dictIndonesia);

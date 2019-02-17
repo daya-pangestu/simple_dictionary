@@ -1,5 +1,6 @@
 package com.daya.jojoman;
 
+import android.app.Application;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -17,6 +18,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.LiveData;
@@ -30,22 +32,12 @@ public class Splashscreen extends AppCompatActivity {
 
     @BindView(R.id.splash_progress)
     ProgressBar splashProgress;
-    KataViewModel kataViewModel;
-    DictRepository dictRepository;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splashscreen);
         ButterKnife.bind(this);
-        Stetho.initialize(Stetho.newInitializerBuilder(this)
-                .enableDumpapp(Stetho.defaultDumperPluginsProvider(this))
-                .enableWebKitInspector(Stetho.defaultInspectorModulesProvider(this))
-                .build());
-
-
-        kataViewModel = new KataViewModel(getApplication());
-        kataViewModel = ViewModelProviders.of(Splashscreen.this).get(KataViewModel.class);
-        dictRepository = new DictRepository(getApplication());
+        Stetho.initializeWithDefaults(this);
 
         new LoadData().execute();
 
@@ -57,36 +49,36 @@ public class Splashscreen extends AppCompatActivity {
         double dmaxProgress;
         KataViewModel kataViewModel;
         Appreferen appreferen;
-
         @Override
+
         protected void onPreExecute() {
+            kataViewModel = ViewModelProviders.of(Splashscreen.this).get(KataViewModel.class);
+            appreferen = new Appreferen(getApplicationContext());
 
         }
 
         @Override
         protected Void doInBackground(Void... voids) {
-            //Boolean firstrun = appreferen.getFirstRun();
+            Boolean firstrun = appreferen.getFirstRun();
 
-            //if (firstrun) {
+            if (firstrun) {
 
-            List<DictIndonesia> dictIndonesiaList = preLoadDict();
+              List<DictIndonesia> dictIndonesiaList = preLoadDict();
 
             dprogres = 20;
             int panjangdict =dictIndonesiaList.size();
             Double progressMax = 100.0;
             publishProgress((int) dprogres);
             Double dProgressDiff = (progressMax - dprogres) / (panjangdict);
+            for (DictIndonesia dictList : dictIndonesiaList) {
+                kataViewModel.inserttransactional(dictList);
+                dprogres += dProgressDiff;
+                publishProgress((int) dprogres);
 
-            for (DictIndonesia models : dictIndonesiaList) {
-
-                dictRepository.insert(models);
-
-                    dprogres += dProgressDiff;
-                    publishProgress((int) dprogres);
             }
-
-            publishProgress((int) dmaxProgress);
-           /* }else {
+                publishProgress((int) dmaxProgress);
+                appreferen.setFirstRun();
+           }else {
                 try {
                     synchronized (this) {
                         this.wait(500);
@@ -98,7 +90,7 @@ public class Splashscreen extends AppCompatActivity {
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
-            }*/
+            }
             return null;
         }
 
@@ -111,7 +103,9 @@ public class Splashscreen extends AppCompatActivity {
         @Override
         protected void onPostExecute(Void aVoid) {
             super.onPostExecute(aVoid);
-            Log.i(TAG, "onPostExecute: "+dictRepository.getAllKata().getValue().size());
+            Intent o = new Intent(Splashscreen.this, MainActivity.class);
+            startActivity(o);
+            finish();
         }
     }
 
@@ -135,17 +129,7 @@ public class Splashscreen extends AppCompatActivity {
 
                 String spliter[] = textGabung.split("\t", 3);
 
-                Log.i(TAG, "exportToDB: " + spliter[0]);
-                Log.i(TAG, "exportToDB: " + spliter[1]);
-                Log.i(TAG, "exportToDB: " + spliter[2]);
-                int id = Integer.parseInt(spliter[0]);
-
-                // dbIND.getIdDao().insert(new DictIndonesia(id, spliter[1], spliter[2]));
-
-                //belum dapat sumber datanya
-                //dbEng.getEngDao().insert(new DictEnglish(id,spliter[1],spliter[2]));
-
-                DictIndonesia dictIndonesia  = new DictIndonesia( spliter[1], spliter[2]);
+                DictIndonesia dictIndonesia  = new DictIndonesia(spliter[1],spliter[2]);
 
                 preload.add(dictIndonesia);
 
@@ -156,6 +140,4 @@ public class Splashscreen extends AppCompatActivity {
 
         return preload;
     }
-
-
 }

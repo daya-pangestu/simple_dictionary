@@ -44,11 +44,7 @@ public class MainActivity extends AppCompatActivity {
             NavigationUI.setupWithNavController(navigation, navHostFragment.getNavController());
         }
 
-
             setSupportActionBar(toolbarMain);
-
-//        WriteToDb write = new WriteToDb(this);
-//        write.exportToDB();
 
 
     }

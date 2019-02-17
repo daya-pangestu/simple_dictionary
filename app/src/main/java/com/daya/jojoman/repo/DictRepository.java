@@ -11,14 +11,15 @@ import java.util.List;
 
 import androidx.lifecycle.LiveData;
 
+
 public class DictRepository {
 
 
     private DictIdDao indDao;
-
-
+    DictIndoDatabase db;
     public DictRepository(Application application) {
-        DictIndoDatabase db = DictIndoDatabase.getINSTANCE(application);
+        db = DictIndoDatabase.getINSTANCE(application);
+
         indDao = db.dictIdDao();
 
     }
@@ -27,30 +28,27 @@ public class DictRepository {
         return  indDao.getAll();
     }
 
-    public void insertTransaction(DictIndonesia dictIndonesia) {
-       /* db.runInTransaction(() -> {
-            for (DictIndonesia dics : dictIndonesia) {
-                db.dictIdDao().insert(dics);
-            }
-        });*/
+    public LiveData<List<DictIndonesia>> getLimitRandomKata() {
+        return  indDao.get15kataRandom();
+    }
 
-        new insertAsyncTask(indDao).execute(dictIndonesia);
+
+    public void insertTransaction(DictIndonesia dictIndonesia) {
+
+        new inserTransactAsyncTask(db).execute(dictIndonesia);
     }
 
 
     public void insert(DictIndonesia dictIndonesia) {
-        indDao.insert(dictIndonesia);
-
+        new insertAsyncTask(indDao).execute(dictIndonesia);
     }
-
-
 
 
     private static class insertAsyncTask extends AsyncTask<DictIndonesia, Void, Void> {
         private DictIdDao asyncIdDao;
 
         insertAsyncTask(DictIdDao dao) {
-            asyncIdDao = dao;
+            this.asyncIdDao = dao;
         }
 
         @Override
@@ -58,6 +56,27 @@ public class DictRepository {
                 //asyncIdDao.insertTransaction(dictIndonesias[0]);
                 // asyncIdDao.insert(dictIndonesias);
             asyncIdDao.insert(dictIndonesias[0]);
+
+            return null;
+        }
+    }
+
+    private static class inserTransactAsyncTask extends AsyncTask<DictIndonesia, Void, Void> {
+        private DictIndoDatabase db;
+
+        inserTransactAsyncTask(DictIndoDatabase db) {
+            this.db = db;
+        }
+
+        @Override
+        protected Void doInBackground(DictIndonesia... dictIndonesias) {
+
+             db.runInTransaction(() -> {
+            for (DictIndonesia dics : dictIndonesias) {
+                db.dictIdDao().insert(dics);
+            }
+        });
+
             return null;
         }
     }

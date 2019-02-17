@@ -9,7 +9,7 @@ import androidx.room.Room;
 import androidx.room.RoomDatabase;
 
 
-@Database(entities = {DictIndonesia.class}, version = 7, exportSchema = false)
+@Database(entities = {DictIndonesia.class}, version = 10)
 public abstract class DictIndoDatabase extends RoomDatabase {
     public abstract DictIdDao dictIdDao();
 
@@ -29,5 +29,8 @@ public abstract class DictIndoDatabase extends RoomDatabase {
         }
         return INSTANCE;
     }
+
+
+    //populate database
 
 }

@@ -15,6 +15,7 @@ import java.util.List;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -50,18 +51,17 @@ public class Fdashboard extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         RecyclerView rvFDashboard = view.findViewById(R.id.rv_f_dashboard);
 
-        Log.i(TAG, "onViewCreated: " + kataViewModel.getAllKataKata().getValue().size());
 
-       // kataINDAdapter.setListKamus();
-
-
-        kataINDAdapter = new KataINDAdapter(getActivity()); // tambahkan data dengan cara new new itu
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getActivity());
-        rvFDashboard.setAdapter(kataINDAdapter);
         rvFDashboard.setLayoutManager(layoutManager);
+        rvFDashboard.setHasFixedSize(true);
+        KataViewModel kataViewModel = ViewModelProviders.of(getActivity()).get(KataViewModel.class);
+
+        kataINDAdapter = new KataINDAdapter();
+        rvFDashboard.setAdapter(kataINDAdapter);
 
 
-
+        kataViewModel.getLimitRandomKata().observe(getActivity(), dictIndonesias -> kataINDAdapter.setDict(dictIndonesias));
 
     }
 }

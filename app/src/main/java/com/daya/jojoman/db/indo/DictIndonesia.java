@@ -1,6 +1,8 @@
 package com.daya.jojoman.db.indo;
 
 
+import android.util.Log;
+
 import androidx.lifecycle.LiveData;
 import androidx.room.ColumnInfo;
 import androidx.room.Dao;
@@ -16,25 +18,21 @@ import androidx.annotation.NonNull;
 
 import java.util.List;
 
+import static android.content.ContentValues.TAG;
+
 @Entity
 public class DictIndonesia {
 
     @PrimaryKey(autoGenerate = true)
-    @ColumnInfo(name = "idIndo")
     int idIndo;
-    @ColumnInfo(name = "kata")
-    String kata;
 
-    @ColumnInfo(name = "penjelasan")
-    private String penjelasn;
-
+    public String kata;
+    public String penjelasn;
 
     public DictIndonesia(String kata, String penjelasn) {
-
         this.kata = kata;
         this.penjelasn = penjelasn;
     }
-
 
     public int getIdIndo() {
         return idIndo;
@@ -60,3 +58,4 @@ public class DictIndonesia {
         this.penjelasn = penjelasn;
     }
 }
+
