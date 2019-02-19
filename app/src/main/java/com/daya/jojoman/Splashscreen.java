@@ -65,15 +65,16 @@ public class Splashscreen extends AppCompatActivity {
 
               List<DictIndonesia> dictIndonesiaList = preLoadDict();
 
-            dprogres = 20;
+            dprogres = 10;
             int panjangdict =dictIndonesiaList.size();
-            Double progressMax = 100.0;
+            Double progressMax = 100000.0;
             publishProgress((int) dprogres);
             Double dProgressDiff = (progressMax - dprogres) / (panjangdict);
             for (DictIndonesia dictList : dictIndonesiaList) {
                 kataViewModel.inserttransactional(dictList);
                 dprogres += dProgressDiff;
                 publishProgress((int) dprogres);
+                Log.i(TAG, "doInBackground: "+dictList.getKata());
 
             }
                 publishProgress((int) dmaxProgress);

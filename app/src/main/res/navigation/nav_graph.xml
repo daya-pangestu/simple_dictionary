@@ -8,12 +8,20 @@
         android:id="@+id/navigation_home"
         android:name="com.daya.jojoman.Fdashboard"
         android:label="fragment_fdashboard"
-        tools:layout="@layout/fragment_fdashboard" />
+        tools:layout="@layout/fragment_fdashboard" >
+        <action
+            android:id="@+id/action_navigation_home_to_fDetail_ragment2"
+            app:destination="@id/fDetail_ragment" />
+    </fragment>
     <fragment
         android:id="@+id/navigation_fovorite"
         android:name="com.daya.jojoman.Ffavorite"
         android:label="fragment_ffavorite"
-        tools:layout="@layout/fragment_ffavorite" />
+        tools:layout="@layout/fragment_ffavorite" >
+        <action
+            android:id="@+id/action_navigation_fovorite_to_fDetail_ragment"
+            app:destination="@id/fDetail_ragment" />
+    </fragment>
     <fragment
         android:id="@+id/navigation_history"
         android:name="com.daya.jojoman.Fhistory"
@@ -24,4 +32,9 @@
         android:name="com.daya.jojoman.Fsettings"
         android:label="fragment_fsettings"
         tools:layout="@layout/fragment_fsettings" />
+    <fragment
+        android:id="@+id/fDetail_ragment"
+        android:name="com.daya.jojoman.fDetail_ragment"
+        android:label="fragment_f_detail_ragment"
+        tools:layout="@layout/fragment_f_detail_ragment" />
 </navigation>

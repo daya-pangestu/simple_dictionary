@@ -20,6 +20,9 @@ public class KataViewModel extends AndroidViewModel {
     private DictRepository dictRepository;
     private LiveData<List<DictIndonesia>> limitRandomKata;
     private LiveData<List<DictIndonesia>> allKata;
+    private LiveData<List<DictIndonesia>> allKataOnly;
+    private DictIndonesia sendToDetail;
+
 
 
 
@@ -28,6 +31,7 @@ public class KataViewModel extends AndroidViewModel {
         dictRepository = new DictRepository(application);
         limitRandomKata = dictRepository.getLimitRandomKata();
         allKata = dictRepository.getAllKata();
+        allKataOnly = dictRepository.getAllKataOnly();
 
     }
 
@@ -39,6 +43,10 @@ public class KataViewModel extends AndroidViewModel {
         return allKata;
     }
 
+    public LiveData<List<DictIndonesia>> getAllKataOnly() {
+        return allKataOnly;
+    }
+
     public void inserttransactional(DictIndonesia dictIndonesia) {
         dictRepository.insertTransaction(dictIndonesia);
 
@@ -48,4 +56,12 @@ public class KataViewModel extends AndroidViewModel {
         dictRepository.insert(dictIndonesia);
     }
 
+
+    public DictIndonesia getSendToDetail() {
+        return sendToDetail;
+    }
+
+    public void setSendToDetail(DictIndonesia sendToDetail) {
+        this.sendToDetail = sendToDetail;
+    }
 }

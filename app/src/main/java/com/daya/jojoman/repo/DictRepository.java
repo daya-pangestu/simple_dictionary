@@ -21,11 +21,14 @@ public class DictRepository {
         db = DictIndoDatabase.getINSTANCE(application);
 
         indDao = db.dictIdDao();
-
     }
 
     public LiveData<List<DictIndonesia>> getAllKata() {
         return  indDao.getAll();
+    }
+
+    public LiveData<List<DictIndonesia>> getAllKataOnly() {
+        return  indDao.getAllKataOnly();
     }
 
     public LiveData<List<DictIndonesia>> getLimitRandomKata() {

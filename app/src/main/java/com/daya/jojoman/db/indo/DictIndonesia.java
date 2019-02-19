@@ -8,6 +8,7 @@ import androidx.room.ColumnInfo;
 import androidx.room.Dao;
 import androidx.room.Delete;
 import androidx.room.Entity;
+import androidx.room.Ignore;
 import androidx.room.Insert;
 import androidx.room.PrimaryKey;
 import androidx.room.Query;
@@ -24,8 +25,8 @@ import static android.content.ContentValues.TAG;
 public class DictIndonesia {
 
     @PrimaryKey(autoGenerate = true)
-    int idIndo;
 
+    int idIndo;
     public String kata;
     public String penjelasn;
 
