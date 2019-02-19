@@ -1,14 +1,68 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".fDetail_ragment">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="@string/hello_blank_fragment" />
+        android:layout_height="wrap_content">
 
-</FrameLayout>
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp">
+
+        <TextView
+            android:id="@+id/text_detail"
+            android:layout_width="match_parent"
+            android:layout_height="43dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginBottom="8dp"
+            android:gravity="center_vertical"
+            android:textSize="32dp"
+            android:textStyle="bold"
+            android:layout_alignParentTop="true"
+            tools:text="rumah" />
+
+
+        <TextView
+            android:id="@+id/textView"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:layout_marginStart="8dp"
+            android:layout_below="@id/text_detail"
+            android:layout_marginEnd="8dp"
+            android:layout_marginBottom="8dp"
+            android:gravity="center_vertical"
+            android:text="penjelasan:"
+            android:textSize="18dp" />
+
+
+        <TextView
+            android:layout_below="@id/textView"
+            android:id="@+id/penjelasan_detail"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginBottom="24dp"
+            android:textStyle="italic"
+            tools:text="asrtyhtgrfdqwerngfefrgfasrtyhtgrfdqwerngfefrgfasrtyhtgrfdqwerngfefrgfasrtyhtgrfdqwerngfefrgfasrtyhtgrfdqwerngfefrgfasrtyhtgrfdqwerngfefrgfasrtyhtgrfdqwerngfefrgfasrtyhtgrfdqwerngfefrgfasrtyhtgrfdqwerngfefrgfasrtyhtgrfdqwerngfefrgfasrtyhtgrfdqwerngfefrgf" />
+
+    </RelativeLayout>
+    </ScrollView>
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/floatingActionButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:clickable="true"
+        android:src="@drawable/ic_add_black_24dp"
+        android:layout_gravity="end|bottom"
+        android:layout_margin="8dp"/>
+</androidx.coordinatorlayout.widget.CoordinatorLayout>
+
