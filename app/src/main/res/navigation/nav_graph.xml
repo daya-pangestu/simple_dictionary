@@ -37,4 +37,9 @@
         android:name="com.daya.jojoman.fDetail_ragment"
         android:label="fragment_f_detail_ragment"
         tools:layout="@layout/fragment_f_detail_ragment" />
+    <fragment
+        android:id="@+id/FSearch_layout"
+        android:name="com.daya.jojoman.FSearch_layout"
+        android:label="fragment_fsearch_layout"
+        tools:layout="@layout/fragment_fsearch_layout" /><action android:id="@+id/action_global_navigation_home" app:destination="@id/navigation_home"/>
 </navigation>

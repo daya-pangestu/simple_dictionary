@@ -10,6 +10,7 @@ import com.daya.jojoman.db.indo.DictIndonesia;
 import java.util.List;
 
 import androidx.lifecycle.LiveData;
+import androidx.paging.DataSource;
 
 
 public class DictRepository {
@@ -17,22 +18,32 @@ public class DictRepository {
 
     private DictIdDao indDao;
     DictIndoDatabase db;
+
     public DictRepository(Application application) {
         db = DictIndoDatabase.getINSTANCE(application);
 
         indDao = db.dictIdDao();
     }
 
+    public LiveData<List<DictIndonesia>> getSearch(String s) {
+        return indDao.getAllsearch(s);
+    }
+
+
+    public DataSource.Factory<Integer, DictIndonesia> getAllKataPaged() {
+        return indDao.getAllPaged();
+    }
+
     public LiveData<List<DictIndonesia>> getAllKata() {
-        return  indDao.getAll();
+        return indDao.getAll();
     }
 
     public LiveData<List<DictIndonesia>> getAllKataOnly() {
-        return  indDao.getAllKataOnly();
+        return indDao.getAllKataOnly();
     }
 
     public LiveData<List<DictIndonesia>> getLimitRandomKata() {
-        return  indDao.get15kataRandom();
+        return indDao.get15kataRandom();
     }
 
 
@@ -56,8 +67,8 @@ public class DictRepository {
 
         @Override
         protected Void doInBackground(DictIndonesia... dictIndonesias) {
-                //asyncIdDao.insertTransaction(dictIndonesias[0]);
-                // asyncIdDao.insert(dictIndonesias);
+            //asyncIdDao.insertTransaction(dictIndonesias[0]);
+            // asyncIdDao.insert(dictIndonesias);
             asyncIdDao.insert(dictIndonesias[0]);
 
             return null;
@@ -74,11 +85,11 @@ public class DictRepository {
         @Override
         protected Void doInBackground(DictIndonesia... dictIndonesias) {
 
-             db.runInTransaction(() -> {
-            for (DictIndonesia dics : dictIndonesias) {
-                db.dictIdDao().insert(dics);
-            }
-        });
+            db.runInTransaction(() -> {
+                for (DictIndonesia dics : dictIndonesias) {
+                    db.dictIdDao().insert(dics);
+                }
+            });
 
             return null;
         }

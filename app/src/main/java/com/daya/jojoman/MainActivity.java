@@ -1,35 +1,38 @@
 package com.daya.jojoman;
 
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.view.inputmethod.EditorInfo;
+import android.widget.EditText;
 
-import com.daya.jojoman.db.indo.DictIndonesia;
-import com.daya.jojoman.search.SearchSugest;
+import com.daya.jojoman.repo.KataViewModel;
+import com.daya.jojoman.search.GlobalSearch;
 import com.facebook.stetho.Stetho;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.mancj.materialsearchbar.MaterialSearchBar;
 
-import java.util.List;
-
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.SearchView;
 import androidx.appcompat.widget.Toolbar;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
+import androidx.navigation.NavController;
+import androidx.navigation.Navigation;
 import androidx.navigation.fragment.NavHostFragment;
 import androidx.navigation.ui.NavigationUI;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class MainActivity extends AppCompatActivity implements MaterialSearchBar.OnSearchActionListener {
+public class MainActivity extends AppCompatActivity{
     public String TAG = getClass().getSimpleName();
 
     @BindView(R.id.navigation)
     BottomNavigationView navigation;
     @BindView(R.id.toolbar_main)
     Toolbar toolbarMain;
-    @BindView(R.id.searchBar)
-    MaterialSearchBar searchBar;
+
 
 
     @Override
@@ -52,45 +55,31 @@ public class MainActivity extends AppCompatActivity implements MaterialSearchBar
         setSupportActionBar(toolbarMain);
         getSupportActionBar().setDisplayHomeAsUpEnabled(false);
 
-        LayoutInflater inflater1 = (LayoutInflater) getSystemService(LAYOUT_INFLATER_SERVICE);
-        SearchSugest sugest = new SearchSugest(inflater1);
-        kataViewModel.getAllKata().observe(this, new Observer<List<DictIndonesia>>() {
-            @Override
-            public void onChanged(List<DictIndonesia> dictIndonesias) {
-                sugest.setSugestions(dictIndonesias);
-                searchBar.setCustomSuggestionAdapter(sugest);
-            }
-        });
-
-
-
-
-
     }
 
-    @Override
-    public void onSearchStateChanged(boolean enabled) {
-
-    }
-
-    @Override
-    public void onSearchConfirmed(CharSequence text) {
-
-    }
-
-    @Override
-    public void onButtonClicked(int buttonCode) {
-
-    }
-/*
-
-/*
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_toolbar, menu);
-        MaterialSearchBar searchBar = (MaterialSearchBar)menu.findItem(R.id.searchBar).getActionView();
-
+/*
+        SearchView searchBar = (SearchView) menu.findItem(R.id.searchBar_bar).getActionView();
+        searchBar.setImeOptions(EditorInfo.IME_ACTION_DONE);
+*/
 
         return true;
-    }*/
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.searchBar_bar:
+
+                Intent i = new Intent(this, SearchActivity.class);
+                startActivity(i);
+
+
+        }
+
+
+        return super.onOptionsItemSelected(item);
+    }
 }

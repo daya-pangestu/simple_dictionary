@@ -3,6 +3,8 @@ package com.daya.jojoman.search;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Filter;
+import android.widget.Filterable;
 import android.widget.TextView;
 
 import com.daya.jojoman.R;
@@ -16,12 +18,14 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 
-public class SearchSugest extends SuggestionsAdapter<DictIndonesia, SearchSugest.SugestionHlder>  {
-    List<DictIndonesia> listSugest;
+public class SearchSugest extends SuggestionsAdapter<DictIndonesia, SearchSugest.SugestionHlder> implements Filterable {
+
 
     public SearchSugest(LayoutInflater inflater) {
         super(inflater);
     }
+
+
 
     @NonNull
     @Override
@@ -33,11 +37,10 @@ public class SearchSugest extends SuggestionsAdapter<DictIndonesia, SearchSugest
 
     @Override
     public void onBindSuggestionHolder(DictIndonesia dictIndonesia, SugestionHlder sugestionHlder, int i) {
-        sugestionHlder.title.setText(dictIndonesia.getKata());
+        sugestionHlder.penjelasan.setText(dictIndonesia.getKata());
         sugestionHlder.penjelasan.setText(dictIndonesia.getPenjelasn());
+
     }
-
-
 
     @Override
     public int getSingleViewHeight() {
@@ -45,27 +48,31 @@ public class SearchSugest extends SuggestionsAdapter<DictIndonesia, SearchSugest
     }
 
 
+    @Override
+    public Filter getFilter() {
+        return new Filter() {
+            @Override
+            protected FilterResults performFiltering(CharSequence constraint) {
+                FilterResults results = new FilterResults();
+                String term = constraint.toString();
+                if(term.isEmpty())
+                    suggestions = suggestions_clone;
+                else {
+                    suggestions = new ArrayList<>();
+                    for (DictIndonesia item: suggestions_clone)
+                        if(item.getKata().toLowerCase().contains(term.toLowerCase()))
+                            suggestions.add(item);
+                }
+                results.values = suggestions;
+                return results;
+            }
 
-    public void addSugestions(DictIndonesia r) {
-        listSugest.add(r);
-
-    }
-
-    public void setSugestions(List<DictIndonesia> sugestions) {
-        this.listSugest = sugestions;
-        listSugest = new ArrayList<>(sugestions);
-    }
-
-    public void clearSugestions() {
-        this.listSugest.clear();
-    }
-
-    public void deleteSugestion(int position, DictIndonesia r) {
-        this.listSugest.remove(position);
-    }
-
-    public List<DictIndonesia> getSugestion() {
-        return listSugest;
+            @Override
+            protected void publishResults(CharSequence constraint, FilterResults results) {
+                suggestions = (ArrayList<DictIndonesia>) results.values;
+                notifyDataSetChanged();
+            }
+        };
     }
 
 

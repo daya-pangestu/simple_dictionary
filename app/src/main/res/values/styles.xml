@@ -10,7 +10,7 @@
     </style>
 
     <style name="searchViewStyle" parent="Widget.AppCompat.SearchView.ActionBar" >
-        <item name="queryBackground">@color/colorAccent</item>
+        <item name="android:textColorHint">@android:color/white</item>
 
     </style>
 

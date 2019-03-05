@@ -1,4 +1,4 @@
-package com.daya.jojoman;
+package com.daya.jojoman.repo;
 
 import android.app.Application;
 
@@ -14,6 +14,8 @@ import java.util.concurrent.Executors;
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
+import androidx.paging.LivePagedListBuilder;
+import androidx.paging.PagedList;
 
 public class KataViewModel extends AndroidViewModel {
 
@@ -22,9 +24,9 @@ public class KataViewModel extends AndroidViewModel {
     private LiveData<List<DictIndonesia>> allKata;
     private LiveData<List<DictIndonesia>> allKataOnly;
     private DictIndonesia sendToDetail;
+    private LiveData<List<DictIndonesia>> search;
 
-
-
+    public LiveData<PagedList<DictIndonesia>> dictList;
 
     public KataViewModel(@NonNull Application application) {
         super(application);
@@ -33,7 +35,21 @@ public class KataViewModel extends AndroidViewModel {
         allKata = dictRepository.getAllKata();
         allKataOnly = dictRepository.getAllKataOnly();
 
+        PagedList.Config pagedListConfig =
+                (new PagedList.Config.Builder()).setEnablePlaceholders(true)
+                        .setPrefetchDistance(10)
+                        .setPageSize(20).build();
+
+        dictList = new LivePagedListBuilder<>(
+                dictRepository.getAllKataPaged(), pagedListConfig).build();
+
     }
+
+    public LiveData<List<DictIndonesia>> getSearch(String s) {
+        return search = dictRepository.getSearch(s);
+    }
+
+
 
     public LiveData<List<DictIndonesia>> getLimitRandomKata() {
         return limitRandomKata;

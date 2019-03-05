@@ -14,28 +14,13 @@
         android:layout_height="?android:attr/actionBarSize"
         android:background="?attr/colorPrimary"
         android:elevation="4dp"
-        android:theme="@style/ThemeOverlay.AppCompat.ActionBar"
+        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
         app:contentInsetStart="0dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:popupTheme="@style/ThemeOverlay.AppCompat.Light">
-
-        <com.mancj.materialsearchbar.MaterialSearchBar
-            style="@style/MaterialSearchBarLight"
-            app:mt_hint="try: gawai"
-            app:mt_maxSuggestionsCount="5"
-            android:layout_marginStart="8dp"
-            android:layout_marginEnd="8dp"
-            android:layout_marginTop="6dp"
-            app:mt_placeholder="KAMUS++"
-            android:layout_marginBottom="6dp"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/searchBar" />
-
-    </androidx.appcompat.widget.Toolbar>
-
+        app:popupTheme="@style/ThemeOverlay.AppCompat.Light"/>
+    <!--app:collapseIcon="@drawable/ic_arrow_back_black_24dp"-->
 
     <fragment
         android:id="@+id/fragment_nav_host"

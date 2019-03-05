@@ -2,34 +2,24 @@ package com.daya.jojoman;
 
 
 import android.os.Bundle;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.util.Log;
-import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.inputmethod.EditorInfo;
-import android.view.inputmethod.InputMethodManager;
-import android.widget.SearchView;
-import android.widget.TextView;
 
 import com.daya.jojoman.db.indo.DictIndonesia;
 import com.daya.jojoman.recyclerview.KataINDAdapter;
+import com.daya.jojoman.repo.KataViewModel;
 import com.daya.jojoman.search.GlobalSearch;
 import com.l4digital.fastscroll.FastScroller;
-import com.mancj.materialsearchbar.MaterialSearchBar;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
-import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -39,7 +29,7 @@ import static android.content.ContentValues.TAG;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class Fdashboard extends Fragment implements MaterialSearchBar.OnSearchActionListener {
+public class Fdashboard extends Fragment implements KataINDAdapter.OnItemClickListener {
 
     private KataINDAdapter kataINDAdapter;
     private List<DictIndonesia> listDictID;
@@ -67,29 +57,21 @@ public class Fdashboard extends Fragment implements MaterialSearchBar.OnSearchAc
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getActivity());
         rvFDashboard.setLayoutManager(layoutManager);
         rvFDashboard.setHasFixedSize(true);
+        kataINDAdapter = new KataINDAdapter(this);
 
         KataViewModel kataViewModel = ViewModelProviders.of(getActivity()).get(KataViewModel.class);
-
-        kataINDAdapter = new KataINDAdapter(position -> {
-            Log.i(TAG, "onViewCreated: " + kataViewModel.getSendToDetail().getKata()+" "+kataViewModel.getSendToDetail().getPenjelasn());
-        });
 
                 //butuh paging
                 kataViewModel.getAllKata().observe(getActivity(), dictIndonesias ->
                         kataINDAdapter.setDict(dictIndonesias));
 
-
-
          rvFDashboard.setAdapter(kataINDAdapter);
+
+
 
         fastScroller.setSectionIndexer(kataINDAdapter);
 
         fastScroller.attachRecyclerView(rvFDashboard);
-
-        GlobalSearch globalSearch = new GlobalSearch(kataINDAdapter, getActivity());
-        globalSearch.activateGlobalsearch();
-
-
 
     }
 
@@ -105,18 +87,9 @@ public class Fdashboard extends Fragment implements MaterialSearchBar.OnSearchAc
     }
 
 
-    @Override
-    public void onSearchStateChanged(boolean enabled) {
-
-    }
 
     @Override
-    public void onSearchConfirmed(CharSequence text) {
-
-    }
-
-    @Override
-    public void onButtonClicked(int buttonCode) {
-
+    public void itemclicked(int position) {
+        Log.i(TAG, "itemclicked: ");
     }
 }

@@ -9,10 +9,12 @@
         android:icon="@drawable/ic_search_black_24dp"
         android:orderInCategory="100"
         app:showAsAction="ifRoom|collapseActionView"
-        app:actionViewClass="com.mancj.materialsearchbar.MaterialSearchBar"
-        app:mt_placeholder="KAMUS++"
-        app:mt_hint="try: gawai"
-        app:mt_maxSuggestionsCount="5"
-        android:title="@string/search" />
+        android:title="@string/search"
+        />
+
+    <!--
+        app:actionViewClass="androidx.appcompat.widget.SearchView"
+-->
+
 
 </menu>

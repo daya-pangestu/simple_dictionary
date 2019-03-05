@@ -8,12 +8,12 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.daya.jojoman.db.indo.DictIndonesia;
+import com.daya.jojoman.repo.KataViewModel;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProviders;
-import butterknife.BindView;
 
 
 /**
@@ -46,8 +46,11 @@ public class fDetail_ragment extends Fragment {
 
         DictIndonesia dictIndonesia = kataViewModel.getSendToDetail();
 
+        if (dictIndonesia != null) {
+
         textDetail.setText(dictIndonesia.getKata());
         textPenjelasan.setText(dictIndonesia.getPenjelasn());
+        }
 
     }
 }

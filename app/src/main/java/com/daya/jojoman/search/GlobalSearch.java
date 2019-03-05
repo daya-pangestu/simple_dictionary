@@ -1,74 +1,58 @@
 package com.daya.jojoman.search;
 
 import android.app.Activity;
+import android.content.Context;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.KeyEvent;
+import android.view.LayoutInflater;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.TextView;
 
 import com.daya.jojoman.R;
+import com.daya.jojoman.db.indo.DictIndonesia;
 import com.daya.jojoman.recyclerview.KataINDAdapter;
+import com.daya.jojoman.repo.KataViewModel;
 import com.l4digital.fastscroll.FastScroller;
 import com.mancj.materialsearchbar.MaterialSearchBar;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import androidx.appcompat.widget.SearchView;
+import androidx.lifecycle.LiveData;
+import androidx.lifecycle.Observer;
+
+import static com.facebook.stetho.inspector.network.ResponseHandlingInputStream.TAG;
 
 public class GlobalSearch {
 
     private KataINDAdapter adapter;
-    private MaterialSearchBar materialSearchBar;
+    private SearchView materialSearchBar;
     FastScroller fastScroller;
     private Activity activity;
+    KataViewModel kataViewModel;
 
 
-    public GlobalSearch(KataINDAdapter adapter, Activity activity) {
+    public GlobalSearch(KataINDAdapter adapter, Activity activity,KataViewModel v) {
         this.adapter = adapter;
         this.activity = activity;
+        this.kataViewModel = v;
 
     }
 
 
     public void activateGlobalsearch() {
-        materialSearchBar = activity.findViewById(R.id.searchBar);
-        materialSearchBar.setCardViewElevation(6);
-        materialSearchBar.addTextChangeListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+        materialSearchBar = activity.findViewById(R.id.searchBar_bar);
 
-            }
 
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                  adapter.getFilter().filter(materialSearchBar.getText());
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-            }
-        });
+        materialSearchBar.setImeOptions(EditorInfo.IME_ACTION_DONE);
 
 
 
-
-
-        materialSearchBar.getSearchEditText().setImeOptions(EditorInfo.IME_ACTION_DONE);
-
-
-        materialSearchBar.getSearchEditText().setOnEditorActionListener(new TextView.OnEditorActionListener() {
-            @Override
-            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-
-                if (actionId == EditorInfo.IME_ACTION_DONE) {
-                    InputMethodManager imm = (InputMethodManager) activity.getSystemService(activity.INPUT_METHOD_SERVICE);
-                    imm.hideSoftInputFromWindow(activity.getCurrentFocus().getWindowToken(), InputMethodManager.RESULT_UNCHANGED_HIDDEN);
-
-                    return true;
-                }
-
-                return false;
-            }
-        });
+        }
 
 
     }
-}

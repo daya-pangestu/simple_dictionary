@@ -1,6 +1,5 @@
 package com.daya.jojoman;
 
-import android.app.Application;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -9,7 +8,7 @@ import android.widget.ProgressBar;
 
 import com.daya.jojoman.db.indo.DictIndonesia;
 import com.daya.jojoman.repo.Appreferen;
-import com.daya.jojoman.repo.DictRepository;
+import com.daya.jojoman.repo.KataViewModel;
 import com.facebook.stetho.Stetho;
 
 import java.io.BufferedReader;
@@ -18,10 +17,8 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.lifecycle.LiveData;
 import androidx.lifecycle.ViewModelProviders;
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -32,6 +29,7 @@ public class Splashscreen extends AppCompatActivity {
 
     @BindView(R.id.splash_progress)
     ProgressBar splashProgress;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -49,8 +47,8 @@ public class Splashscreen extends AppCompatActivity {
         double dmaxProgress;
         KataViewModel kataViewModel;
         Appreferen appreferen;
-        @Override
 
+        @Override
         protected void onPreExecute() {
             kataViewModel = ViewModelProviders.of(Splashscreen.this).get(KataViewModel.class);
             appreferen = new Appreferen(getApplicationContext());
@@ -63,30 +61,32 @@ public class Splashscreen extends AppCompatActivity {
 
             if (firstrun) {
 
-              List<DictIndonesia> dictIndonesiaList = preLoadDict();
+                List<DictIndonesia> dictIndonesiaList = preLoadDict();
+                int panjangdict = dictIndonesiaList.size();
 
-            dprogres = 10;
-            int panjangdict =dictIndonesiaList.size();
-            Double progressMax = 100000.0;
-            publishProgress((int) dprogres);
-            Double dProgressDiff = (progressMax - dprogres) / (panjangdict);
-            for (DictIndonesia dictList : dictIndonesiaList) {
-                kataViewModel.inserttransactional(dictList);
-                dprogres += dProgressDiff;
+                dprogres = 30;
                 publishProgress((int) dprogres);
-                Log.i(TAG, "doInBackground: "+dictList.getKata());
+                Double progressMaInsert = 80.0;
+                Double dProgressDiff = (progressMaInsert- dprogres) / (panjangdict);
 
-            }
+
+                for (DictIndonesia dictList : dictIndonesiaList) {
+                    kataViewModel.inserttransactional(dictList);
+                    dprogres += dProgressDiff;
+                    publishProgress((int) dprogres);
+                    Log.i(TAG, "doInBackground: " + dictList.getKata());
+
+                }
                 publishProgress((int) dmaxProgress);
                 appreferen.setFirstRun();
-           }else {
+            } else {
                 try {
                     synchronized (this) {
                         this.wait(500);
                         publishProgress(50);
 
                         this.wait(500);
-                        publishProgress((int)dmaxProgress);
+                        publishProgress((int) dmaxProgress);
                     }
                 } catch (InterruptedException e) {
                     e.printStackTrace();
@@ -97,13 +97,12 @@ public class Splashscreen extends AppCompatActivity {
 
         @Override
         protected void onProgressUpdate(Integer... values) {
-            super.onProgressUpdate(values);
             splashProgress.setProgress(values[0]);
         }
 
         @Override
         protected void onPostExecute(Void aVoid) {
-            super.onPostExecute(aVoid);
+
             Intent o = new Intent(Splashscreen.this, MainActivity.class);
             startActivity(o);
             finish();
@@ -118,23 +117,26 @@ public class Splashscreen extends AppCompatActivity {
             InputStream istream = getResources().openRawResource(R.raw.kbbi_data);
             InputStreamReader iStreamReader = new InputStreamReader((istream));
             BufferedReader bfReader = new BufferedReader(iStreamReader);
-//
-//            InputStream istream = context.getResources().openRawResource(R.raw.engdict);
-//            InputStreamReader iStreamReader = new InputStreamReader((istream));
-//            BufferedReader bfReader = new BufferedReader(iStreamReader);
+/*
+
+            InputStream istream = getResources().openRawResource(R.raw.dictionary_english );
+            InputStreamReader iStreamReader = new InputStreamReader((istream));
+            BufferedReader bfReader = new BufferedReader(iStreamReader);
+*/
 
 
             String textGabung;
 
-           while ((textGabung= bfReader.readLine()) != null){
+            while ((textGabung = bfReader.readLine()) != null) {
 
                 String spliter[] = textGabung.split("\t", 3);
 
-                DictIndonesia dictIndonesia  = new DictIndonesia(spliter[1],spliter[2]);
+                DictIndonesia dictIndonesia = new DictIndonesia(spliter[1], spliter[2]);
 
                 preload.add(dictIndonesia);
 
-            } while (textGabung != null);
+            }
+            while (textGabung != null) ;
         } catch (IOException e) {
             e.printStackTrace();
         }
