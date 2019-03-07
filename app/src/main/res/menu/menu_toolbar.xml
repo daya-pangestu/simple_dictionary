@@ -9,11 +9,12 @@
         android:icon="@drawable/ic_search_black_24dp"
         android:orderInCategory="100"
         app:showAsAction="ifRoom|collapseActionView"
+        app:actionViewClass="androidx.appcompat.widget.SearchView"
         android:title="@string/search"
         />
 
     <!--
-        app:actionViewClass="androidx.appcompat.widget.SearchView"
+
 -->
 
 

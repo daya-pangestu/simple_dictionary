@@ -7,7 +7,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.daya.jojoman.db.indo.DictIndonesia;
+import com.daya.jojoman.db.indo.model.DictIndonesia;
+import com.daya.jojoman.db.indo.model.HistoryModel;
+import com.daya.jojoman.repo.HistoryViewModel;
 import com.daya.jojoman.repo.KataViewModel;
 
 import androidx.annotation.NonNull;
@@ -20,7 +22,7 @@ import androidx.lifecycle.ViewModelProviders;
  * A simple {@link Fragment} subclass.
  */
 public class fDetail_ragment extends Fragment {
-
+    HistoryViewModel historyViewModel;
 
 
     public fDetail_ragment() {
@@ -33,7 +35,11 @@ public class fDetail_ragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_f_detail_ragment, container, false);
+        View v = inflater.inflate(R.layout.fragment_f_detail_ragment, container, false);
+        historyViewModel = ViewModelProviders.of(this).get(HistoryViewModel.class);
+
+
+        return v;
     }
 
     @Override
@@ -44,13 +50,13 @@ public class fDetail_ragment extends Fragment {
 
         kataViewModel = ViewModelProviders.of(getActivity()).get(KataViewModel.class);
 
-        DictIndonesia dictIndonesia = kataViewModel.getSendToDetail();
+        DictIndonesia dict = kataViewModel.getSendToDetail();
 
-        if (dictIndonesia != null) {
+        historyViewModel.addHistory(new HistoryModel(dict.getKata(), dict.getPenjelasn()));
 
-        textDetail.setText(dictIndonesia.getKata());
-        textPenjelasan.setText(dictIndonesia.getPenjelasn());
-        }
+        textDetail.setText(dict.getKata());
+
+        textPenjelasan.setText(dict.getPenjelasn());
 
     }
 }

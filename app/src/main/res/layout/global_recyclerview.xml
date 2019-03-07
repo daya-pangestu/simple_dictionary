@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rv_global"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="18dp" />
+
+
+    <com.l4digital.fastscroll.FastScroller
+        android:id="@+id/fast_scroller_global"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true"
+        android:layout_gravity="end"
+        app:bubbleColor="@color/colorAccent"
+        app:bubbleSize="small"
+        app:bubbleTextColor="@color/putih"
+        app:handleColor="@color/colorPrimaryDark"
+        app:showBubble="true"
+        app:showTrack="true"
+        app:trackColor="@color/colorPrimary" />
+
+
+</RelativeLayout>

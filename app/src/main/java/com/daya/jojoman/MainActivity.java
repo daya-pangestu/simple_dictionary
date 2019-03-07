@@ -27,34 +27,19 @@ import butterknife.ButterKnife;
 
 public class MainActivity extends AppCompatActivity{
     public String TAG = getClass().getSimpleName();
+    public static final int FROM_DASHBOARD = 1;
+    public static final int FROM_SEARCH = 2;
+    public static final int FORM_HISTORY = 3;
 
     @BindView(R.id.navigation)
     BottomNavigationView navigation;
     @BindView(R.id.toolbar_main)
     Toolbar toolbarMain;
 
+    NavHostFragment navHostFragment;
 
-
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-        ButterKnife.bind(this);
-        Stetho.initialize(Stetho.newInitializerBuilder(this)
-                .enableDumpapp(Stetho.defaultDumperPluginsProvider(this))
-                .enableWebKitInspector(Stetho.defaultInspectorModulesProvider(this))
-                .build());
-        KataViewModel kataViewModel = ViewModelProviders.of(this).get(KataViewModel.class);
-
-
-        NavHostFragment navHostFragment = (NavHostFragment) getSupportFragmentManager().findFragmentById(R.id.fragment_nav_host);
-        if (navHostFragment != null) {
-            NavigationUI.setupWithNavController(navigation, navHostFragment.getNavController());
-        }
-        toolbarMain.setTitleTextColor(Color.WHITE);
-        setSupportActionBar(toolbarMain);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(false);
-
+    public static String settag(Class c) {
+        return c.getSimpleName();
     }
 
     @Override
@@ -69,17 +54,38 @@ public class MainActivity extends AppCompatActivity{
     }
 
     @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+        ButterKnife.bind(this);
+
+        Stetho.initialize(Stetho.newInitializerBuilder(this)
+                .enableDumpapp(Stetho.defaultDumperPluginsProvider(this))
+                .enableWebKitInspector(Stetho.defaultInspectorModulesProvider(this))
+                .build());
+        KataViewModel kataViewModel = ViewModelProviders.of(this).get(KataViewModel.class);
+
+        navHostFragment = (NavHostFragment) getSupportFragmentManager().findFragmentById(R.id.fragment_nav_host);
+        if (navHostFragment != null) {
+            NavigationUI.setupWithNavController(navigation, navHostFragment.getNavController());
+        }
+        toolbarMain.setTitleTextColor(Color.WHITE);
+        setSupportActionBar(toolbarMain);
+
+    }
+
+    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.searchBar_bar:
+               /* Intent i = new Intent(this, SearchActivity.class);
+                startActivity(i);*/
 
-                Intent i = new Intent(this, SearchActivity.class);
-                startActivity(i);
-
+                Navigation.findNavController(navHostFragment.getView()).navigate(R.id.action_global_FSearch_layout);
 
         }
 
-
         return super.onOptionsItemSelected(item);
     }
+
 }

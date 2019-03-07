@@ -1,6 +1,5 @@
 package com.daya.jojoman;
 
-
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,14 +13,7 @@ import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import butterknife.BindView;
 
-
-/**
- * A simple {@link Fragment} subclass.
- */
 public class Ffavorite extends Fragment {
-
-
-
 
     public Ffavorite() {
         // Required empty public constructor
@@ -41,8 +33,6 @@ public class Ffavorite extends Fragment {
         Button goToDetail = view.findViewById(R.id.goToDetail);
 
         goToDetail.setOnClickListener(Navigation.createNavigateOnClickListener(R.id.action_navigation_fovorite_to_fDetail_ragment));
-
-
 
     }
 }

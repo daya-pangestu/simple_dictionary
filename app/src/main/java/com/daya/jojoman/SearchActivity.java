@@ -4,8 +4,9 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Toast;
 
-import com.daya.jojoman.db.indo.DictIndonesia;
+import com.daya.jojoman.db.indo.model.DictIndonesia;
 import com.daya.jojoman.recyclerview.KataINDAdapter;
 import com.daya.jojoman.repo.KataViewModel;
 import com.l4digital.fastscroll.FastScroller;
@@ -22,6 +23,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
+import static com.daya.jojoman.MainActivity.FROM_SEARCH;
+
 public class SearchActivity extends AppCompatActivity {
     private static String TAG = SearchActivity.class.getSimpleName();
     @BindView(R.id.toolbar_search)
@@ -29,9 +32,11 @@ public class SearchActivity extends AppCompatActivity {
     SearchView searchBar;
     KataViewModel model;
     KataINDAdapter kataINDAdapter;
-    RecyclerView rvFDashboard;
-    @BindView(R.id.fast_scroller_search)
-    FastScroller fastScrollerSearch;
+
+    @BindView(R.id.rv_global)
+    RecyclerView rvGlobal;
+    @BindView(R.id.fast_scroller_global)
+    FastScroller fastScrollerGlobal;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,8 +47,6 @@ public class SearchActivity extends AppCompatActivity {
         setSupportActionBar(toolbarSearch);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         model = ViewModelProviders.of(this).get(KataViewModel.class);
-
-
     }
 
     @Override
@@ -54,17 +57,16 @@ public class SearchActivity extends AppCompatActivity {
         //searchBar.setImeOptions(EditorInfo.IME_ACTION_DONE);
 
         toolbarSearch.hasExpandedActionView();
-        rvFDashboard = findViewById(R.id.recycler_search);
+
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
-        rvFDashboard.setLayoutManager(layoutManager);
-        rvFDashboard.setHasFixedSize(true);
+        rvGlobal.setLayoutManager(layoutManager);
+        rvGlobal.setHasFixedSize(true);
         kataINDAdapter = new KataINDAdapter(new KataINDAdapter.OnItemClickListener() {
             @Override
             public void itemclicked(int position) {
 
             }
-        });
-
+        }, FROM_SEARCH);
 
         searchBar.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
@@ -73,14 +75,19 @@ public class SearchActivity extends AppCompatActivity {
                 model.getSearch(query).observe(SearchActivity.this, new Observer<List<DictIndonesia>>() {
                     @Override
                     public void onChanged(List<DictIndonesia> dictIndonesias) {
-                        Log.i(TAG, "onChanged: " + dictIndonesias.get(0).getKata() + dictIndonesias.get(0).getPenjelasn());
+                        if (dictIndonesias != null) {
 
-                        kataINDAdapter.setDict(dictIndonesias);
-                        Log.i(TAG, "onChanged:panjang  " + dictIndonesias.size());
-                        rvFDashboard.setAdapter(kataINDAdapter);
+                            kataINDAdapter.setDict(dictIndonesias);
+                            Log.i(TAG, "onChanged:panjang  " + dictIndonesias.size());
+                            rvGlobal.setAdapter(kataINDAdapter);
+                        } else {
+                            Toast.makeText(SearchActivity.this, "nothing to show", Toast.LENGTH_SHORT).show();
+                            kataINDAdapter.setDict(dictIndonesias);
+                            Log.i(TAG, "onChanged:panjang  " + dictIndonesias.size());
+                            rvGlobal.setAdapter(kataINDAdapter);
+                        }
                     }
                 });
-
 
                 return false;
             }
@@ -103,9 +110,9 @@ public class SearchActivity extends AppCompatActivity {
             }
         });
 
-        fastScrollerSearch.setSectionIndexer(kataINDAdapter);
+        fastScrollerGlobal.setSectionIndexer(kataINDAdapter);
 
-        fastScrollerSearch.attachRecyclerView(rvFDashboard);
+        fastScrollerGlobal.attachRecyclerView(rvGlobal);
 
         searchBar.onActionViewExpanded();
         return true;

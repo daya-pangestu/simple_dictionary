@@ -2,14 +2,9 @@ package com.daya.jojoman.repo;
 
 import android.app.Application;
 
-import com.daya.jojoman.db.indo.DictIdDao;
-import com.daya.jojoman.db.indo.DictIndoDatabase;
-import com.daya.jojoman.db.indo.DictIndonesia;
-import com.daya.jojoman.repo.DictRepository;
+import com.daya.jojoman.db.indo.model.DictIndonesia;
 
 import java.util.List;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
@@ -40,16 +35,11 @@ public class KataViewModel extends AndroidViewModel {
                         .setPrefetchDistance(10)
                         .setPageSize(20).build();
 
-        dictList = new LivePagedListBuilder<>(
-                dictRepository.getAllKataPaged(), pagedListConfig).build();
 
     }
-
     public LiveData<List<DictIndonesia>> getSearch(String s) {
         return search = dictRepository.getSearch(s);
     }
-
-
 
     public LiveData<List<DictIndonesia>> getLimitRandomKata() {
         return limitRandomKata;
@@ -68,10 +58,6 @@ public class KataViewModel extends AndroidViewModel {
 
     }
 
-    public void insert(DictIndonesia dictIndonesia) {
-        dictRepository.insert(dictIndonesia);
-    }
-
 
     public DictIndonesia getSendToDetail() {
         return sendToDetail;
@@ -80,4 +66,6 @@ public class KataViewModel extends AndroidViewModel {
     public void setSendToDetail(DictIndonesia sendToDetail) {
         this.sendToDetail = sendToDetail;
     }
+
+
 }

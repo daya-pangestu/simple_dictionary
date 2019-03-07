@@ -1,6 +1,6 @@
 package com.daya.jojoman.db.indo;
 
-import android.util.Log;
+import com.daya.jojoman.db.indo.model.DictIndonesia;
 
 import java.util.List;
 
@@ -24,30 +24,30 @@ public interface DictIdDao {
     LiveData<List<DictIndonesia>> getAllsearch(String word);
 
 
-    @Query("SELECT * FROM DictIndonesia")
-    public abstract DataSource.Factory<Integer, DictIndonesia> getAllPaged();
+    @Query("select * FROM DictIndonesia WHERE idIndo like '%'|| :id || '%'")
+    List<DictIndonesia> getKata(int id);
 
+
+   /* @Query("SELECT * FROM DictIndonesia")
+    DataSource.Factory<Integer, DictIndonesia> getAllPaged();*/
 
     @Transaction
     @Query("SELECT idIndo,kata FROM DictIndonesia")
     @SuppressWarnings(RoomWarnings.CURSOR_MISMATCH)
-
     LiveData<List<DictIndonesia>> getAllKataOnly();
 
     @Transaction
-
     @Query("SELECT * FROM DictIndonesia WHERE idIndo IN (SELECT idIndo FROM dictindonesia ORDER BY RANDOM() LIMIT 10)")
     @SuppressWarnings(RoomWarnings.CURSOR_MISMATCH)
     LiveData<List<DictIndonesia>> get15kataRandom();
-
     @Insert
     void insert(DictIndonesia dictIndonesia);
 
 
     @Update
-    abstract void update(DictIndonesia dictIndonesia);
+    void update(DictIndonesia dictIndonesia);
 
     @Delete
-    abstract void delete(DictIndonesia dictIndonesia);
+    void delete(DictIndonesia dictIndonesia);
 
 }

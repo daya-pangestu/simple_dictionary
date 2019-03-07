@@ -5,7 +5,10 @@ import android.os.AsyncTask;
 
 import com.daya.jojoman.db.indo.DictIdDao;
 import com.daya.jojoman.db.indo.DictIndoDatabase;
-import com.daya.jojoman.db.indo.DictIndonesia;
+import com.daya.jojoman.db.indo.model.DictIndonesia;
+import com.daya.jojoman.db.indo.HistoryDao;
+import com.daya.jojoman.db.indo.model.HistoryModel;
+import com.daya.jojoman.db.indo.model.relation.History;
 
 import java.util.List;
 
@@ -18,21 +21,32 @@ public class DictRepository {
 
     private DictIdDao indDao;
     DictIndoDatabase db;
+    private HistoryDao hDao;
 
     public DictRepository(Application application) {
         db = DictIndoDatabase.getINSTANCE(application);
-
         indDao = db.dictIdDao();
+        hDao = db.hDao();
     }
+
+    //history
+    public LiveData<List<HistoryModel>> gethistory() {
+        return hDao.loadhistory();
+    }
+
+    public void addHistory(HistoryModel historyModel) {
+        //hDao.insert(historyModel);
+        new insertHistoryAsynck(hDao).execute(historyModel);
+    }
+
+
+    //dictionary
 
     public LiveData<List<DictIndonesia>> getSearch(String s) {
         return indDao.getAllsearch(s);
     }
 
 
-    public DataSource.Factory<Integer, DictIndonesia> getAllKataPaged() {
-        return indDao.getAllPaged();
-    }
 
     public LiveData<List<DictIndonesia>> getAllKata() {
         return indDao.getAll();
@@ -53,8 +67,19 @@ public class DictRepository {
     }
 
 
-    public void insert(DictIndonesia dictIndonesia) {
-        new insertAsyncTask(indDao).execute(dictIndonesia);
+    private static class insertHistoryAsynck extends AsyncTask<HistoryModel, Void, Void> {
+        HistoryDao dao;
+
+        insertHistoryAsynck(HistoryDao dao) {
+            this.dao = dao;
+        }
+
+        @Override
+        protected Void doInBackground(HistoryModel... historyModels) {
+            dao.insert(historyModels[0]);
+
+            return null;
+        }
     }
 
 

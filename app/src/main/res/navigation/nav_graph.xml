@@ -41,5 +41,14 @@
         android:id="@+id/FSearch_layout"
         android:name="com.daya.jojoman.FSearch_layout"
         android:label="fragment_fsearch_layout"
-        tools:layout="@layout/fragment_fsearch_layout" /><action android:id="@+id/action_global_navigation_home" app:destination="@id/navigation_home"/>
+        tools:layout="@layout/fragment_fsearch_layout">
+        <action
+            android:id="@+id/action_FSearch_layout_to_fDetail_ragment"
+            app:destination="@id/fDetail_ragment"
+            app:popUpTo="@id/FSearch_layout"
+            app:popUpToInclusive="true" />
+    </fragment>
+    <action
+        android:id="@+id/action_global_FSearch_layout"
+        app:destination="@id/FSearch_layout" />
 </navigation>

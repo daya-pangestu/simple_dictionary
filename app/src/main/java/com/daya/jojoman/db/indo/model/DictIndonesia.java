@@ -1,4 +1,4 @@
-package com.daya.jojoman.db.indo;
+package com.daya.jojoman.db.indo.model;
 
 
 import android.util.Log;
@@ -25,10 +25,15 @@ import static android.content.ContentValues.TAG;
 public class DictIndonesia {
 
     @PrimaryKey(autoGenerate = true)
-
     int idIndo;
     public String kata;
     public String penjelasn;
+
+    @Ignore
+    public DictIndonesia(int idIndo) {
+        this.idIndo = idIndo;
+    }
+
 
     public DictIndonesia(String kata, String penjelasn) {
         this.kata = kata;

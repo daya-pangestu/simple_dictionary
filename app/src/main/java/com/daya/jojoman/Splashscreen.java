@@ -6,7 +6,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.widget.ProgressBar;
 
-import com.daya.jojoman.db.indo.DictIndonesia;
+import com.daya.jojoman.db.indo.model.DictIndonesia;
 import com.daya.jojoman.repo.Appreferen;
 import com.daya.jojoman.repo.KataViewModel;
 import com.facebook.stetho.Stetho;

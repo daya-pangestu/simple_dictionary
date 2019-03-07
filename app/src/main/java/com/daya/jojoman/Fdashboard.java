@@ -2,15 +2,14 @@ package com.daya.jojoman;
 
 
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.daya.jojoman.db.indo.DictIndonesia;
+import com.daya.jojoman.db.indo.model.DictIndonesia;
 import com.daya.jojoman.recyclerview.KataINDAdapter;
 import com.daya.jojoman.repo.KataViewModel;
-import com.daya.jojoman.search.GlobalSearch;
+import com.daya.jojoman.repo.RecyclerViewModel;
 import com.l4digital.fastscroll.FastScroller;
 
 import java.util.ArrayList;
@@ -23,17 +22,11 @@ import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import static android.content.ContentValues.TAG;
+import static com.daya.jojoman.MainActivity.FROM_DASHBOARD;
 
 
-/**
- * A simple {@link Fragment} subclass.
- */
-public class Fdashboard extends Fragment implements KataINDAdapter.OnItemClickListener {
-
-    private KataINDAdapter kataINDAdapter;
-    private List<DictIndonesia> listDictID;
-    KataViewModel kataViewModel;
+public class Fdashboard extends Fragment {
+    RecyclerViewModel recyclerViewModel;
 
     public Fdashboard() {
         // Required empty public constructor
@@ -51,28 +44,31 @@ public class Fdashboard extends Fragment implements KataINDAdapter.OnItemClickLi
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        RecyclerView rvFDashboard = view.findViewById(R.id.rv_f_dashboard);
-        FastScroller fastScroller = view.findViewById(R.id.fast_scroller_dashboard);
+        RecyclerView rvFDashboard = view.findViewById(R.id.rv_global);
+        FastScroller fastScroller = view.findViewById(R.id.fast_scroller_global);
+        //recyclerViewModel = ViewModelProviders.of(this).get(RecyclerViewModel.class);
+
+        KataINDAdapter kataINDAdapter = new KataINDAdapter(new KataINDAdapter.OnItemClickListener() {
+            @Override
+            public void itemclicked(int position) {
+            }
+        }, FROM_DASHBOARD);
+
 
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getActivity());
         rvFDashboard.setLayoutManager(layoutManager);
         rvFDashboard.setHasFixedSize(true);
-        kataINDAdapter = new KataINDAdapter(this);
+
 
         KataViewModel kataViewModel = ViewModelProviders.of(getActivity()).get(KataViewModel.class);
+        rvFDashboard.setAdapter(kataINDAdapter);
 
-                //butuh paging
-                kataViewModel.getAllKata().observe(getActivity(), dictIndonesias ->
-                        kataINDAdapter.setDict(dictIndonesias));
-
-         rvFDashboard.setAdapter(kataINDAdapter);
-
+        kataViewModel.getAllKata().observe(getActivity(), kataINDAdapter::setDict);//butuh paging
 
 
         fastScroller.setSectionIndexer(kataINDAdapter);
 
         fastScroller.attachRecyclerView(rvFDashboard);
-
     }
 
 
@@ -88,8 +84,4 @@ public class Fdashboard extends Fragment implements KataINDAdapter.OnItemClickLi
 
 
 
-    @Override
-    public void itemclicked(int position) {
-        Log.i(TAG, "itemclicked: ");
-    }
 }
