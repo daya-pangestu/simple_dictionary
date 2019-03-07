@@ -59,5 +59,7 @@ dependencies {
     implementation 'de.siegmar:fastcsv:1.0.3'
     debugImplementation 'com.amitshekhar.android:debug-db:1.0.5'
     implementation 'android.arch.paging:runtime:1.0.1'
+    implementation 'com.github.Ferfalk:SimpleSearchView:0.1.3'
+
 
 }

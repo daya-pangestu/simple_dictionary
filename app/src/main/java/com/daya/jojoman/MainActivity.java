@@ -1,21 +1,15 @@
 package com.daya.jojoman;
 
-import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 
-import com.daya.jojoman.recyclerview.KataINDAdapter;
 import com.daya.jojoman.repo.HistoryViewModel;
-import com.daya.jojoman.repo.KataViewModel;
-import com.daya.jojoman.search.GlobalSearch;
 import com.facebook.stetho.Stetho;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
-import com.mancj.materialsearchbar.MaterialSearchBar;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.SearchView;
 import androidx.appcompat.widget.Toolbar;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.navigation.Navigation;
@@ -76,11 +70,12 @@ public class MainActivity extends AppCompatActivity{
         switch (item.getItemId()) {
             case R.id.searchBar_bar:
                 Navigation.findNavController(navHostFragment.getView()).navigate(R.id.action_global_FSearch_layout);
+                break;
 
             case R.id.delete_history:
                 historyViewModel.deleteHistory();
                 Navigation.findNavController(navHostFragment.getView()).navigate(R.id.action_navigation_history_self);
-
+                break;
         }
         return super.onOptionsItemSelected(item);
     }

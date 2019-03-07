@@ -12,16 +12,15 @@
     <androidx.cardview.widget.CardView
         android:layout_width="68dp"
         android:layout_height="match_parent"
-        app:cardBackgroundColor="@color/colorAccent"
         app:cardCornerRadius="4dp"
+        app:cardBackgroundColor="#61FFFFFF"
+
         app:cardElevation="2dp">
 
         <ImageButton
-            android:id="@+id/btn_favorit_recycler"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:background="@color/colorAccent"
             android:scaleType="fitCenter"
             android:src="@drawable/ic_favorite_border_black_24dp"/>
 
@@ -37,9 +36,7 @@
         android:clickable="true"
         android:focusable="true"
         android:foreground="?android:attr/selectableItemBackground"
-        app:cardCornerRadius="2dp"
-        app:cardElevation="2dp"
-        app:cardUseCompatPadding="true">
+        app:cardCornerRadius="2dp">
 
 
         <LinearLayout

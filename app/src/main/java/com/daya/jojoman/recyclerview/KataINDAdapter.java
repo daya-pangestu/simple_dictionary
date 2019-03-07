@@ -11,16 +11,15 @@ import android.widget.TextView;
 import com.chauthai.swipereveallayout.SwipeRevealLayout;
 import com.chauthai.swipereveallayout.ViewBinderHelper;
 import com.daya.jojoman.MainActivity;
-import com.daya.jojoman.repo.KataViewModel;
 import com.daya.jojoman.R;
 import com.daya.jojoman.db.indo.model.DictIndonesia;
+import com.daya.jojoman.repo.KataViewModel;
 import com.l4digital.fastscroll.FastScroller;
 
 import java.util.List;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.FragmentActivity;
-
 import androidx.lifecycle.ViewModelProviders;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
@@ -38,7 +37,7 @@ public class KataINDAdapter extends RecyclerView.Adapter<KataINDAdapter.KataHold
 
     public KataINDAdapter(@NonNull OnItemClickListener onItemClickListener, int kode) {
         viewBinderHelper = new ViewBinderHelper();
-        this.kode = kode;
+        KataINDAdapter.kode = kode;
         this.onItemClickListener = onItemClickListener;
         viewBinderHelper.setOpenOnlyOne(true);
     }

@@ -10,21 +10,16 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.daya.jojoman.db.indo.DictIndoDatabase;
-import com.daya.jojoman.db.indo.model.DictIndonesia;
 import com.daya.jojoman.recyclerview.KataINDAdapter;
 import com.daya.jojoman.repo.KataViewModel;
-import com.daya.jojoman.repo.RecyclerViewModel;
 import com.l4digital.fastscroll.FastScroller;
-
-import java.util.List;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.SearchView;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
+import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import butterknife.BindView;
@@ -32,7 +27,6 @@ import butterknife.ButterKnife;
 import butterknife.Unbinder;
 
 import static android.content.ContentValues.TAG;
-import static com.daya.jojoman.MainActivity.FROM_DASHBOARD;
 import static com.daya.jojoman.MainActivity.FROM_SEARCH;
 
 
@@ -45,8 +39,8 @@ public class FSearch_layout extends Fragment {
     RecyclerView rvGlobal;
     @BindView(R.id.fast_scroller_global)
     FastScroller fastScrollerGlobal;
-    SearchView searchBar;
-    KataViewModel model;
+    private SearchView searchBar;
+    private KataViewModel model;
     private Unbinder unbinder;
 
     public FSearch_layout() {
@@ -78,11 +72,11 @@ public class FSearch_layout extends Fragment {
         KataINDAdapter kataINDAdapter = new KataINDAdapter(position -> {
         }, FROM_SEARCH);
 
-
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getContext());
         rvGlobal.setLayoutManager(layoutManager);
         rvGlobal.setHasFixedSize(true);
         rvGlobal.setAdapter(kataINDAdapter);
+        rvGlobal.addItemDecoration(new DividerItemDecoration(getContext(), DividerItemDecoration.VERTICAL));
 
         Log.i(TAG, "onCreateOptionsMenu: search is openend " + searchBar.isIconified());
 
@@ -97,9 +91,9 @@ public class FSearch_layout extends Fragment {
 
             @Override
             public boolean onQueryTextChange(String newText) {
-
+/*
                 Log.i(TAG, "onQueryTextChange: " + newText);
-              /*  model.getSearch(newText).observe(SearchActivity.this, new Observer<List<DictIndonesia>>() {
+                model.getSearch(newText).observe(SearchActivity.this, new Observer<List<DictIndonesia>>() {
                     @Override
                     public void onChanged(List<DictIndonesia> dictIndonesias) {
                         if (dictIndonesias != null) {

@@ -5,7 +5,17 @@
     android:layout_height="match_parent"
     tools:context=".FSearch_layout">
 
-    <include layout="@layout/global_recyclerview" />
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
+        <com.ferfalk.simplesearchview.SimpleSearchView
+            android:id="@+id/searchView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/colorPrimary" />
+
+        <include layout="@layout/global_recyclerview" />
+    </RelativeLayout>
 
 </FrameLayout>

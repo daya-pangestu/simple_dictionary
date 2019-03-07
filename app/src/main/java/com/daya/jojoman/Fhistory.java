@@ -4,9 +4,6 @@ package com.daya.jojoman;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -14,7 +11,6 @@ import com.daya.jojoman.db.indo.model.DictIndonesia;
 import com.daya.jojoman.db.indo.model.HistoryModel;
 import com.daya.jojoman.recyclerview.KataINDAdapter;
 import com.daya.jojoman.repo.HistoryViewModel;
-import com.daya.jojoman.repo.RecyclerViewModel;
 import com.l4digital.fastscroll.FastScroller;
 
 import java.util.ArrayList;
@@ -25,13 +21,13 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
+import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
 
-import static com.daya.jojoman.MainActivity.FROM_DASHBOARD;
 import static com.daya.jojoman.MainActivity.FROM_HISTORY;
 
 
@@ -74,6 +70,7 @@ public class Fhistory extends Fragment {//perlu relasi
         rvGlobal.setLayoutManager(layoutManager);
         rvGlobal.setHasFixedSize(true);
         rvGlobal.setAdapter(kataINDAdapter);
+        rvGlobal.addItemDecoration(new DividerItemDecoration(getContext(), DividerItemDecoration.VERTICAL));
 
         historyViewModel.getList().observe(this, new Observer<List<HistoryModel>>() {
             @Override

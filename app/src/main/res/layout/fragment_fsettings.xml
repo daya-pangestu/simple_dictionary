@@ -32,7 +32,6 @@
 
             <com.github.angads25.toggle.widget.LabeledSwitch
                 android:layout_weight="1"
-                android:id="@+id/switch_setting"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_margin="4dp"
