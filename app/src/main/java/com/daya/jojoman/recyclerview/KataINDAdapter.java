@@ -1,6 +1,7 @@
 package com.daya.jojoman.recyclerview;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -26,7 +27,7 @@ import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.RecyclerView;
 
 public class KataINDAdapter extends RecyclerView.Adapter<KataINDAdapter.KataHolder> implements  /*Filterable,*/ FastScroller.SectionIndexer {
-
+    static final String TAG = KataINDAdapter.class.getSimpleName();
     public static int kode;
 
     private List<DictIndonesia> listKamus;
@@ -70,9 +71,9 @@ public class KataINDAdapter extends RecyclerView.Adapter<KataINDAdapter.KataHold
     public int getItemCount() {
 
         if (listKamus != null) {
+            Log.i(TAG, "getItemCount: ");
             return listKamus.size();
         } else return 0;
-
     }
 
     public void setDict(List<DictIndonesia> dict) {
@@ -145,6 +146,8 @@ public class KataINDAdapter extends RecyclerView.Adapter<KataINDAdapter.KataHold
                 case MainActivity.FROM_SEARCH:
                     navigation.navigate(R.id.action_FSearch_layout_to_fDetail_ragment);
                     break;
+                case MainActivity.FROM_HISTORY:
+                    navigation.navigate(R.id.action_navigation_history_to_fDetail_ragment);
                 default:
                     break;
 

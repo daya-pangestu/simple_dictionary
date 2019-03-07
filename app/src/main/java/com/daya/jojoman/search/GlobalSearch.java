@@ -27,15 +27,5 @@ public class GlobalSearch {
     }
 
 
-    public void activateGlobalsearch() {
-        materialSearchBar = activity.findViewById(R.id.searchBar_bar);
-
-
-        materialSearchBar.setImeOptions(EditorInfo.IME_ACTION_DONE);
-
-
-
-        }
-
 
     }

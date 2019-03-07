@@ -1,6 +1,7 @@
 package com.daya.jojoman.db.indo;
 
 import com.daya.jojoman.db.indo.model.DictIndonesia;
+import com.daya.jojoman.db.indo.model.HistoryModel;
 
 import java.util.List;
 
@@ -24,10 +25,6 @@ public interface DictIdDao {
     LiveData<List<DictIndonesia>> getAllsearch(String word);
 
 
-    @Query("select * FROM DictIndonesia WHERE idIndo like '%'|| :id || '%'")
-    List<DictIndonesia> getKata(int id);
-
-
    /* @Query("SELECT * FROM DictIndonesia")
     DataSource.Factory<Integer, DictIndonesia> getAllPaged();*/
 
@@ -49,5 +46,9 @@ public interface DictIdDao {
 
     @Delete
     void delete(DictIndonesia dictIndonesia);
+
+
+    //history
+
 
 }

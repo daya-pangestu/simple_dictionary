@@ -2,7 +2,9 @@ package com.daya.jojoman;
 
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
@@ -22,6 +24,7 @@ import androidx.lifecycle.ViewModelProviders;
  * A simple {@link Fragment} subclass.
  */
 public class fDetail_ragment extends Fragment {
+    static final String TAG = fDetail_ragment.class.getSimpleName();
     HistoryViewModel historyViewModel;
 
 
@@ -37,7 +40,7 @@ public class fDetail_ragment extends Fragment {
         // Inflate the layout for this fragment
         View v = inflater.inflate(R.layout.fragment_f_detail_ragment, container, false);
         historyViewModel = ViewModelProviders.of(this).get(HistoryViewModel.class);
-
+        setHasOptionsMenu(true);
 
         return v;
     }
@@ -53,10 +56,17 @@ public class fDetail_ragment extends Fragment {
         DictIndonesia dict = kataViewModel.getSendToDetail();
 
         historyViewModel.addHistory(new HistoryModel(dict.getKata(), dict.getPenjelasn()));
+        Log.i(TAG, "onViewCreated: " + historyViewModel.getList());
 
         textDetail.setText(dict.getKata());
 
         textPenjelasan.setText(dict.getPenjelasn());
 
+    }
+
+    @Override
+    public void onPrepareOptionsMenu(@NonNull Menu menu) {
+        menu.findItem(R.id.delete_history).setVisible(false);
+        super.onPrepareOptionsMenu(menu);
     }
 }

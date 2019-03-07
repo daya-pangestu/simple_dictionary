@@ -3,6 +3,7 @@ package com.daya.jojoman;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
+import android.view.Menu;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -37,7 +38,9 @@ public class Fdashboard extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_fdashboard, container, false);
+        View v = inflater.inflate(R.layout.fragment_fdashboard, container, false);
+        setHasOptionsMenu(true);
+        return v;
     }
 
 
@@ -82,6 +85,11 @@ public class Fdashboard extends Fragment {
         return dictIndonesiaList;
     }
 
+    @Override
+    public void onPrepareOptionsMenu(@NonNull Menu menu) {
+        menu.findItem(R.id.delete_history).setVisible(false);
+        super.onPrepareOptionsMenu(menu);
+    }
 
 
 }

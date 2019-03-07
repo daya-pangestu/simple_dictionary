@@ -8,16 +8,13 @@ import com.daya.jojoman.db.indo.DictIndoDatabase;
 import com.daya.jojoman.db.indo.model.DictIndonesia;
 import com.daya.jojoman.db.indo.HistoryDao;
 import com.daya.jojoman.db.indo.model.HistoryModel;
-import com.daya.jojoman.db.indo.model.relation.History;
 
 import java.util.List;
 
 import androidx.lifecycle.LiveData;
-import androidx.paging.DataSource;
 
 
 public class DictRepository {
-
 
     private DictIdDao indDao;
     DictIndoDatabase db;
@@ -39,6 +36,10 @@ public class DictRepository {
         new insertHistoryAsynck(hDao).execute(historyModel);
     }
 
+    public void deleteHistory() {
+        new deleteHistoryAsynck(hDao).execute();
+
+    }
 
     //dictionary
 
@@ -65,6 +66,21 @@ public class DictRepository {
 
         new inserTransactAsyncTask(db).execute(dictIndonesia);
     }
+
+    private static class deleteHistoryAsynck extends AsyncTask<Void, Void, Void> {
+        HistoryDao historyDao;
+
+        public deleteHistoryAsynck(HistoryDao historyDao) {
+            this.historyDao = historyDao;
+        }
+
+        @Override
+        protected Void doInBackground(Void... voids) {
+            historyDao.delete();
+            return null;
+        }
+    }
+
 
 
     private static class insertHistoryAsynck extends AsyncTask<HistoryModel, Void, Void> {

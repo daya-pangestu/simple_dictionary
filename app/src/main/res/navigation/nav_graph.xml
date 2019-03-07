@@ -26,7 +26,14 @@
         android:id="@+id/navigation_history"
         android:name="com.daya.jojoman.Fhistory"
         android:label="fragment_fhistory"
-        tools:layout="@layout/fragment_fhistory" />
+        tools:layout="@layout/fragment_fhistory">
+        <action
+            android:id="@+id/action_navigation_history_to_fDetail_ragment"
+            app:destination="@id/fDetail_ragment" />
+        <action
+            android:id="@+id/action_navigation_history_self"
+            app:destination="@id/navigation_history" />
+    </fragment>
     <fragment
         android:id="@+id/navigation_settings"
         android:name="com.daya.jojoman.Fsettings"
