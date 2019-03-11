@@ -5,8 +5,10 @@ import android.os.AsyncTask;
 
 import com.daya.jojoman.db.indo.DictIdDao;
 import com.daya.jojoman.db.indo.DictIndoDatabase;
-import com.daya.jojoman.db.indo.model.DictIndonesia;
+import com.daya.jojoman.db.indo.FavoritDao;
 import com.daya.jojoman.db.indo.HistoryDao;
+import com.daya.jojoman.db.indo.model.DictIndonesia;
+import com.daya.jojoman.db.indo.model.FavoritModel;
 import com.daya.jojoman.db.indo.model.HistoryModel;
 
 import java.util.List;
@@ -14,16 +16,18 @@ import java.util.List;
 import androidx.lifecycle.LiveData;
 
 
-public class DictRepository {
+class DictRepository {
 
-    private DictIdDao indDao;
-    DictIndoDatabase db;
-    private HistoryDao hDao;
+    private final DictIdDao indDao;
+    private final DictIndoDatabase db;
+    private final HistoryDao hDao;
+    private final FavoritDao favoritDao;
 
     public DictRepository(Application application) {
         db = DictIndoDatabase.getINSTANCE(application);
         indDao = db.dictIdDao();
         hDao = db.hDao();
+        favoritDao = db.favoritDao();
     }
 
     //history
@@ -40,6 +44,24 @@ public class DictRepository {
         new deleteHistoryAsynck(hDao).execute();
 
     }
+
+
+    //favorite
+    public LiveData<List<FavoritModel>> getFavorite() {
+        return favoritDao.loadFavorite();
+    }
+
+    public void addFavorite(FavoritModel favoritModel) {
+        //hDao.insert(historyModel);
+        new insertFavoriteAsync(favoritDao).execute(favoritModel);
+    }
+
+    public void deleteFavorite() {
+        new deleteFavoriteAsync(favoritDao).execute();
+
+    }
+
+
 
     //dictionary
 
@@ -68,9 +90,9 @@ public class DictRepository {
     }
 
     private static class deleteHistoryAsynck extends AsyncTask<Void, Void, Void> {
-        HistoryDao historyDao;
+        final HistoryDao historyDao;
 
-        public deleteHistoryAsynck(HistoryDao historyDao) {
+        deleteHistoryAsynck(HistoryDao historyDao) {
             this.historyDao = historyDao;
         }
 
@@ -82,9 +104,42 @@ public class DictRepository {
     }
 
 
+    private static class insertFavoriteAsync extends AsyncTask<FavoritModel, Void, Void> {
+        final FavoritDao dao;
+
+        insertFavoriteAsync(FavoritDao dao) {
+            this.dao = dao;
+        }
+
+
+        @Override
+        protected Void doInBackground(FavoritModel... favoritModels) {
+            dao.insert(favoritModels[0]);
+
+            return null;
+        }
+    }
+
+
+    private static class deleteFavoriteAsync extends AsyncTask<Void, Void, Void> {
+        final FavoritDao dao;
+
+        deleteFavoriteAsync(FavoritDao favoritDao) {
+            this.dao = favoritDao;
+        }
+
+        @Override
+        protected Void doInBackground(Void... voids) {
+            dao.delete();
+
+            return null;
+        }
+    }
+
+
 
     private static class insertHistoryAsynck extends AsyncTask<HistoryModel, Void, Void> {
-        HistoryDao dao;
+        final HistoryDao dao;
 
         insertHistoryAsynck(HistoryDao dao) {
             this.dao = dao;
@@ -100,7 +155,7 @@ public class DictRepository {
 
 
     private static class insertAsyncTask extends AsyncTask<DictIndonesia, Void, Void> {
-        private DictIdDao asyncIdDao;
+        private final DictIdDao asyncIdDao;
 
         insertAsyncTask(DictIdDao dao) {
             this.asyncIdDao = dao;
@@ -117,7 +172,7 @@ public class DictRepository {
     }
 
     private static class inserTransactAsyncTask extends AsyncTask<DictIndonesia, Void, Void> {
-        private DictIndoDatabase db;
+        private final DictIndoDatabase db;
 
         inserTransactAsyncTask(DictIndoDatabase db) {
             this.db = db;

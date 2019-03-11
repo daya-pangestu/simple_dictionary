@@ -76,11 +76,11 @@ public class SearchSugest extends SuggestionsAdapter<DictIndonesia, SearchSugest
 
 
     static class SugestionHlder extends RecyclerView.ViewHolder {
-        protected TextView title;
-        protected TextView penjelasan;
+        final TextView title;
+        final TextView penjelasan;
 
 
-        public SugestionHlder(@NonNull View itemView) {
+        SugestionHlder(@NonNull View itemView) {
             super(itemView);
             title = itemView.findViewById(R.id.text_sugestion);
             penjelasan = itemView.findViewById(R.id.penjelasan_sugestion);

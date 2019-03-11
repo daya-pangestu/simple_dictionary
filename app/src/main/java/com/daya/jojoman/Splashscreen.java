@@ -136,7 +136,7 @@ public class Splashscreen extends AppCompatActivity {
                 preload.add(dictIndonesia);
 
             }
-            while (textGabung != null) ;
+            // while (textGabung != null) ;
         } catch (IOException e) {
             e.printStackTrace();
         }

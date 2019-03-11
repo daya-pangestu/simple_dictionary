@@ -3,7 +3,7 @@ package com.daya.jojoman.repo;
 import android.app.Application;
 
 import com.daya.jojoman.db.indo.model.DictIndonesia;
-import com.daya.jojoman.db.indo.model.HistoryModel;
+import com.daya.jojoman.db.indo.model.FavoritModel;
 
 import java.util.List;
 
@@ -11,33 +11,30 @@ import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 
-public class HistoryViewModel extends AndroidViewModel {
-    List<DictIndonesia> list;
+public class FavoriteViewModel extends AndroidViewModel {
     private final DictRepository dictRepository;
+    List<DictIndonesia> list;
 
-    public HistoryViewModel(@NonNull Application application) {
+
+    public FavoriteViewModel(@NonNull Application application) {
         super(application);
         dictRepository = new DictRepository(application);
     }
 
-    public void addHistory(HistoryModel hm) {
+    public void addFavorite(FavoritModel fm) {
         //insert transaction to db tabel history
 
         //list.add(d)
 
-        dictRepository.addHistory(hm);
+        dictRepository.addFavorite(fm);
 
     }
 
-    public LiveData<List<HistoryModel>> getList() {
-        return dictRepository.gethistory();
+    public LiveData<List<FavoritModel>> getList() {
+        return dictRepository.getFavorite();
     }
 
-    public void deleteHistory() {
-
-
-        dictRepository.deleteHistory();
+    public void deleteFavorite() {
+        dictRepository.deleteFavorite();
     }
-
-
 }

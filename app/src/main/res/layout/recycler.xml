@@ -9,24 +9,21 @@
     app:dragEdge="left"
     app:mode="same_level">
 
-    <androidx.cardview.widget.CardView
+    <FrameLayout
+        android:id="@+id/back_frame"
         android:layout_width="68dp"
-        android:layout_height="match_parent"
-        app:cardCornerRadius="4dp"
-        app:cardBackgroundColor="#61FFFFFF"
+        android:layout_height="match_parent">
 
-        app:cardElevation="2dp">
-
-        <ImageButton
+        <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:scaleType="fitCenter"
-            android:src="@drawable/ic_favorite_border_black_24dp"/>
+            android:text="favorite"
+            android:textColor="#000"
+            android:textSize="48sp" />
+    </FrameLayout>
 
-    </androidx.cardview.widget.CardView>
-
-    <androidx.cardview.widget.CardView
+    <androidx.coordinatorlayout.widget.CoordinatorLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
         xmlns:tools="http://schemas.android.com/tools"
@@ -35,9 +32,7 @@
         android:id="@+id/card_view_rcycler"
         android:clickable="true"
         android:focusable="true"
-        android:foreground="?android:attr/selectableItemBackground"
-        app:cardCornerRadius="2dp">
-
+        android:foreground="?android:attr/selectableItemBackground">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -53,6 +48,7 @@
                 tools:text="kata" />
 
             <TextView
+                android:layout_marginStart="8dp"
                 android:id="@+id/recycler_penjelasan"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -62,5 +58,5 @@
 
         </LinearLayout>
 
-    </androidx.cardview.widget.CardView>
+    </androidx.coordinatorlayout.widget.CoordinatorLayout>
 </com.chauthai.swipereveallayout.SwipeRevealLayout>

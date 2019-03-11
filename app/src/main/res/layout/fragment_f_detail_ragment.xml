@@ -26,7 +26,7 @@
             android:layout_marginEnd="8dp"
             android:layout_marginBottom="8dp"
             android:gravity="center_vertical"
-            android:textSize="32dp"
+            android:textSize="32sp"
             android:textStyle="bold"
             android:layout_alignParentTop="true"
             tools:text="rumah" />
@@ -42,7 +42,7 @@
             android:layout_marginBottom="8dp"
             android:gravity="center_vertical"
             android:text="penjelasan:"
-            android:textSize="18dp" />
+            android:textSize="18sp" />
 
 
         <TextView
@@ -65,6 +65,7 @@
         android:clickable="true"
         android:src="@drawable/ic_add_black_24dp"
         android:layout_gravity="end|bottom"
-        android:layout_margin="8dp"/>
+        android:layout_margin="8dp"
+        android:focusable="true" />
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
 

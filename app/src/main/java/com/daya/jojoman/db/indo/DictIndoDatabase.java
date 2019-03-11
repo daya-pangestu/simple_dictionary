@@ -3,6 +3,7 @@ package com.daya.jojoman.db.indo;
 import android.content.Context;
 
 import com.daya.jojoman.db.indo.model.DictIndonesia;
+import com.daya.jojoman.db.indo.model.FavoritModel;
 import com.daya.jojoman.db.indo.model.HistoryModel;
 
 import androidx.room.Database;
@@ -10,9 +11,11 @@ import androidx.room.Room;
 import androidx.room.RoomDatabase;
 
 
-@Database(entities = {DictIndonesia.class, HistoryModel.class}, version = 19, exportSchema = false)
+@Database(entities = {DictIndonesia.class, HistoryModel.class, FavoritModel.class}, version = 20, exportSchema = false)
 public abstract class DictIndoDatabase extends RoomDatabase {
     public abstract DictIdDao dictIdDao();
+
+    public abstract FavoritDao favoritDao();
 
     public abstract HistoryDao hDao();
 
@@ -31,9 +34,6 @@ public abstract class DictIndoDatabase extends RoomDatabase {
             }
         }
         return INSTANCE;
-    }
-
-    public void s() {
     }
 
 

@@ -1,12 +1,10 @@
 package com.daya.jojoman.db.indo;
 
 import com.daya.jojoman.db.indo.model.DictIndonesia;
-import com.daya.jojoman.db.indo.model.HistoryModel;
 
 import java.util.List;
 
 import androidx.lifecycle.LiveData;
-import androidx.paging.DataSource;
 import androidx.room.Dao;
 import androidx.room.Delete;
 import androidx.room.Insert;

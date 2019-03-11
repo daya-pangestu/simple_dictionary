@@ -6,17 +6,13 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
 
-import com.daya.jojoman.db.indo.model.DictIndonesia;
 import com.daya.jojoman.recyclerview.KataINDAdapter;
 import com.daya.jojoman.repo.KataViewModel;
 import com.l4digital.fastscroll.FastScroller;
 
-import java.util.List;
-
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.SearchView;
 import androidx.appcompat.widget.Toolbar;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -26,12 +22,12 @@ import butterknife.ButterKnife;
 import static com.daya.jojoman.MainActivity.FROM_SEARCH;
 
 public class SearchActivity extends AppCompatActivity {
-    private static String TAG = SearchActivity.class.getSimpleName();
+    private static final String TAG = SearchActivity.class.getSimpleName();
     @BindView(R.id.toolbar_search)
     Toolbar toolbarSearch;
-    SearchView searchBar;
-    KataViewModel model;
-    KataINDAdapter kataINDAdapter;
+    private SearchView searchBar;
+    private KataViewModel model;
+    private KataINDAdapter kataINDAdapter;
 
     @BindView(R.id.rv_global)
     RecyclerView rvGlobal;
@@ -61,31 +57,25 @@ public class SearchActivity extends AppCompatActivity {
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
         rvGlobal.setLayoutManager(layoutManager);
         rvGlobal.setHasFixedSize(true);
-        kataINDAdapter = new KataINDAdapter(new KataINDAdapter.OnItemClickListener() {
-            @Override
-            public void itemclicked(int position) {
+        kataINDAdapter = new KataINDAdapter(position -> {
 
-            }
         }, FROM_SEARCH);
 
         searchBar.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
                 Log.i(TAG, "onQueryTextChange: " + query);
-                model.getSearch(query).observe(SearchActivity.this, new Observer<List<DictIndonesia>>() {
-                    @Override
-                    public void onChanged(List<DictIndonesia> dictIndonesias) {
-                        if (dictIndonesias != null) {
+                model.getSearch(query).observe(SearchActivity.this, dictIndonesias -> {
+                    if (dictIndonesias != null) {
 
-                            kataINDAdapter.setDict(dictIndonesias);
-                            Log.i(TAG, "onChanged:panjang  " + dictIndonesias.size());
-                            rvGlobal.setAdapter(kataINDAdapter);
-                        } else {
-                            Toast.makeText(SearchActivity.this, "nothing to show", Toast.LENGTH_SHORT).show();
-                            kataINDAdapter.setDict(dictIndonesias);
-                            Log.i(TAG, "onChanged:panjang  " + dictIndonesias.size());
-                            rvGlobal.setAdapter(kataINDAdapter);
-                        }
+                        kataINDAdapter.setDict(dictIndonesias);
+                        Log.i(TAG, "onChanged:panjang  " + dictIndonesias.size());
+                        rvGlobal.setAdapter(kataINDAdapter);
+                    } else {
+                        Toast.makeText(SearchActivity.this, "nothing to show", Toast.LENGTH_SHORT).show();
+                        kataINDAdapter.setDict(dictIndonesias);
+                        Log.i(TAG, "onChanged:panjang  " + dictIndonesias.size());
+                        rvGlobal.setAdapter(kataINDAdapter);
                     }
                 });
 

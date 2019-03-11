@@ -9,16 +9,13 @@ import java.util.List;
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
-import androidx.paging.LivePagedListBuilder;
-import androidx.paging.PagedList;
 
 public class KataViewModel extends AndroidViewModel {
 
-    private DictRepository dictRepository;
-    private LiveData<List<DictIndonesia>> allKata;
-    private LiveData<List<DictIndonesia>> allKataOnly;
+    private final DictRepository dictRepository;
+    private final LiveData<List<DictIndonesia>> allKata;
+    private final LiveData<List<DictIndonesia>> allKataOnly;
     private DictIndonesia sendToDetail;
-    private LiveData<List<DictIndonesia>> search;
 
 
     public KataViewModel(@NonNull Application application) {
@@ -30,6 +27,7 @@ public class KataViewModel extends AndroidViewModel {
 
     }
     public LiveData<List<DictIndonesia>> getSearch(String s) {
+        LiveData<List<DictIndonesia>> search;
         return search = dictRepository.getSearch(s);
     }
 

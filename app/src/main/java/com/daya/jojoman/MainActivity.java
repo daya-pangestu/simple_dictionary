@@ -5,12 +5,14 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.daya.jojoman.layout.BottomNavigationBehavior;
 import com.daya.jojoman.repo.HistoryViewModel;
 import com.facebook.stetho.Stetho;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.navigation.Navigation;
 import androidx.navigation.fragment.NavHostFragment;
@@ -29,8 +31,8 @@ public class MainActivity extends AppCompatActivity{
     @BindView(R.id.toolbar_main)
     Toolbar toolbarMain;
 
-    NavHostFragment navHostFragment;
-    HistoryViewModel historyViewModel;
+    private NavHostFragment navHostFragment;
+    private HistoryViewModel historyViewModel;
 
 
     @Override
@@ -53,6 +55,10 @@ public class MainActivity extends AppCompatActivity{
         if (navHostFragment != null) {
             NavigationUI.setupWithNavController(navigation, navHostFragment.getNavController());
         }
+
+
+        CoordinatorLayout.LayoutParams params = (CoordinatorLayout.LayoutParams) navigation.getLayoutParams();
+        params.setBehavior(new BottomNavigationBehavior());
         toolbarMain.setTitleTextColor(Color.WHITE);
         setSupportActionBar(toolbarMain);
 
@@ -61,15 +67,11 @@ public class MainActivity extends AppCompatActivity{
     }
 
     @Override
-    public boolean onPrepareOptionsMenu(Menu menu) {
-        return super.onPrepareOptionsMenu(menu);
-    }
-
-    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.searchBar_bar:
                 Navigation.findNavController(navHostFragment.getView()).navigate(R.id.action_global_FSearch_layout);
+                //navigation.setVisibility(View.GONE);
                 break;
 
             case R.id.delete_history:

@@ -4,8 +4,6 @@ import android.app.Application;
 import android.content.Context;
 import android.util.Log;
 
-import com.daya.jojoman.Fdashboard;
-import com.daya.jojoman.MainActivity;
 import com.daya.jojoman.db.indo.model.DictIndonesia;
 import com.daya.jojoman.recyclerview.KataINDAdapter;
 import com.l4digital.fastscroll.FastScroller;
@@ -14,18 +12,16 @@ import java.util.List;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
-import androidx.lifecycle.ViewModel;
-import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import static android.content.ContentValues.TAG;
 
 public class RecyclerViewModel extends AndroidViewModel {
-    KataINDAdapter kataINDAdapter;
-    Context context;
-    RecyclerView recyclerView;
-    FastScroller fastScroller;
+    private final Context context;
+    private final RecyclerView recyclerView;
+    private final FastScroller fastScroller;
+    private KataINDAdapter kataINDAdapter;
 
     public RecyclerViewModel(@NonNull Application application, RecyclerView recyclerView, FastScroller fastScroller) {
 
@@ -41,22 +37,19 @@ public class RecyclerViewModel extends AndroidViewModel {
             kataINDAdapter.notifyDataSetChanged();
             Log.i(TAG, "onChanged:panjang  " + dictIndonesias.size());
         } else {
-            kataINDAdapter.setDict(dictIndonesias);
+            kataINDAdapter.setDict(null);
             kataINDAdapter.notifyDataSetChanged();
             Log.i(TAG, "onChanged:panjang  recyclerview kososng ");
         }
     }
 
-    public KataINDAdapter getAdapter() {
+    private KataINDAdapter getAdapter() {
         return kataINDAdapter;
     }
 
     public void setAdapter(int kode) {
-        kataINDAdapter = new KataINDAdapter(new KataINDAdapter.OnItemClickListener() {
-            @Override
-            public void itemclicked(int position) {
+        kataINDAdapter = new KataINDAdapter(position -> {
 
-            }
         }, kode);
 
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(context);

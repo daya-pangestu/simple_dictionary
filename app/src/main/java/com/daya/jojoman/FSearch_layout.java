@@ -12,10 +12,10 @@ import android.view.ViewGroup;
 
 import com.daya.jojoman.recyclerview.KataINDAdapter;
 import com.daya.jojoman.repo.KataViewModel;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.l4digital.fastscroll.FastScroller;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.appcompat.widget.SearchView;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProviders;
@@ -33,15 +33,15 @@ import static com.daya.jojoman.MainActivity.FROM_SEARCH;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class FSearch_layout extends Fragment {
+class FSearch_layout extends Fragment {
 
     @BindView(R.id.rv_global)
     RecyclerView rvGlobal;
     @BindView(R.id.fast_scroller_global)
     FastScroller fastScrollerGlobal;
-    private SearchView searchBar;
     private KataViewModel model;
     private Unbinder unbinder;
+    BottomNavigationView bottomNavigationView;
 
     public FSearch_layout() {
         // Required empty public constructor
@@ -55,7 +55,7 @@ public class FSearch_layout extends Fragment {
         unbinder = ButterKnife.bind(this, view);
         setHasOptionsMenu(true);
         model = ViewModelProviders.of(this).get(KataViewModel.class);
-
+        bottomNavigationView = view.findViewById(R.id.navigation);
         return view;
     }
 
@@ -64,10 +64,15 @@ public class FSearch_layout extends Fragment {
         inflater.inflate(R.menu.menu_search, menu);
         Log.i(TAG, "onCreateOptionsMenu: menu called within fragment");
 
-        searchBar = (SearchView) menu.findItem(R.id.search_sactivity).getActionView();
+        SearchView searchBar = (SearchView) menu.findItem(R.id.search_sactivity).getActionView();
+
         searchBar.setIconified(true);
         searchBar.setFocusable(false);
         searchBar.clearFocus();
+
+        searchBar.setOnClickListener(v -> {
+            bottomNavigationView.setVisibility(View.GONE);
+        });
 
         KataINDAdapter kataINDAdapter = new KataINDAdapter(position -> {
         }, FROM_SEARCH);
@@ -115,13 +120,6 @@ public class FSearch_layout extends Fragment {
 
         super.onCreateOptionsMenu(menu, inflater);
 
-    }
-
-    @Override
-    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-
-        // ((AppCompatActivity)getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }
 
 

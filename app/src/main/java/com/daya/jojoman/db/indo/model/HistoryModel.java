@@ -1,7 +1,6 @@
 package com.daya.jojoman.db.indo.model;
 
 import androidx.room.Entity;
-import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
 
 @Entity

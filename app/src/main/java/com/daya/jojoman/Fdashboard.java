@@ -27,7 +27,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import static com.daya.jojoman.MainActivity.FROM_DASHBOARD;
 
 
-public class Fdashboard extends Fragment {
+class Fdashboard extends Fragment {
     RecyclerViewModel recyclerViewModel;
 
     public Fdashboard() {
@@ -52,10 +52,7 @@ public class Fdashboard extends Fragment {
         FastScroller fastScroller = view.findViewById(R.id.fast_scroller_global);
         //recyclerViewModel = ViewModelProviders.of(this).get(RecyclerViewModel.class);
 
-        KataINDAdapter kataINDAdapter = new KataINDAdapter(new KataINDAdapter.OnItemClickListener() {
-            @Override
-            public void itemclicked(int position) {
-            }
+        KataINDAdapter kataINDAdapter = new KataINDAdapter(position -> {
         }, FROM_DASHBOARD);
 
 

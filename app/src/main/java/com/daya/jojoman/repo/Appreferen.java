@@ -2,13 +2,12 @@ package com.daya.jojoman.repo;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.preference.PreferenceManager;
 
 import static android.content.Context.MODE_PRIVATE;
 
 public class Appreferen {
-    private SharedPreferences sharedPreferences;
-    Context context;
+    private final SharedPreferences sharedPreferences;
+    private final Context context;
 
     private static final String FIRST_RUN = "first_run";
 

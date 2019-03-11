@@ -19,7 +19,6 @@ import java.util.List;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -35,15 +34,15 @@ import static com.daya.jojoman.MainActivity.FROM_HISTORY;
  * A simple {@link Fragment} subclass.
  */
 public class Fhistory extends Fragment {//perlu relasi
-    static final String TAG = Fhistory.class.getSimpleName();
+    private static final String TAG = Fhistory.class.getSimpleName();
 
     @BindView(R.id.rv_global)
     RecyclerView rvGlobal;
     @BindView(R.id.fast_scroller_global)
     FastScroller fastScrollerGlobal;
-    Unbinder unbinder;
-    HistoryViewModel historyViewModel;
-    KataINDAdapter kataINDAdapter;
+    private Unbinder unbinder;
+    private HistoryViewModel historyViewModel;
+    private KataINDAdapter kataINDAdapter;
     public Fhistory() {
         // Required empty public constructor
     }
@@ -72,22 +71,19 @@ public class Fhistory extends Fragment {//perlu relasi
         rvGlobal.setAdapter(kataINDAdapter);
         rvGlobal.addItemDecoration(new DividerItemDecoration(getContext(), DividerItemDecoration.VERTICAL));
 
-        historyViewModel.getList().observe(this, new Observer<List<HistoryModel>>() {
-            @Override
-            public void onChanged(List<HistoryModel> historyModels) {
-                if (historyModels.size() != 0) {
-                    for (HistoryModel s : historyModels) {
-                        String d = s.getKataHistory();
-                        String q = s.getPenjelasanHistory();
+        historyViewModel.getList().observe(this, historyModels -> {
+            if (historyModels.size() != 0) {
+                for (HistoryModel s : historyModels) {
+                    String d = s.getKataHistory();
+                    String q = s.getPenjelasanHistory();
 
-                        Log.i(TAG, "onChanged: " + d + " " + q);
-                        listHistory.add(new DictIndonesia(d, q));
+                    Log.i(TAG, "onChanged: " + d + " " + q);
+                    listHistory.add(new DictIndonesia(d, q));
 
-                    }
-                } else Log.i(TAG, "onChanged: history empty");
-                kataINDAdapter.setDict(listHistory);
+                }
+            } else Log.i(TAG, "onChanged: history empty");
+            kataINDAdapter.setDict(listHistory);
 
-            }
         });
 
         fastScrollerGlobal.setSectionIndexer(kataINDAdapter);
