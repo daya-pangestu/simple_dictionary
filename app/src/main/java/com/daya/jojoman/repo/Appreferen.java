@@ -10,6 +10,7 @@ public class Appreferen {
     private final Context context;
 
     private static final String FIRST_RUN = "first_run";
+    public static final String JUMLAH_FAVORIT = "jumlah_favorit";
 
     public Appreferen(Context context) {
         sharedPreferences = context.getSharedPreferences("preferencesDictio", MODE_PRIVATE);
@@ -26,4 +27,6 @@ public class Appreferen {
     public Boolean getFirstRun() {
         return sharedPreferences.getBoolean(FIRST_RUN, true);
     }
+
+
 }

@@ -6,12 +6,11 @@
         android:id="@+id/searchBar_bar"
         android:orderInCategory="100"
         android:icon="@drawable/ic_search_black_24dp"
-        app:showAsAction="ifRoom|collapseActionView"
+        app:showAsAction="ifRoom"
         android:title="@string/search" />
-
     <item
-        android:id="@+id/delete_history"
+        android:id="@+id/delete_menu_toolbar"
         android:gravity="start"
-        android:title="delete"
+        android:title="delete all"
         app:showAsAction="collapseActionView" />
 </menu>

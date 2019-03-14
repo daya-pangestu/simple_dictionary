@@ -5,7 +5,7 @@
     app:startDestination="@id/navigation_home">
     <fragment
         android:id="@+id/navigation_home"
-        android:name="com.daya.jojoman.Fdashboard"
+        android:name="com.daya.jojoman.view.Fdashboard"
         android:label="fragment_fdashboard"
         tools:layout="@layout/fragment_fdashboard" >
         <action
@@ -14,38 +14,38 @@
     </fragment>
     <fragment
         android:id="@+id/navigation_fovorite"
-        android:name="com.daya.jojoman.Ffavorite"
+        android:name="com.daya.jojoman.view.Ffavorite"
         android:label="fragment_ffavorite"
         tools:layout="@layout/fragment_ffavorite" >
         <action
             android:id="@+id/action_navigation_fovorite_to_fDetail_ragment"
             app:destination="@id/fDetail_ragment" />
+        <action
+            android:id="@+id/action_navigation_fovorite_pop"
+            app:popUpTo="@id/navigation_fovorite"
+            app:popUpToInclusive="true" />
     </fragment>
     <fragment
         android:id="@+id/navigation_history"
-        android:name="com.daya.jojoman.Fhistory"
+        android:name="com.daya.jojoman.view.Fhistory"
         android:label="fragment_fhistory"
         tools:layout="@layout/fragment_fhistory">
         <action
             android:id="@+id/action_navigation_history_to_fDetail_ragment"
             app:destination="@id/fDetail_ragment" />
         <action
-            android:id="@+id/action_navigation_history_self"
-            app:destination="@id/navigation_history" />
+            android:id="@+id/action_navigation_history_pop"
+            app:popUpTo="@id/navigation_history"
+            app:popUpToInclusive="true" />
     </fragment>
     <fragment
-        android:id="@+id/navigation_settings"
-        android:name="com.daya.jojoman.Fsettings"
-        android:label="fragment_fsettings"
-        tools:layout="@layout/fragment_fsettings" />
-    <fragment
         android:id="@+id/fDetail_ragment"
-        android:name="com.daya.jojoman.fDetail_ragment"
+        android:name="com.daya.jojoman.view.fDetail_ragment"
         android:label="fragment_f_detail_ragment"
         tools:layout="@layout/fragment_f_detail_ragment" />
     <fragment
         android:id="@+id/FSearch_layout"
-        android:name="com.daya.jojoman.FSearch_layout"
+        android:name="com.daya.jojoman.view.FSearch_layout"
         android:label="fragment_fsearch_layout"
         tools:layout="@layout/fragment_fsearch_layout">
         <action
@@ -57,4 +57,8 @@
     <action
         android:id="@+id/action_global_FSearch_layout"
         app:destination="@id/FSearch_layout" />
+    <fragment
+        android:id="@+id/navigation_settings"
+        android:name="com.daya.jojoman.view.Fpreferences"
+        android:label="Fpreferences" />
 </navigation>

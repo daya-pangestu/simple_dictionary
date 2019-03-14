@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <com.chauthai.swipereveallayout.SwipeRevealLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/swipper"
+    android:id="@+id/swipper_favorite"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
@@ -10,30 +9,28 @@
     app:mode="same_level">
 
     <androidx.coordinatorlayout.widget.CoordinatorLayout
-        android:id="@+id/back_frame"
+        android:id="@+id/back_frame_favorite"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
-        android:background="@color/colorAccent">
+        android:background="@color/design_default_color_error">
 
         <TextView
-            android:id="@+id/textview_back_frame"
             style="@style/TextAppearance.MaterialComponents.Subtitle1"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_margin="4dp"
             android:layout_gravity="center"
-            android:background="@color/colorAccent"
+            android:layout_margin="4dp"
+            android:background="@color/design_default_color_error"
             android:gravity="center"
-            android:text="favorite"
+            android:text="delete"
             android:textColor="#fff" />
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
-    <androidx.coordinatorlayout.widget.CoordinatorLayout
-        xmlns:android="http://schemas.android.com/apk/res/android"
+    <androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
         xmlns:tools="http://schemas.android.com/tools"
+        android:id="@+id/card_view_rcycler_favorite"
         android:layout_width="match_parent"
-        android:id="@+id/front_frame"
         android:layout_height="wrap_content"
         android:clickable="true"
         android:focusable="true"
@@ -45,7 +42,7 @@
             android:orientation="vertical">
 
             <TextView
-                android:id="@+id/recycler_kata"
+                android:id="@+id/recycler_kata_favorite"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="8dp"
@@ -53,15 +50,16 @@
                 tools:text="kata" />
 
             <TextView
-                android:layout_marginStart="8dp"
-                android:id="@+id/recycler_penjelasan"
+                android:id="@+id/recycler_penjelasan_favorite"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:maxLines="2"
+                android:layout_marginStart="8dp"
                 android:layout_marginBottom="24dp"
+                android:maxLines="2"
                 tools:text="/home/daya/project/IntelliJIDEAProjects/jojoman/app/src/main/res/layout/recycler.xml/home/daya/project/IntelliJIDEAProjects/jojoman/app/src/main/res/layout/recycler.xml/home/daya/project/IntelliJIDEAProjects/jojoman/app/src/main/res/layout/recycler.xml" />
 
         </LinearLayout>
 
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
+
 </com.chauthai.swipereveallayout.SwipeRevealLayout>

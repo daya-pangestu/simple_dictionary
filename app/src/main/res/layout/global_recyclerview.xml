@@ -18,7 +18,6 @@
         android:layout_height="match_parent"
         android:layout_alignParentTop="true"
         android:layout_alignParentEnd="true"
-        android:layout_alignParentBottom="true"
         android:layout_gravity="end"
         app:bubbleColor="@color/colorAccent"
         app:bubbleSize="small"
@@ -26,6 +25,7 @@
         app:handleColor="@color/colorPrimaryDark"
         app:showBubble="true"
         app:showTrack="true"
+        android:layout_marginBottom="56dp"
         app:trackColor="@color/colorPrimary" />
 
 

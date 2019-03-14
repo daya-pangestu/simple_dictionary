@@ -7,4 +7,23 @@
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="search">search</string>
+
+    <string-array name="size_snackbar">
+
+        <item>small</item>
+        <item>medium</item>
+        <item>large</item>
+
+    </string-array>
+
+    <string-array name="languange">
+
+        <item>English</item>
+        <item>Bahasa indonesia</item>
+
+    </string-array>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+
 </resources>

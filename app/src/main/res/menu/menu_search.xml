@@ -5,7 +5,6 @@
     <item
         android:id="@+id/search_sactivity"
         android:icon="@drawable/ic_search_black_24dp"
-        app:searchIcon="@null"
         android:paddingStart="-16dp"
         android:gravity="start"
         android:iconifiedByDefault="false"

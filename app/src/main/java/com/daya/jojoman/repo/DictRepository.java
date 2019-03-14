@@ -3,31 +3,34 @@ package com.daya.jojoman.repo;
 import android.app.Application;
 import android.os.AsyncTask;
 
-import com.daya.jojoman.db.indo.DictIdDao;
-import com.daya.jojoman.db.indo.DictIndoDatabase;
-import com.daya.jojoman.db.indo.FavoritDao;
-import com.daya.jojoman.db.indo.HistoryDao;
-import com.daya.jojoman.db.indo.model.DictIndonesia;
-import com.daya.jojoman.db.indo.model.FavoritModel;
-import com.daya.jojoman.db.indo.model.HistoryModel;
+import com.daya.jojoman.model.DictIndonesia;
+import com.daya.jojoman.model.FavoritModel;
+import com.daya.jojoman.model.HistoryModel;
+import com.daya.jojoman.model.db.DictIdDao;
+import com.daya.jojoman.model.db.DictIndoDatabase;
+import com.daya.jojoman.model.db.FavoritDao;
+import com.daya.jojoman.model.db.HistoryDao;
 
 import java.util.List;
 
 import androidx.lifecycle.LiveData;
 
 
-class DictRepository {
+public class DictRepository {
 
     private final DictIdDao indDao;
     private final DictIndoDatabase db;
     private final HistoryDao hDao;
     private final FavoritDao favoritDao;
+    private Appreferen appreferen;
+
 
     public DictRepository(Application application) {
         db = DictIndoDatabase.getINSTANCE(application);
         indDao = db.dictIdDao();
         hDao = db.hDao();
         favoritDao = db.favoritDao();
+        appreferen = new Appreferen(application);
     }
 
     //history
@@ -61,6 +64,14 @@ class DictRepository {
 
     }
 
+    public void deleteFavoriteAt(FavoritModel favoritModel) {
+        new deleteFavoriteAsyncAt(favoritDao).execute(favoritModel);
+
+    }
+
+    public LiveData<Integer> getJumlahFavorite() {
+        return favoritDao.getJumlahFavorite();
+    }
 
 
     //dictionary
@@ -68,7 +79,6 @@ class DictRepository {
     public LiveData<List<DictIndonesia>> getSearch(String s) {
         return indDao.getAllsearch(s);
     }
-
 
 
     public LiveData<List<DictIndonesia>> getAllKata() {
@@ -136,6 +146,20 @@ class DictRepository {
         }
     }
 
+    private static class deleteFavoriteAsyncAt extends AsyncTask<FavoritModel, Void, Void> {
+        final FavoritDao dao;
+
+        deleteFavoriteAsyncAt(FavoritDao favoritDao) {
+            this.dao = favoritDao;
+        }
+
+
+        @Override
+        protected Void doInBackground(FavoritModel... favoritModels) {
+            dao.deleteAt(favoritModels[0]);
+            return null;
+        }
+    }
 
 
     private static class insertHistoryAsynck extends AsyncTask<HistoryModel, Void, Void> {

@@ -1,16 +1,70 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".FSearch_layout">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".view.FSearch_layout">
 
-    <com.ferfalk.simplesearchview.SimpleSearchView
-            android:id="@+id/searchView"
+    <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/appbar_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
+
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/toolbar_main"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="@color/colorPrimary" />
+            android:layout_height="?android:attr/actionBarSize"
+            android:layout_gravity="top"
+            android:background="?attr/colorPrimary"
+            android:gravity="center_vertical"
+            app:contentInsetStart="0dp"
+            app:popupTheme="@style/ThemeOverlay.AppCompat.Light">
 
-        <include layout="@layout/global_recyclerview" />
+            <com.ferfalk.simplesearchview.SimpleSearchView
+                android:id="@+id/searchView_laps"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                app:layout_behavior="com.lapism.searchview.widget.SearchBehavior" />
 
-</FrameLayout>
+        </androidx.appcompat.widget.Toolbar>
+
+
+    </com.google.android.material.appbar.AppBarLayout>
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/text_sugggestion_search"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="top"
+            android:layout_margin="8dp"
+            android:fontFamily="sans-serif-black"
+            android:text="did you mean : "
+            android:textStyle="italic" />
+
+        <TextView
+            android:id="@+id/suggest_search"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="top"
+            android:layout_margin="8dp"
+            android:fontFamily="sans-serif-black"
+            android:text="xxxxxxxxxxxxxxxxxxxxxxxxxxx "
+            android:textStyle="italic" />
+    </LinearLayout>
+
+
+    <include
+        layout="@layout/global_recyclerview"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="24dp" />
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>
