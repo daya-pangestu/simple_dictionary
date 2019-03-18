@@ -5,26 +5,32 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
-    app:dragEdge="left"
+    app:dragEdge="right"
     app:mode="same_level">
 
-    <androidx.coordinatorlayout.widget.CoordinatorLayout
-        android:id="@+id/back_frame_favorite"
+
+    <RelativeLayout
+        android:id="@+id/back_frame_favo"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
-        android:background="@color/design_default_color_error">
+        android:background="?selectableItemBackground"
+        android:gravity="center"
+        android:orientation="vertical">
 
-        <TextView
-            style="@style/TextAppearance.MaterialComponents.Subtitle1"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
+        <com.github.zagum.switchicon.SwitchIconView
+            android:id="@+id/switch_icon_favo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:layout_margin="4dp"
-            android:background="@color/design_default_color_error"
-            android:gravity="center"
-            android:text="delete"
-            android:textColor="#fff" />
-    </androidx.coordinatorlayout.widget.CoordinatorLayout>
+            android:padding="8dp"
+            app:si_disabled_alpha=".5"
+            app:si_disabled_color="#dadada"
+            app:si_enabled="false"
+            app:si_tint_color="@color/colorAccent"
+            app:srcCompat="@drawable/ic_delete_big"></com.github.zagum.switchicon.SwitchIconView>
+
+    </RelativeLayout>
+
 
     <androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"

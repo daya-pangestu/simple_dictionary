@@ -5,21 +5,21 @@
     app:startDestination="@id/navigation_home">
     <fragment
         android:id="@+id/navigation_home"
-        android:name="com.daya.jojoman.view.Fdashboard"
+        android:name="com.daya.dictio.view.bottomNav.Fdashboard"
         android:label="fragment_fdashboard"
         tools:layout="@layout/fragment_fdashboard" >
         <action
             android:id="@+id/action_navigation_home_to_fDetail_ragment2"
-            app:destination="@id/fDetail_ragment" />
+            app:destination="@id/fDetail" />
     </fragment>
     <fragment
         android:id="@+id/navigation_fovorite"
-        android:name="com.daya.jojoman.view.Ffavorite"
+        android:name="com.daya.dictio.view.bottomNav.Ffavorite"
         android:label="fragment_ffavorite"
         tools:layout="@layout/fragment_ffavorite" >
         <action
             android:id="@+id/action_navigation_fovorite_to_fDetail_ragment"
-            app:destination="@id/fDetail_ragment" />
+            app:destination="@id/fDetail" />
         <action
             android:id="@+id/action_navigation_fovorite_pop"
             app:popUpTo="@id/navigation_fovorite"
@@ -27,38 +27,43 @@
     </fragment>
     <fragment
         android:id="@+id/navigation_history"
-        android:name="com.daya.jojoman.view.Fhistory"
+        android:name="com.daya.dictio.view.bottomNav.Fhistory"
         android:label="fragment_fhistory"
         tools:layout="@layout/fragment_fhistory">
         <action
             android:id="@+id/action_navigation_history_to_fDetail_ragment"
-            app:destination="@id/fDetail_ragment" />
+            app:destination="@id/fDetail" />
         <action
             android:id="@+id/action_navigation_history_pop"
             app:popUpTo="@id/navigation_history"
             app:popUpToInclusive="true" />
     </fragment>
     <fragment
-        android:id="@+id/fDetail_ragment"
-        android:name="com.daya.jojoman.view.fDetail_ragment"
-        android:label="fragment_f_detail_ragment"
+        android:id="@+id/fDetail"
+        android:name="com.daya.dictio.view.fDetail"
+        android:label="fragment_f_detail"
         tools:layout="@layout/fragment_f_detail_ragment" />
     <fragment
-        android:id="@+id/FSearch_layout"
-        android:name="com.daya.jojoman.view.FSearch_layout"
-        android:label="fragment_fsearch_layout"
+        android:id="@+id/FSearch"
+        android:name="com.daya.dictio.view.FSearch"
+        android:label="fragment_fsearch"
         tools:layout="@layout/fragment_fsearch_layout">
         <action
             android:id="@+id/action_FSearch_layout_to_fDetail_ragment"
-            app:destination="@id/fDetail_ragment"
-            app:popUpTo="@id/FSearch_layout"
+            app:destination="@id/fDetail"
+            app:popUpTo="@id/FSearch"
             app:popUpToInclusive="true" />
     </fragment>
     <action
         android:id="@+id/action_global_FSearch_layout"
-        app:destination="@id/FSearch_layout" />
+        app:destination="@id/FSearch" />
     <fragment
         android:id="@+id/navigation_settings"
-        android:name="com.daya.jojoman.view.Fpreferences"
+        android:name="com.daya.dictio.view.bottomNav.Fpreferences"
         android:label="Fpreferences" />
+    <fragment
+        android:id="@+id/another_search"
+        android:name="com.daya.dictio.another_search"
+        android:label="fragment_another_search"
+        tools:layout="@layout/fragment_another_search" />
 </navigation>
