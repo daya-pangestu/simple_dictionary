@@ -1,6 +1,5 @@
 package com.daya.dictio.view;
 
-
 import android.os.Bundle;
 import android.text.Html;
 import android.view.LayoutInflater;
@@ -14,20 +13,25 @@ import android.widget.Toast;
 
 import com.daya.dictio.R;
 import com.daya.dictio.model.DictIndonesia;
+import com.daya.dictio.model.OtherMeaningModel;
 import com.daya.dictio.view.layout_thing.DialogSubmitListener;
+import com.daya.dictio.view.recyclerview_adapter.OtherDetailAdapter;
+import com.daya.dictio.viewmodel.OtherViewModel;
 import com.daya.dictio.viewmodel.WordViewModel;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.navigation.fragment.NavHostFragment;
+import androidx.recyclerview.widget.DividerItemDecoration;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 import androidx.transition.TransitionManager;
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -47,13 +51,18 @@ public class fDetail extends Fragment implements DialogSubmitListener {
     TextView penjelasanDetail;
     @BindView(R.id.card_detail)
     CardView cardDetail;
-    Unbinder unbinder;
     @BindView(R.id.fab_detail_add_meaning)
     FloatingActionButton fabAddMeaning;
+    @BindView(R.id.recycler_detail)
+    RecyclerView recyclerDetail;
 
     private BottomNavigationView bottomNavigationView;
     private WordViewModel wordViewModel;
     private int rotate = 0;
+    private OtherViewModel otherViewModel;
+    private OtherDetailAdapter otherDetailAdapter;
+    private DictIndonesia dict;
+    private Unbinder unbinder;
 
     public fDetail() {
         // Required empty public constructor
@@ -79,57 +88,64 @@ public class fDetail extends Fragment implements DialogSubmitListener {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View v = inflater.inflate(R.layout.fragment_f_detail_ragment, container, false);
-        setHasOptionsMenu(true);
+        View view = inflater.inflate(R.layout.fragment_f_detail_ragment, container, false);
         ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle("Detail");
-
-        unbinder = ButterKnife.bind(this, v);
-
+        unbinder = ButterKnife.bind(this, view);
+        setHasOptionsMenu(true);
         bottomNavigationView = getActivity().findViewById(R.id.navigation);
         bottomNavigationView.setVisibility(View.INVISIBLE);
-        return v;
-    }
 
-    @Override
-    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
 
+        otherViewModel = ViewModelProviders.of(this).get(OtherViewModel.class);
         wordViewModel = ViewModelProviders.of(getActivity()).get(WordViewModel.class);
 
-        DictIndonesia dict = wordViewModel.getSendToDetail();
+        dict = wordViewModel.getSendToDetail();
 
         textDetail.setText(dict.getWord());
 
         penjelasanDetail.setText(Html.fromHtml(dict.getMeaning()));
 
-        cardDetail.setOnClickListener(v -> expandCollapseCardView(v));
+        cardDetail.setOnClickListener(this::expandCollapseCardView);
 
 
-        fabAddMeaning.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                FragmentManager fm = getFragmentManager();
-                FDialog dialog = FDialog.newInstance();
-                dialog.setDialogListener(fDetail.this);
-
+        fabAddMeaning.setOnClickListener(v -> {
+            FragmentManager fm = getFragmentManager();
+            FDialog dialog = FDialog.newInstance();
+            dialog.setDialogListener(fDetail.this);
+            if (fm != null) {
                 dialog.show(fm, "dialog");
-
-
             }
         });
 
+        //recyclerview
+        otherDetailAdapter = new OtherDetailAdapter();
+        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getActivity());
+        recyclerDetail.setLayoutManager(layoutManager);
+        recyclerDetail.setHasFixedSize(true);
+        recyclerDetail.addItemDecoration(new DividerItemDecoration(getContext(), DividerItemDecoration.VERTICAL));
+        recyclerDetail.setAdapter(otherDetailAdapter);
 
+        otherViewModel.getOtherMeaning(dict.getIdIndo()).observe(this, otherMeaningModels -> {
+            if (!otherMeaningModels.isEmpty()) {
+                otherDetailAdapter.addOtherMeaning(otherMeaningModels);
+            }
+        });
+
+        return view;
     }
+
 
     @Override
     public void onfinishedDialog(String text) {
         Toast.makeText(getActivity(), text, Toast.LENGTH_SHORT).show();
+
+        otherViewModel.addMeaning(new OtherMeaningModel(text, dict.getIdIndo()));
     }
 
     private void expandCollapseCardView(View view) {
 
         rotate = rotate == 0 ? 180 : 0;
-        expandCollapseIcon.animate().rotation(rotate).setDuration(500).start();
+        expandCollapseIcon.animate().rotation(rotate).setDuration(300).start();
 
         if (tex.getVisibility() == View.VISIBLE || penjelasanDetail.getVisibility() == View.VISIBLE) {
 
@@ -148,8 +164,6 @@ public class fDetail extends Fragment implements DialogSubmitListener {
         }
     }
 
-
-    //onpause, onresume, onactivitycreated,handleonbackpressed semuanya menangani tombol tombol back muncul di disini tapi hilang id dashboard
     @Override
     public void onPause() {
         super.onPause();

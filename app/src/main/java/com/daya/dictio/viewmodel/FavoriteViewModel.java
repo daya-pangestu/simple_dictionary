@@ -3,6 +3,7 @@ package com.daya.dictio.viewmodel;
 import android.app.Application;
 
 import com.daya.dictio.model.FavoritModel;
+import com.daya.dictio.model.join.FavoriteJoinDict;
 import com.daya.dictio.repo.DictRepository;
 
 import java.util.List;
@@ -30,7 +31,7 @@ public class FavoriteViewModel extends AndroidViewModel {
         dictRepository.addFavorite(fm);
     }
 
-    public LiveData<List<FavoritModel>> getList() {
+    public LiveData<List<FavoriteJoinDict>> getList() {
         return dictRepository.getFavorite();
     }
 
@@ -42,8 +43,9 @@ public class FavoriteViewModel extends AndroidViewModel {
         dictRepository.deleteFavoriteAt(favoritModel);
     }
 
-    public boolean isFavoritExists(String s) {
-        return dictRepository.isfavoritExists(s);
+    //next implementation
+    public boolean isFavoritExists(int s) {
+        return true;
     }
 
 

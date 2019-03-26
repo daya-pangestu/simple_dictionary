@@ -5,7 +5,7 @@
     <item
         android:id="@+id/searchBar_bar"
         android:orderInCategory="100"
-        android:icon="@drawable/ic_search_black_24dp"
+        android:icon="@drawable/ic_search_white_menu_24dp"
         app:showAsAction="ifRoom"
         android:title="@string/search" />
     <item

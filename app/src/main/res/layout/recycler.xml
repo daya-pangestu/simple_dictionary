@@ -7,31 +7,6 @@
     android:layout_height="wrap_content"
     app:dragEdge="left"
     app:mode="same_level">
-    <!--
-
-        <androidx.coordinatorlayout.widget.CoordinatorLayout
-
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
-    -->
-
-    <!--  <ImageButton
-          android:id="@+id/btn_back_frame"
-          android:layout_width="wrap_content"
-          android:layout_height="match_parent"
-          android:layout_gravity="center"
-          android:padding="4dp"
-          android:background="?colorAccent"
-          android:foreground="?attr/selectableItemBackground"
-          style="@style/Widget.AppCompat.Button.Borderless.Colored"
-          android:layout_margin="4dp"
-          android:src="@drawable/ic_favorite_border_black_24dp"/>-->
-
-
-    <!--
-        </androidx.coordinatorlayout.widget.CoordinatorLayout>
-    -->
-
     <RelativeLayout
         android:id="@+id/back_frame"
         android:layout_width="wrap_content"
@@ -50,7 +25,7 @@
             app:si_disabled_color="#dadada"
             app:si_enabled="false"
             app:si_tint_color="@color/colorAccent"
-            app:srcCompat="@drawable/ic_favorite_big"></com.github.zagum.switchicon.SwitchIconView>
+            app:srcCompat="@drawable/ic_favorite_big" />
 
     </RelativeLayout>
 
@@ -83,7 +58,18 @@
                 android:layout_marginBottom="16dp"
                 tools:text="/home/daya/project/IntelliJIDEAProjects/jojoman/app/src/main/res/layout/recycler.xml/home/daya/project/IntelliJIDEAProjects/jojoman/app/src/main/res/layout/recycler.xml/home/daya/project/IntelliJIDEAProjects/jojoman/app/src/main/res/layout/recycler.xml" />
 
+            <ImageButton
+                android:id="@+id/copy_content_main"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="end"
+                android:layout_marginEnd="8dp"
+                android:layout_marginBottom="16dp"
+                android:background="@null"
+                android:src="@drawable/ic_content_copy_black_24dp"
+                tools:ignore="ContentDescription" />
         </LinearLayout>
+
 
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 </com.chauthai.swipereveallayout.SwipeRevealLayout>

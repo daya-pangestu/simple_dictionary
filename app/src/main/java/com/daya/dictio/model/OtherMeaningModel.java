@@ -8,36 +8,48 @@ import androidx.room.PrimaryKey;
 
 import static androidx.room.ForeignKey.CASCADE;
 
+
 @Entity(
         foreignKeys = @ForeignKey(entity = DictIndonesia.class,
+
                 parentColumns = "idIndo",
                 childColumns = "idOwner",
-                onDelete = CASCADE,
-                onUpdate = CASCADE),
-        indices = {@Index(value = "idOwner", unique = true)}
-
+                onDelete = CASCADE),
+        indices = {@Index("idOwner")}
 )
-public class HistoryModel {
+public class OtherMeaningModel {
+
     @PrimaryKey(autoGenerate = true)
-    private int id;
+    public int idOther;
+    public String Other;
     private int idOwner;
 
-    public HistoryModel(int idOwner) {
+    @Ignore
+    public OtherMeaningModel(String other, int idOwner) {
+        Other = other;
         this.idOwner = idOwner;
     }
 
-    @Ignore // digunain buat delete
-    public HistoryModel(int id, int idOwner) {
-        this.id = id;
+    public OtherMeaningModel(int idOther, String Other, int idOwner) {
+        this.idOther = idOther;
+        this.Other = Other;
         this.idOwner = idOwner;
     }
 
-    public int getId() {
-        return id;
+    public int getIdOther() {
+        return idOther;
     }
 
-    public void setId(int id) {
-        this.id = id;
+    public void setIdOther(int idOther) {
+        this.idOther = idOther;
+    }
+
+    public String getOther() {
+        return Other;
+    }
+
+    public void setOther(String other) {
+        Other = other;
     }
 
     public int getIdOwner() {
@@ -47,6 +59,4 @@ public class HistoryModel {
     public void setIdOwner(int idOwner) {
         this.idOwner = idOwner;
     }
-
-
 }

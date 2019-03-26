@@ -6,7 +6,6 @@
     android:layout_height="match_parent">
 
     <TextView
-        android:layout_alignParentStart="true"
         tools:text="blablabla"
         android:id="@+id/text_sugestion"
         android:layout_width="match_parent"

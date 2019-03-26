@@ -2,26 +2,19 @@ package com.daya.dictio.view.bottomNav;
 
 
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.daya.dictio.R;
-import com.daya.dictio.model.DictIndonesia;
-import com.daya.dictio.model.HistoryModel;
-import com.daya.dictio.view.adapter.WordIndAdapter;
+import com.daya.dictio.view.recyclerview_adapter.HistoryAdapter;
 import com.daya.dictio.viewmodel.HistoryViewModel;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.snackbar.Snackbar;
 import com.l4digital.fastscroll.FastScroller;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProviders;
@@ -32,7 +25,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
-
 
 
 /**
@@ -49,7 +41,7 @@ public class Fhistory extends Fragment {//perlu relasi
 
 
     private HistoryViewModel historyViewModel;
-    private WordIndAdapter wordIndAdapter;
+    private HistoryAdapter historyAdapter;
     BottomNavigationView bottomNavigationView;
 
 
@@ -71,42 +63,22 @@ public class Fhistory extends Fragment {//perlu relasi
         ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle("History");
         bottomNavigationView = getActivity().findViewById(R.id.navigation);
         bottomNavigationView.setVisibility(View.VISIBLE);
+        historyAdapter = new HistoryAdapter();
 
-        return view;
-    }
-
-    @Override
-    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        List<DictIndonesia> listHistory = new ArrayList<>();
-        wordIndAdapter = new WordIndAdapter(position -> {
-        }, WordIndAdapter.SENDER.HISTORY);
-
+        //recyclerview
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getContext());
         rvGlobal.setLayoutManager(layoutManager);
         rvGlobal.setHasFixedSize(true);
-        rvGlobal.setAdapter(wordIndAdapter);
+        rvGlobal.setAdapter(historyAdapter);
         rvGlobal.addItemDecoration(new DividerItemDecoration(getContext(), DividerItemDecoration.VERTICAL));
 
-        historyViewModel.getList().observe(this, historyModels -> {
-            if (historyModels.size() != 0) {
-                for (HistoryModel s : historyModels) {
-                    String d = s.getKataHistory();
-                    String q = s.getPenjelasanHistory();
+        historyViewModel.getList().observe(this, historyJoinDicts -> historyAdapter.setHistory(historyJoinDicts));
 
-                    Log.i(TAG, "onChanged: " + d + " " + q);
-                    listHistory.add(new DictIndonesia(d, q));
-
-                }
-            } else Log.i(TAG, "onChanged: history empty");
-            wordIndAdapter.setDict(listHistory);
-
-        });
-
-        fastScrollerGlobal.setSectionIndexer(wordIndAdapter);
+        fastScrollerGlobal.setSectionIndexer(historyAdapter);
         fastScrollerGlobal.attachRecyclerView(rvGlobal);
 
 
-        super.onViewCreated(view, savedInstanceState);
+        return view;
     }
 
 
@@ -115,7 +87,6 @@ public class Fhistory extends Fragment {//perlu relasi
         switch (item.getItemId()) {
             case R.id.delete_menu_toolbar:
                 historyViewModel.deleteHistory();
-                wordIndAdapter.clearData();
                 NavHostFragment.findNavController(this).navigate(R.id.action_navigation_history_pop);
                 Snackbar.make(getView(), "return to home", Snackbar.LENGTH_LONG).setAction("OK", v -> {
                 }).show();

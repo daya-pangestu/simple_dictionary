@@ -8,8 +8,8 @@ import androidx.room.PrimaryKey;
 @Fts4(contentEntity = DictIndonesia.class)
 @Entity
 public class SearchModelFts {
-    public String word;
-    public String meaning;
+    private String word;
+    private String meaning;
     @PrimaryKey
     @ColumnInfo(name = "rowid")
     private int rowId;

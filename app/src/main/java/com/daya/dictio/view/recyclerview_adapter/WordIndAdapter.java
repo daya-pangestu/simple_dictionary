@@ -1,10 +1,14 @@
-package com.daya.dictio.view.adapter;
+package com.daya.dictio.view.recyclerview_adapter;
 
+import android.content.ClipData;
+import android.content.ClipboardManager;
 import android.content.Context;
 import android.text.Html;
+import android.text.Spanned;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -12,12 +16,14 @@ import com.chauthai.swipereveallayout.SwipeRevealLayout;
 import com.chauthai.swipereveallayout.ViewBinderHelper;
 import com.daya.dictio.R;
 import com.daya.dictio.model.DictIndonesia;
+import com.daya.dictio.model.FavoritModel;
 import com.daya.dictio.model.HistoryModel;
-import com.daya.dictio.view.layout_thing.OnItemClickListener;
+import com.daya.dictio.model.SENDER;
 import com.daya.dictio.viewmodel.FavoriteViewModel;
 import com.daya.dictio.viewmodel.HistoryViewModel;
 import com.daya.dictio.viewmodel.WordViewModel;
 import com.github.zagum.switchicon.SwitchIconView;
+import com.google.android.material.snackbar.Snackbar;
 import com.l4digital.fastscroll.FastScroller;
 
 import java.util.List;
@@ -32,16 +38,16 @@ import androidx.recyclerview.widget.RecyclerView;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
+import static com.google.android.material.snackbar.Snackbar.make;
+
 public class WordIndAdapter extends RecyclerView.Adapter<WordIndAdapter.WordHolder> implements FastScroller.SectionIndexer {
-    private final OnItemClickListener onItemClickListener;
     private final ViewBinderHelper viewBinderHelper = new ViewBinderHelper();
-    private SENDER sender;
+    private final SENDER sender;
     private List<DictIndonesia> listKamus;
     private Context context;
 
-    public WordIndAdapter(@NonNull OnItemClickListener onItemClickListener, SENDER kode) {
+    public WordIndAdapter(SENDER kode) {
         ViewBinderHelper viewBinderHelper = new ViewBinderHelper();
-        this.onItemClickListener = onItemClickListener;
         viewBinderHelper.setOpenOnlyOne(true);
         sender = kode;
     }
@@ -51,7 +57,7 @@ public class WordIndAdapter extends RecyclerView.Adapter<WordIndAdapter.WordHold
     public WordHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.recycler, parent, false);
         this.context = parent.getContext();
-        return new WordHolder(itemView, onItemClickListener);
+        return new WordHolder(itemView);
     }
 
     @Override
@@ -75,10 +81,6 @@ public class WordIndAdapter extends RecyclerView.Adapter<WordIndAdapter.WordHold
         this.listKamus = dict;
         notifyDataSetChanged();
 
-    }
-
-    public enum SENDER {
-        DASHBOARD, HISTORY, SEARCH
     }
 
     @Override
@@ -105,20 +107,19 @@ public class WordIndAdapter extends RecyclerView.Adapter<WordIndAdapter.WordHold
         @BindView(R.id.switchIconView3)
         SwitchIconView iconView;
 
-        /* @BindView(R.id.btn_back_frame)
-         ImageButton btnBackFrame;*/
+        final View viewForSnackbar;
         @BindView(R.id.front_frame)
         CoordinatorLayout frontFrame;
-        private WordViewModel wordViewModel;
-        private OnItemClickListener onItemClickListener;
+        private final WordViewModel wordViewModel;
+        private final HistoryViewModel historyViewModel;
+        private final FavoriteViewModel favoriteViewModel;
+        @BindView(R.id.copy_content_main)
+        ImageButton btnCopy;
+        private DictIndonesia inHolderDict;
 
-        private HistoryViewModel historyViewModel;
-        private FavoriteViewModel favoriteViewModel;
-
-
-        WordHolder(View view, OnItemClickListener onItemClickListener) {
+        WordHolder(View view) {
             super(view);
-            this.onItemClickListener = onItemClickListener;
+            this.viewForSnackbar = view;
             ButterKnife.bind(this, view);
 
             wordViewModel = ViewModelProviders.of((FragmentActivity) context).get(WordViewModel.class);
@@ -127,60 +128,62 @@ public class WordIndAdapter extends RecyclerView.Adapter<WordIndAdapter.WordHold
 
             frontFrame.setOnClickListener(this);
             backFrame.setOnClickListener(this);
-
-
+            btnCopy.setOnClickListener(this);
         }
 
         void bindTo(DictIndonesia dictIndonesia) {
             kataFrontFrame.setText(Html.fromHtml(dictIndonesia.getWord()));
             penjelasanFrontFrame.setText(Html.fromHtml(dictIndonesia.getMeaning()));
-
+            this.inHolderDict = dictIndonesia;
         }
 
-        void navigationFronLayout(View v, String kata, String penjelasan) {
-
+        void navigationFronLayout(View v, int id, String word, String meaning) {
             NavController navigation = Navigation.findNavController(v);
-
+            wordViewModel.setSendToDetail(new DictIndonesia(id, word, meaning));
             switch (sender) {
                 case DASHBOARD:
+                    historyViewModel.addHistory(new HistoryModel(id));
                     navigation.navigate(R.id.fDetail);
                     break;
-
                 case SEARCH:
-                    historyViewModel.addHistory(new HistoryModel(kata, penjelasan));
+                    historyViewModel.addHistory(new HistoryModel(id));
                     navigation.navigate(R.id.fDetail);
+                    make(itemView, word + " added to favorite", Snackbar.LENGTH_SHORT).show();
                     break;
-
-                case HISTORY:
-                    navigation.navigate(R.id.fDetail);
                 default:
                     break;
             }
-
         }
 
         @Override
         public void onClick(View v) {
-            String word = listKamus.get(getAdapterPosition()).getWord();
-            String meaning = listKamus.get(getAdapterPosition()).getMeaning();
-
-            wordViewModel.setSendToDetail(new DictIndonesia(word, meaning));
-
+            String word = inHolderDict.getWord();
+            String meaning = inHolderDict.getMeaning();
+            int id = inHolderDict.getIdIndo();
+            Snackbar snackbar;
             switch (v.getId()) {
-
                 case R.id.front_frame:
-                    navigationFronLayout(v, word, meaning);
-                    break;
+                    navigationFronLayout(v, id, word, meaning);
 
+                    break;
                 case R.id.back_frame:
                     iconView.switchState(true);
-
+                    favoriteViewModel.addFavorite(new FavoritModel(id));
+                    snackbar = Snackbar.make(viewForSnackbar, word + " added to favorite", Snackbar.LENGTH_LONG);
+                    snackbar.show();
                     break;
+
+                case R.id.copy_content_main:
+                    Spanned stringe = Html.fromHtml(word + "\n\n" + meaning);
+                    ClipboardManager clipboard = (ClipboardManager) viewForSnackbar.getContext().getSystemService(Context.CLIPBOARD_SERVICE);
+                    ClipData clip = ClipData.newPlainText("label", stringe.toString());
+                    clipboard.setPrimaryClip(clip);
+                    snackbar = Snackbar.make(viewForSnackbar, listKamus.get(getAdapterPosition()).getWord() + " copied", Snackbar.LENGTH_SHORT);
+                    snackbar.show();
                 default:
                     break;
             }
 
-            onItemClickListener.itemclicked(getAdapterPosition());
         }
     }
 

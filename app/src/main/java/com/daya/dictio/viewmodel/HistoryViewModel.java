@@ -2,8 +2,8 @@ package com.daya.dictio.viewmodel;
 
 import android.app.Application;
 
-import com.daya.dictio.model.DictIndonesia;
 import com.daya.dictio.model.HistoryModel;
+import com.daya.dictio.model.join.HistoryJoinDict;
 import com.daya.dictio.repo.DictRepository;
 
 import java.util.List;
@@ -13,7 +13,6 @@ import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 
 public class HistoryViewModel extends AndroidViewModel {
-    List<DictIndonesia> list;
     private final DictRepository dictRepository;
 
     public HistoryViewModel(@NonNull Application application) {
@@ -26,12 +25,16 @@ public class HistoryViewModel extends AndroidViewModel {
 
     }
 
-    public LiveData<List<HistoryModel>> getList() {
+    public LiveData<List<HistoryJoinDict>> getList() {
         return dictRepository.gethistory();
     }
 
     public void deleteHistory() {
         dictRepository.deleteHistory();
+    }
+
+    public void deleteHistoryAt(HistoryModel historyModel) {
+        dictRepository.deleteHistoryAt(historyModel);
     }
 
 

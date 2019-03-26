@@ -7,15 +7,14 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.daya.dictio.R;
-import com.daya.dictio.view.adapter.FavoritAdapter;
 import com.daya.dictio.view.layout_thing.BottomNavigationBehavior;
+import com.daya.dictio.view.recyclerview_adapter.FavoritAdapter;
 import com.daya.dictio.viewmodel.FavoriteViewModel;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.snackbar.Snackbar;
 import com.l4digital.fastscroll.FastScroller;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProviders;
@@ -36,7 +35,6 @@ public class Ffavorite extends Fragment {
     FastScroller fastScrollerGlobal;
     FavoritAdapter adapter;
     BottomNavigationView bottomNavigationView;
-    BottomNavigationBehavior b;
     private Unbinder unbinder;
     private FavoriteViewModel favoriteViewModel;
 
@@ -48,26 +46,14 @@ public class Ffavorite extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View v = inflater.inflate(R.layout.fragment_ffavorite, container, false);
-        unbinder = ButterKnife.bind(this, v);
+        View view = inflater.inflate(R.layout.fragment_ffavorite, container, false);
+        unbinder = ButterKnife.bind(this, view);
         favoriteViewModel = ViewModelProviders.of(this).get(FavoriteViewModel.class);
         bottomNavigationView = getActivity().findViewById(R.id.navigation);
         ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle("Favorite");
-
-        b = new BottomNavigationBehavior();
-
-
         setHasOptionsMenu(true);
 
-        return v;
-
-    }
-
-    @Override
-    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-        adapter = new FavoritAdapter(position -> {
-        });
+        adapter = new FavoritAdapter();
 
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getActivity());
         rvGlobal.setLayoutManager(layoutManager);
@@ -75,11 +61,8 @@ public class Ffavorite extends Fragment {
         rvGlobal.addItemDecoration(new DividerItemDecoration(getContext(), DividerItemDecoration.VERTICAL));
         rvGlobal.setAdapter(adapter);
 
-        favoriteViewModel.getList().observe(this, dict -> {
-            adapter.setDict(dict);
 
-        });
-
+        favoriteViewModel.getList().observe(this, favoriteJoinDicts -> adapter.setDict(favoriteJoinDicts));
         fastScrollerGlobal.setSectionIndexer(adapter);
         fastScrollerGlobal.attachRecyclerView(rvGlobal);
 
@@ -89,7 +72,10 @@ public class Ffavorite extends Fragment {
             }
         });
 
+        return view;
+
     }
+
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {

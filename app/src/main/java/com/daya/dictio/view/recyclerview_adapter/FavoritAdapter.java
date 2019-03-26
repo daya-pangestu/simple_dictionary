@@ -1,4 +1,4 @@
-package com.daya.dictio.view.adapter;
+package com.daya.dictio.view.recyclerview_adapter;
 
 import android.content.Context;
 import android.os.Handler;
@@ -6,6 +6,7 @@ import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -15,7 +16,7 @@ import com.daya.dictio.R;
 import com.daya.dictio.model.DictIndonesia;
 import com.daya.dictio.model.FavoritModel;
 import com.daya.dictio.model.HistoryModel;
-import com.daya.dictio.view.layout_thing.OnItemClickListener;
+import com.daya.dictio.model.join.FavoriteJoinDict;
 import com.daya.dictio.viewmodel.FavoriteViewModel;
 import com.daya.dictio.viewmodel.HistoryViewModel;
 import com.daya.dictio.viewmodel.WordViewModel;
@@ -25,6 +26,7 @@ import com.l4digital.fastscroll.FastScroller;
 import java.util.List;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.fragment.app.FragmentActivity;
 import androidx.lifecycle.ViewModelProviders;
@@ -38,26 +40,23 @@ import timber.log.Timber;
 
 public class FavoritAdapter extends RecyclerView.Adapter<FavoritAdapter.WordolderFavorite> implements FastScroller.SectionIndexer {
     private final ViewBinderHelper viewBinderHelper = new ViewBinderHelper();
-    private OnItemClickListener onItemClickListener;
-    private List<FavoritModel> listKamus;
+    private List<FavoriteJoinDict> listKamus;
     private Context context;
 
-    public FavoritAdapter(OnItemClickListener onItemClickListener) {
-        this.onItemClickListener = onItemClickListener;
-    }
 
     @NonNull
     @Override
     public WordolderFavorite onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.recycler_favorite, parent, false);
         this.context = parent.getContext();
-        return new WordolderFavorite(itemView, onItemClickListener);
+        viewBinderHelper.setOpenOnlyOne(true);
+        return new WordolderFavorite(itemView);
     }
 
     @Override
     public void onBindViewHolder(@NonNull WordolderFavorite holder, int position) {
-        FavoritModel current = listKamus.get(position);
-        viewBinderHelper.bind(holder.swipperFavorite, String.valueOf(current.getIdFavorit()));
+        FavoriteJoinDict current = listKamus.get(position);
+        viewBinderHelper.bind(holder.swipperFavorite, String.valueOf(current.getId()));
         holder.bindTo(current);
     }
 
@@ -67,7 +66,7 @@ public class FavoritAdapter extends RecyclerView.Adapter<FavoritAdapter.Wordolde
 
     }
 
-    public void setDict(List<FavoritModel> dict) {
+    public void setDict(List<FavoriteJoinDict> dict) {
         this.listKamus = dict;
         notifyDataSetChanged();
     }
@@ -79,7 +78,7 @@ public class FavoritAdapter extends RecyclerView.Adapter<FavoritAdapter.Wordolde
 
 
     private String fapatkanItem(int position) {
-        return listKamus.get(position).getWordFavorit();
+        return listKamus.get(position).getWord();
     }
 
     @Override
@@ -112,45 +111,50 @@ public class FavoritAdapter extends RecyclerView.Adapter<FavoritAdapter.Wordolde
         @BindView(R.id.swipper_favorite)
         SwipeRevealLayout swipperFavorite;
 
+        private final WordViewModel wordViewModel;
+        private final HistoryViewModel historyViewModel;
+        private final FavoriteViewModel favoriteViewModel;
+        @Nullable
+        @BindView(R.id.list_empty)
+        ImageView listEmpty;
+        private FavoriteJoinDict inHolderFav;
 
-        private WordViewModel wordViewModel;
-        private HistoryViewModel historyViewModel;
-        private FavoriteViewModel favoriteViewModel;
-        private OnItemClickListener onItemClickListener;
 
-        WordolderFavorite(View view, OnItemClickListener onItemClickListener) {
+        WordolderFavorite(View view) {
             super(view);
             ButterKnife.bind(this, view);
+
             historyViewModel = ViewModelProviders.of((FragmentActivity) view.getContext()).get(HistoryViewModel.class);
-
-
             wordViewModel = ViewModelProviders.of((FragmentActivity) context).get(WordViewModel.class);
             favoriteViewModel = ViewModelProviders.of((FragmentActivity) context).get(FavoriteViewModel.class);
 
-            this.onItemClickListener = onItemClickListener;
             frontFrameFavorite.setOnClickListener(this);
-
             backFrameFavorite.setOnClickListener(this);
+
         }
 
 
-        void bindTo(FavoritModel favoritModel) {
-            kataFavoriteFront.setText(Html.fromHtml(favoritModel.getWordFavorit()));
-            penjelasanFavoriteFront.setText(Html.fromHtml(favoritModel.getMeaning()));
+        void bindTo(FavoriteJoinDict favoriteJoinDict) {
+            kataFavoriteFront.setText(Html.fromHtml(favoriteJoinDict.getWord()));
+            penjelasanFavoriteFront.setText(Html.fromHtml(favoriteJoinDict.getMeaning()));
+            inHolderFav = favoriteJoinDict;
         }
 
         @Override
         public void onClick(View v) {
-            int id = listKamus.get(getAdapterPosition()).getIdFavorit();
-            String wordFavorit = listKamus.get(getAdapterPosition()).getWordFavorit();
-            String meaning = listKamus.get(getAdapterPosition()).getMeaning();
+            int id = inHolderFav.getId();
+            int idOwner = inHolderFav.getIdOwner();
+            String wordFavorit = inHolderFav.getWord();
+            String meaning = inHolderFav.getMeaning();
+
             switch (v.getId()) {
                 case R.id.card_view_rcycler_favorite:
-                    wordViewModel.setSendToDetail(new DictIndonesia(wordFavorit, meaning));
-                    historyViewModel.addHistory(new HistoryModel(wordFavorit, meaning));
+
+                    wordViewModel.setSendToDetail(new DictIndonesia(id, wordFavorit, meaning));
+                    historyViewModel.addHistory(new HistoryModel(id));
+
                     NavController navigation = Navigation.findNavController(v);
                     navigation.navigate(R.id.action_navigation_fovorite_to_fDetail_ragment);
-                    onItemClickListener.itemclicked(getAdapterPosition());
                     break;
                 case R.id.back_frame_favo:
                     iconDelete.setIconEnabled(true);
@@ -158,7 +162,7 @@ public class FavoritAdapter extends RecyclerView.Adapter<FavoritAdapter.Wordolde
                     handler.postDelayed(() -> {
                         // hold item before removed for 0.5 sec
                         removeItemAt(getAdapterPosition());
-                        favoriteViewModel.deleteFavoriteAt(new FavoritModel(id, wordFavorit, meaning));
+                        favoriteViewModel.deleteFavoriteAt(new FavoritModel(id, idOwner));
                         Timber.i("onClick: sisa listkamus %s", listKamus.size());
                     }, 300);
 

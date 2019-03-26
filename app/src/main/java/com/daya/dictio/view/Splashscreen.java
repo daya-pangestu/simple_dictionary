@@ -3,14 +3,12 @@ package com.daya.dictio.view;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.util.Log;
 import android.widget.ProgressBar;
 
 import com.daya.dictio.R;
 import com.daya.dictio.model.DictIndonesia;
 import com.daya.dictio.repo.Appreferen;
 import com.daya.dictio.viewmodel.WordViewModel;
-import com.facebook.stetho.Stetho;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -23,8 +21,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProviders;
 import butterknife.BindView;
 import butterknife.ButterKnife;
-
-import static android.content.ContentValues.TAG;
+import timber.log.Timber;
 
 public class Splashscreen extends AppCompatActivity {
 
@@ -36,12 +33,47 @@ public class Splashscreen extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splashscreen);
         ButterKnife.bind(this);
-        Stetho.initializeWithDefaults(this);
 
         new LoadData().execute();
 
     }
 
+
+    private List<DictIndonesia> preLoadDict() {
+        List<DictIndonesia> preload = new ArrayList<>();
+
+        try {
+
+            InputStream istream = getResources().openRawResource(R.raw.kbbi_data);
+            InputStreamReader iStreamReader = new InputStreamReader((istream));
+            BufferedReader bfReader = new BufferedReader(iStreamReader);
+
+            /*
+
+            InputStream istream = getResources().openRawResource(R.raw.dictionary_english );
+            InputStreamReader iStreamReader = new InputStreamReader((istream));
+            BufferedReader bfReader = new BufferedReader(iStreamReader);
+            */
+
+
+            String textGabung;
+
+            while ((textGabung = bfReader.readLine()) != null) {
+
+                String spliter[] = textGabung.split("\t", 3);
+
+                DictIndonesia dictIndonesia = new DictIndonesia(spliter[1], spliter[2]);
+
+                preload.add(dictIndonesia);
+
+            }
+            // while (textGabung != null) ;
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return preload;
+    }
 
     private class LoadData extends AsyncTask<Void, Integer, Void> {
         double dprogres;
@@ -74,7 +106,7 @@ public class Splashscreen extends AppCompatActivity {
                     wordViewModel.inserttransactional(dictList);
                     dprogres += dProgressDiff;
                     publishProgress((int) dprogres);
-                    Log.i(TAG, "doInBackground: " + dictList.getWord());
+                    Timber.i("doInBackground: %s", dictList.getWord());
 
                 }
                 publishProgress((int) dmaxProgress);
@@ -104,43 +136,12 @@ public class Splashscreen extends AppCompatActivity {
         protected void onPostExecute(Void aVoid) {
 
             Intent o = new Intent(Splashscreen.this, MainActivity.class);
-            startActivity(o);
+            o.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY | Intent.FLAG_ACTIVITY_CLEAR_TOP);
             finish();
+            startActivity(o);
         }
-    }
-
-    private List<DictIndonesia> preLoadDict() {
-        List<DictIndonesia> preload = new ArrayList<>();
-
-        try {
-
-            InputStream istream = getResources().openRawResource(R.raw.kbbi_data);
-            InputStreamReader iStreamReader = new InputStreamReader((istream));
-            BufferedReader bfReader = new BufferedReader(iStreamReader);
-/*
-
-            InputStream istream = getResources().openRawResource(R.raw.dictionary_english );
-            InputStreamReader iStreamReader = new InputStreamReader((istream));
-            BufferedReader bfReader = new BufferedReader(iStreamReader);
-*/
-
-
-            String textGabung;
-
-            while ((textGabung = bfReader.readLine()) != null) {
-
-                String spliter[] = textGabung.split("\t", 3);
-
-                DictIndonesia dictIndonesia = new DictIndonesia(spliter[1], spliter[2]);
-
-                preload.add(dictIndonesia);
-
-            }
-            // while (textGabung != null) ;
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        return preload;
     }
 }
+/*probably change this into fragment with navigation component
+ * loaded data it just sample testing perpose
+ * change into real one next*/

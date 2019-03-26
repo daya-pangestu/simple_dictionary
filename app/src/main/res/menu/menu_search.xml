@@ -4,12 +4,11 @@
 
     <item
         android:id="@+id/search_sactivity"
-        android:icon="@drawable/ic_search_black_24dp"
+        android:icon="@drawable/ic_search_white_menu_24dp"
         android:paddingStart="-16dp"
         android:gravity="start"
         android:iconifiedByDefault="false"
         app:showAsAction="ifRoom"
-        app:actionViewClass="androidx.appcompat.widget.SearchView"
         android:title="@string/search" />
 
 </menu>

@@ -1,9 +1,6 @@
 package com.daya.dictio.view.layout_thing;
 
 import android.animation.ValueAnimator;
-import android.content.Context;
-import android.util.AttributeSet;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.view.animation.DecelerateInterpolator;
@@ -14,23 +11,18 @@ import com.google.android.material.snackbar.Snackbar;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.core.view.ViewCompat;
 
-import static androidx.constraintlayout.widget.Constraints.TAG;
-
 public class BottomNavigationBehavior<V extends View> extends CoordinatorLayout.Behavior<V> {
 
     private int lastStartedType;
     private ValueAnimator offsetAnimator;
     private boolean isSnappingEnabled = true; // set to false to disable snap support
 
-    public BottomNavigationBehavior(Context context, AttributeSet attrs) {
-        super(context, attrs);
-    }
 
     public BottomNavigationBehavior() {
         super();
     }
 
-    public void setSnappingEnabled(boolean isEnabled) {
+    private void setSnappingEnabled(boolean isEnabled) {
         isSnappingEnabled = isEnabled;
         lastStartedType = 0;
         if (offsetAnimator != null) {
@@ -38,22 +30,6 @@ public class BottomNavigationBehavior<V extends View> extends CoordinatorLayout.
             offsetAnimator = null;
         }
 
-    }
-
-    public void expand(CoordinatorLayout coordinatorLayout, V child) {
-
-        int[] consumed = new int[2];
-
-        boolean curIsSnappingEnabled = isSnappingEnabled;
-        if (curIsSnappingEnabled) {
-            setSnappingEnabled(false);
-        }
-
-        onNestedPreScroll(coordinatorLayout, child, null, 0, -1000, consumed, ViewCompat.TYPE_TOUCH);
-
-        if (curIsSnappingEnabled) {
-            setSnappingEnabled(true);
-        }
     }
 
     @Override
@@ -146,7 +122,6 @@ public class BottomNavigationBehavior<V extends View> extends CoordinatorLayout.
 
         float targetTranslation = isVisible ? 0f : child.getHeight();
         offsetAnimator.setFloatValues(child.getTranslationY(), targetTranslation);
-        Log.i(TAG, "animateBarVisibility: child translation" + child.getTranslationY() + "  target translation" + targetTranslation);
         offsetAnimator.start();
     }
 

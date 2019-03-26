@@ -5,14 +5,12 @@
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:animateLayoutChanges="true"
-    tools:context=".view.fDetail_ragment">
+    tools:context=".view.fDetail">
 
     <androidx.cardview.widget.CardView
         android:id="@+id/card_detail"
         android:clickable="true"
         android:focusable="true"
-        app:cardCornerRadius="4dp"
-        app:cardElevation="4dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
@@ -41,8 +39,7 @@
             android:layout_marginTop="8dp"
             android:layout_marginEnd="8dp"
             android:src="@drawable/ic_expand_more_black_24dp"
-
-            />
+            tools:ignore="ContentDescription" />
 
 
         <TextView
@@ -71,6 +68,16 @@
 
     </RelativeLayout>
     </androidx.cardview.widget.CardView>
+
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recycler_detail"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        app:layout_anchor="@id/card_detail"
+        app:layout_anchorGravity="bottom" />
+
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

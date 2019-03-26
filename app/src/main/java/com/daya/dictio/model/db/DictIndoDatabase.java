@@ -5,6 +5,7 @@ import android.content.Context;
 import com.daya.dictio.model.DictIndonesia;
 import com.daya.dictio.model.FavoritModel;
 import com.daya.dictio.model.HistoryModel;
+import com.daya.dictio.model.OtherMeaningModel;
 import com.daya.dictio.model.SearchModelFts;
 
 import androidx.annotation.NonNull;
@@ -15,11 +16,20 @@ import androidx.room.migration.Migration;
 import androidx.sqlite.db.SupportSQLiteDatabase;
 
 
-@Database(entities = {DictIndonesia.class, FavoritModel.class, HistoryModel.class, SearchModelFts.class}, version = 25, exportSchema = false)
+@Database(entities = {DictIndonesia.class, FavoritModel.class, HistoryModel.class, SearchModelFts.class, OtherMeaningModel.class}, version = 33, exportSchema = false)
 public abstract class DictIndoDatabase extends RoomDatabase {
+
+
     public abstract DictIdDao dictIdDao();
 
-    private static Migration migrationFTS = new Migration(25, 26) {
+    //i thing the problem is it in he
+    private static final Callback callback = new Callback() {
+        @Override
+        public void onCreate(@NonNull SupportSQLiteDatabase db) {
+            super.onCreate(db);
+        }
+    };
+    private static final Migration migrationFTS = new Migration(33, 34) {
         @Override
         public void migrate(@NonNull SupportSQLiteDatabase database) {
             database.execSQL("CREATE VIRTUAL TABLE IF NOT EXISTS `DictindonesiaFts` USING FTS4("
@@ -28,7 +38,6 @@ public abstract class DictIndoDatabase extends RoomDatabase {
                     + " SELECT `idindo`,`word`,`meaning` FROM DictIndoDatabase ");
         }
     };
-    private static DictIndoDatabase INSTANCE;
 
     public static DictIndoDatabase getINSTANCE(Context context) {
         if (INSTANCE == null) {
@@ -39,18 +48,22 @@ public abstract class DictIndoDatabase extends RoomDatabase {
                             DictIndoDatabase.class,
                             "DictindonesiaDatabase")
                             .fallbackToDestructiveMigration()
+                            .addCallback(callback)
                             .addMigrations(migrationFTS)
                             .build();
+
                 }
             }
         }
         return INSTANCE;
     }
 
+    private static DictIndoDatabase INSTANCE;
+
     public abstract FavoriteDao favoriteDao();
 
     public abstract HistoryDao historyDao();
 
-    //populate database
+    public abstract OtherMeaningDao otherMeaningDao();
 
 }

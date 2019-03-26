@@ -66,4 +66,7 @@
         android:name="com.daya.dictio.another_search"
         android:label="fragment_another_search"
         tools:layout="@layout/fragment_another_search" />
+    <action
+        android:id="@+id/action_global_another_search"
+        app:destination="@id/another_search" />
 </navigation>

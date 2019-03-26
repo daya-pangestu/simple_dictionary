@@ -36,4 +36,7 @@ public class Fpreferences extends PreferenceFragmentCompat {
         menu.findItem(R.id.delete_menu_toolbar).setVisible(false);
         super.onPrepareOptionsMenu(menu);
     }
+
+
+    //useless for now
 }

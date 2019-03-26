@@ -12,7 +12,6 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
-        <activity android:name="com.daya.dictio.view.SearchActivity" />
         <activity android:name="com.daya.dictio.view.Splashscreen">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
