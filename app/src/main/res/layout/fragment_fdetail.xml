@@ -1,33 +1,30 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
+    android:id="@+id/fDetail_root"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:animateLayoutChanges="true"
-    tools:context=".view.fDetail">
+    tools:context=".view.fDetail"
+    tools:ignore="ExtraText">
 
-    <androidx.cardview.widget.CardView
-        android:id="@+id/card_detail"
-        android:clickable="true"
-        android:focusable="true"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
 
     <RelativeLayout
+        android:id="@+id/card_detail"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="24dp">
+        android:layout_marginTop="24dp"
+        android:background="?attr/selectableItemBackground">
 
         <TextView
             android:id="@+id/text_detail"
             android:layout_width="match_parent"
             android:layout_height="42dp"
+            android:layout_alignParentTop="true"
             android:layout_marginStart="8dp"
             android:gravity="center_vertical"
             android:textSize="32sp"
             android:textStyle="bold"
-            android:layout_alignParentTop="true"
             tools:text="rumah" />
 
         <ImageView
@@ -38,22 +35,21 @@
             android:layout_alignParentEnd="true"
             android:layout_marginTop="8dp"
             android:layout_marginEnd="8dp"
+            android:paddingStart="16dp"
+            android:paddingEnd="16dp"
             android:src="@drawable/ic_expand_more_black_24dp"
             tools:ignore="ContentDescription" />
-
 
         <TextView
             android:id="@+id/textView"
             android:layout_width="match_parent"
             android:layout_height="40dp"
-            android:layout_marginStart="8dp"
             android:layout_below="@id/text_detail"
-            android:layout_marginEnd="8dp"
+            android:layout_marginStart="8dp"
             android:gravity="center_vertical"
-            android:text="penjelasan:"
-            android:visibility="gone"
-            android:textSize="18sp" />
-
+            android:text="@string/meaning"
+            android:textSize="18sp"
+            android:visibility="gone" />
 
         <TextView
             android:id="@+id/penjelasan_detail"
@@ -62,31 +58,57 @@
             android:layout_below="@id/textView"
             android:layout_marginStart="8dp"
             android:layout_marginEnd="8dp"
-            android:visibility="gone"
             android:textStyle="italic"
-            tools:text="asrtyhtgrfdqwerngfefrgfasrtyhtgrfdqwerngfefrgfasrtyhtgrfdqwerngfefrgfasrtyhtgrfdqwerngfefrgfasrtyhtgrfdqwerngfefrgfasrtyhtgrfdqwerngfefrgfasrtyhtgrfdqwerngfefrgfasrtyhtgrfdqwerngfefrgfasrtyhtgrfdqwerngfefrgfasrtyhtgrfdqwerngfefrgfasrtyhtgrfdqwerngfefrgf" />
+            android:visibility="gone"
+            tools:text="asrtyhtgrfdqwerngfefrgfasrtyhtgrfdqwerngfefrgfasrtyhtgrfdqwerngfefr" />
 
+        <ImageButton
+            android:id="@+id/copy_content_detail"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/penjelasan_detail"
+            android:layout_alignParentEnd="true"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp"
+            android:background="?selectableItemBackground"
+            android:paddingStart="16dp"
+            android:paddingTop="8dp"
+            android:paddingEnd="8dp"
+            android:paddingBottom="8dp"
+            android:src="@drawable/ic_content_copy_black_24dp"
+            android:visibility="visible"
+            tools:ignore="ContentDescription" />
     </RelativeLayout>
-    </androidx.cardview.widget.CardView>
 
+    <View
+        android:id="@+id/divider"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="?android:listDivider"
+        app:layout_anchor="@id/card_detail"
+        app:layout_anchorGravity="bottom"
+        app:layout_insetEdge="top" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recycler_detail"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="bottom"
-        app:layout_anchor="@id/card_detail"
-        app:layout_anchorGravity="bottom" />
+        android:layout_marginBottom="100dp"
+        app:layout_anchor="@id/divider"
+        app:layout_dodgeInsetEdges="top" /> <!--bug : ada 100dp dari recyclerview yang tidak terscroll-->
+
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/fab_detail_add_meaning"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:clickable="true"
-        android:id="@+id/fab_detail_add_meaning"
-        android:src="@drawable/ic_add_black_24dp"
         android:layout_gravity="end|bottom"
+        android:clickable="true"
         android:layout_margin="8dp"
-        android:focusable="true" />
+        android:focusable="true"
+        android:src="@drawable/ic_add_black_24dp"
+        app:fabSize="mini" />
+
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
 

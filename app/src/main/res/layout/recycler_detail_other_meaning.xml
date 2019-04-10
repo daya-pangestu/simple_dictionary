@@ -9,41 +9,75 @@
     app:dragEdge="right"
     app:mode="same_level">
 
-    <RelativeLayout
+    <LinearLayout
         android:id="@+id/back_frame_other_meaning"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
-        android:background="?selectableItemBackground"
         android:gravity="center"
-        android:orientation="vertical">
+        android:elevation="2dp"
+        android:orientation="horizontal">
+
+        <com.github.zagum.switchicon.SwitchIconView
+            android:id="@+id/btn_edit_other_detail"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginStart="8dp"
+            android:clickable="true"
+            android:focusable="true"
+            android:padding="8dp"
+            android:src="@drawable/ic_edit_black_24dp"
+            app:si_disabled_alpha=".5"
+            app:si_disabled_color="#dadada"
+            app:si_enabled="false"
+            app:si_no_dash="true" />
 
         <com.github.zagum.switchicon.SwitchIconView
             android:id="@+id/switch_icon_delete_Other"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
+            android:layout_height="match_parent"
             android:padding="8dp"
-            android:src="@drawable/ic_delete_big"
+            android:background="?attr/selectableItemBackground"
+            android:src="@drawable/ic_delete_black_24dp"
             app:si_disabled_alpha=".5"
             app:si_disabled_color="#dadada"
             app:si_enabled="false"
-            app:si_tint_color="@color/colorAccent" />
-    </RelativeLayout>
+            app:si_no_dash="true" />
+
+    </LinearLayout>
 
     <LinearLayout
         android:id="@+id/front_frame_other_meaning"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:background="?selectableItemBackground"
+        android:orientation="horizontal"
+        android:weightSum="10">
 
         <TextView
             android:id="@+id/text_other_detail"
-            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center_vertical"
             android:padding="8dp"
             android:textSize="24sp"
-            tools:text="apapkekeapapkekeapapkekeapapkekeapapkekeapapkekeapapkeke" />
-    </LinearLayout>
+            android:layout_width="0dp"
+            android:layout_weight="9"
+            tools:text="apapkekeapapkepapkeke" />
 
+        <ImageButton
+            android:id="@+id/copy_content_main"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_gravity="end"
+            android:layout_marginEnd="8dp"
+            android:layout_weight="1"
+            android:background="?selectableItemBackground"
+            android:paddingStart="16dp"
+            android:paddingTop="8dp"
+            android:paddingEnd="16dp"
+
+            android:paddingBottom="8dp"
+            android:src="@drawable/ic_content_copy_black_24dp"
+            tools:ignore="ContentDescription" />
+
+    </LinearLayout>
 </com.chauthai.swipereveallayout.SwipeRevealLayout>

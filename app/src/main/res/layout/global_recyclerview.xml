@@ -10,7 +10,8 @@
         android:id="@+id/rv_global"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginEnd="18dp" />
+        android:paddingStart="0dp"
+        android:paddingEnd="18dp" />
 
 
     <com.l4digital.fastscroll.FastScroller
@@ -20,12 +21,9 @@
         android:layout_alignParentTop="true"
         android:layout_alignParentEnd="true"
         android:layout_gravity="end"
-        app:bubbleColor="@color/colorAccent"
-        app:bubbleSize="small"
-        app:bubbleTextColor="@color/putih"
         app:handleColor="@color/colorPrimaryDark"
-        app:showBubble="true"
         app:showTrack="true"
+        app:showBubble="false"
         android:layout_marginBottom="56dp"
         app:trackColor="@color/colorPrimary" />
 

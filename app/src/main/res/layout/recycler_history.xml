@@ -47,7 +47,7 @@
             android:orientation="vertical">
 
             <TextView
-                android:id="@+id/recycler_kata_history"
+                android:id="@+id/text_kata_history"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="8dp"
@@ -55,13 +55,13 @@
                 tools:text="kata" />
 
             <TextView
-                android:id="@+id/recycler_penjelasan_history"
+                android:id="@+id/text_penjelasan_history"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
                 android:layout_marginBottom="24dp"
                 android:maxLines="2"
-                android:text="/home/daya/project/IntelliJIDEAProjects/jojoman/app/src/main/res/layout/recycler.xml/home/daya/project/IntelliJIDEAProjects/jojoman/app/src/main/res/layout/recycler.xml/home/daya/project/IntelliJIDEAProjects/jojoman/app/src/main/res/layout/recycler.xml" />
+                tools:text="/home/daya/project/IntelliJIDEAProjects/jojoman/app/src/main/res/layout/recycler.xml/home/daya/project/IntelliJIDEAProjects/jojoman/app/src/main/res/layout/recycler.xml/home/daya/project/IntelliJIDEAProjects/jojoman/app/src/main/res/layout/recycler.xml" />
 
         </LinearLayout>
 

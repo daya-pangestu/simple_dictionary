@@ -11,6 +11,7 @@ import androidx.room.Delete;
 import androidx.room.Insert;
 import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
+import io.reactivex.Single;
 
 @Dao
 public interface FavoriteDao {
@@ -30,7 +31,7 @@ public interface FavoriteDao {
 
 
     @Query("SELECT idOwner From favoritmodel WHERE :s")
-    Integer isfavoritExists(int s);
+    Single<Integer> isfavoritExists(int s);
 
     @Query("SELECT FavoritModel.id,FavoritModel.idOwner,word,meaning  FROM FavoritModel JOIN DictIndonesia ON FavoritModel.idOwner = DictIndonesia.idIndo")
     LiveData<List<FavoriteJoinDict>> loadFavorite();

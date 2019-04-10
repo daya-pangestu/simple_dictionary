@@ -5,6 +5,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.widget.ProgressBar;
 
+import com.akexorcist.localizationactivity.ui.LocalizationActivity;
 import com.daya.dictio.R;
 import com.daya.dictio.model.DictIndonesia;
 import com.daya.dictio.repo.Appreferen;
@@ -17,19 +18,18 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
 
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProviders;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import timber.log.Timber;
 
-public class Splashscreen extends AppCompatActivity {
+public class Splashscreen extends LocalizationActivity {
 
     @BindView(R.id.splash_progress)
     ProgressBar splashProgress;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splashscreen);
         ButterKnife.bind(this);

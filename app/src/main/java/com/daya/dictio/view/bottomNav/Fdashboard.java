@@ -10,9 +10,13 @@ import android.view.ViewGroup;
 import com.daya.dictio.R;
 import com.daya.dictio.model.SENDER;
 import com.daya.dictio.view.layout_thing.BottomNavigationBehavior;
-import com.daya.dictio.view.recyclerview_adapter.WordIndAdapter;
+import com.daya.dictio.view.recyclerview_adapter.WordIndAdapterPaged;
 import com.daya.dictio.viewmodel.WordViewModel;
 import com.l4digital.fastscroll.FastScroller;
+
+import org.jetbrains.annotations.NotNull;
+
+import java.util.Objects;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -35,34 +39,35 @@ public class Fdashboard extends Fragment {
     FastScroller fastScrollerGlobal;
 
     private Unbinder unbinder;
-    private WordIndAdapter wordIndAdapterPaged;
+    private WordIndAdapterPaged wordIndAdapterPaged;
 
     public Fdashboard() {
         // Required empty public constructor
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NotNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_fdashboard, container, false);
         setHasOptionsMenu(true);
         unbinder = ButterKnife.bind(this, v);
-        ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle("Dashboard");
+        Objects.requireNonNull(((AppCompatActivity) Objects.requireNonNull(getActivity())).getSupportActionBar()).setTitle(getString(R.string.dashboard));
         new BottomNavigationBehavior().animateBarVisibility(v, true);
 
         //viewmodel
         WordViewModel wordViewModel = ViewModelProviders.of(getActivity()).get(WordViewModel.class);
         //recyclerview
-        wordIndAdapterPaged = new WordIndAdapter(SENDER.DASHBOARD);
+        wordIndAdapterPaged = new WordIndAdapterPaged(SENDER.DASHBOARD);
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getActivity());
         rvGlobal.setLayoutManager(layoutManager);
-        rvGlobal.addItemDecoration(new DividerItemDecoration(getContext(), DividerItemDecoration.VERTICAL));
+        rvGlobal.addItemDecoration(new DividerItemDecoration(v.getContext(), DividerItemDecoration.VERTICAL));
         rvGlobal.setAdapter(wordIndAdapterPaged);
         wordViewModel.getAllWordPaged().observe(this, dictIndonesias ->
-                wordIndAdapterPaged.setDict(dictIndonesias));
+                wordIndAdapterPaged.submitList(dictIndonesias));
         //fastscroll
         fastScrollerGlobal.setSectionIndexer(wordIndAdapterPaged);
         fastScrollerGlobal.attachRecyclerView(rvGlobal);
+
         return v;
     }
 

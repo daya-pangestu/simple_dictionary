@@ -45,7 +45,7 @@ public class FavoriteViewModel extends AndroidViewModel {
 
     //next implementation
     public boolean isFavoritExists(int s) {
-        return true;
+        return dictRepository.isfavoritExist(s);
     }
 
 

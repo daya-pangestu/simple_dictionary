@@ -6,20 +6,23 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.chauthai.swipereveallayout.SwipeRevealLayout;
 import com.chauthai.swipereveallayout.ViewBinderHelper;
 import com.daya.dictio.R;
 import com.daya.dictio.model.OtherMeaningModel;
+import com.daya.dictio.view.FDialog;
+import com.daya.dictio.view.layout_thing.DialogSubmitListener;
 import com.daya.dictio.viewmodel.OtherViewModel;
 import com.github.zagum.switchicon.SwitchIconView;
 
 import java.util.List;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentActivity;
+import androidx.fragment.app.FragmentManager;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.RecyclerView;
 import butterknife.BindView;
@@ -28,9 +31,7 @@ import butterknife.ButterKnife;
 public class OtherDetailAdapter extends RecyclerView.Adapter<OtherDetailAdapter.OtherDetail> {
     private final ViewBinderHelper viewBinderHelper = new ViewBinderHelper();
 
-
     private List<OtherMeaningModel> listOther;
-
     private Context context;
 
     @NonNull
@@ -38,6 +39,7 @@ public class OtherDetailAdapter extends RecyclerView.Adapter<OtherDetailAdapter.
     public OtherDetail onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.recycler_detail_other_meaning, parent, false);
         this.context = parent.getContext();
+        viewBinderHelper.setOpenOnlyOne(true);
         return new OtherDetail(v);
     }
 
@@ -47,6 +49,7 @@ public class OtherDetailAdapter extends RecyclerView.Adapter<OtherDetailAdapter.
         viewBinderHelper.bind(holder.swipeOtherMeaning, String.valueOf(current.getIdOther()));
 
         holder.bind(current);
+
 
     }
 
@@ -69,27 +72,36 @@ public class OtherDetailAdapter extends RecyclerView.Adapter<OtherDetailAdapter.
         }
     }
 
-    public class OtherDetail extends RecyclerView.ViewHolder implements View.OnClickListener {
+    public class OtherDetail extends RecyclerView.ViewHolder implements View.OnClickListener, DialogSubmitListener {
         final OtherViewModel otherViewModel;
         @BindView(R.id.text_other_detail)
         TextView textOtherDetail;
+
+        @BindView(R.id.btn_edit_other_detail)
+        SwitchIconView btnEditOtherDetail;
+
         @BindView(R.id.swipe_other_meaning)
         SwipeRevealLayout swipeOtherMeaning;
+
         @BindView(R.id.switch_icon_delete_Other)
-        SwitchIconView switchIconDelete;
+        SwitchIconView switchIconDeleteOther;
+
         @BindView(R.id.back_frame_other_meaning)
-        RelativeLayout backFrameOtherMeaning;
+        LinearLayout backFrameOtherMeaning;
+
         @BindView(R.id.front_frame_other_meaning)
         LinearLayout frontFrameOtherMeaning;
+
         private OtherMeaningModel inHolderOtherMeaning;
 
         OtherDetail(@NonNull View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);
             otherViewModel = ViewModelProviders.of((FragmentActivity) context).get(OtherViewModel.class);
-
-
             backFrameOtherMeaning.setOnClickListener(this);
+            btnEditOtherDetail.setOnClickListener(this);
+            frontFrameOtherMeaning.requestLayout();
+
         }
 
         void bind(OtherMeaningModel otherMeaning) {
@@ -105,22 +117,28 @@ public class OtherDetailAdapter extends RecyclerView.Adapter<OtherDetailAdapter.
             int idOwner = inHolderOtherMeaning.getIdOwner();
             switch (v.getId()) {
                 case R.id.back_frame_other_meaning:
-                    switchIconDelete.switchState();
                     final Handler handler = new Handler();
                     handler.postDelayed(() -> {
                         // hold item before removed for 0.5 sec
                         removeItemAt(getAdapterPosition());
                         otherViewModel.deleteOtherMeaning(new OtherMeaningModel(id, meaning, idOwner));
-
-
                     }, 300);
-
-
                     break;
+                case R.id.btn_edit_other_detail:
+                    FragmentManager fragmentManager = ((AppCompatActivity) context).getSupportFragmentManager();
+                    FDialog dialog = FDialog.newInstance();
+                    dialog.setEditListener(this, inHolderOtherMeaning.getOther());
+                    dialog.show(fragmentManager, "dialog");
+                    swipeOtherMeaning.close(true);
                 default:
                     break;
 
             }
+        }
+
+        @Override
+        public void onfinishedDialog(String text) {
+            otherViewModel.updateOtherMeaning(new OtherMeaningModel(inHolderOtherMeaning.getIdOther(), text, inHolderOtherMeaning.getIdOwner()));
         }
     }
 }

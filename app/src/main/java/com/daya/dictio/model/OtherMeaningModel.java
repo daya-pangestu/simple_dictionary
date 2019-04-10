@@ -25,12 +25,13 @@ public class OtherMeaningModel {
     private int idOwner;
 
     @Ignore
-    public OtherMeaningModel(String other, int idOwner) {
+    public OtherMeaningModel(String other, int idOwner) {//add meaning
         Other = other;
         this.idOwner = idOwner;
     }
 
-    public OtherMeaningModel(int idOther, String Other, int idOwner) {
+
+    public OtherMeaningModel(int idOther, String Other, int idOwner) {//update meaning
         this.idOther = idOther;
         this.Other = Other;
         this.idOwner = idOwner;

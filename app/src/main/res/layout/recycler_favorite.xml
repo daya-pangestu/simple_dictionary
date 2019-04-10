@@ -17,7 +17,7 @@
         android:orientation="vertical">
 
         <com.github.zagum.switchicon.SwitchIconView
-            android:id="@+id/switch_icon_favo"
+            android:id="@+id/switch_icon_delete_favo"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
@@ -47,7 +47,7 @@
             android:orientation="vertical">
 
             <TextView
-                android:id="@+id/recycler_kata_favorite"
+                android:id="@+id/text_kata_favorite"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="8dp"
@@ -55,7 +55,7 @@
                 tools:text="kata" />
 
             <TextView
-                android:id="@+id/recycler_penjelasan_favorite"
+                android:id="@+id/text_penjelasan_favorite"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"

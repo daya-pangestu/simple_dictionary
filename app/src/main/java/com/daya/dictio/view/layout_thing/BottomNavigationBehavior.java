@@ -22,16 +22,6 @@ public class BottomNavigationBehavior<V extends View> extends CoordinatorLayout.
         super();
     }
 
-    private void setSnappingEnabled(boolean isEnabled) {
-        isSnappingEnabled = isEnabled;
-        lastStartedType = 0;
-        if (offsetAnimator != null) {
-            offsetAnimator.cancel();
-            offsetAnimator = null;
-        }
-
-    }
-
     @Override
     public boolean onStartNestedScroll(CoordinatorLayout coordinatorLayout, V child, View directTargetChild,
                                        View target, int axes, int type) {

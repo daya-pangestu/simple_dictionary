@@ -11,6 +11,6 @@
     <item
         android:id="@+id/delete_menu_toolbar"
         android:gravity="start"
-        android:title="delete all"
+        android:title="@string/delete_all"
         app:showAsAction="collapseActionView" />
 </menu>

@@ -9,6 +9,7 @@ import androidx.room.Dao;
 import androidx.room.Delete;
 import androidx.room.Insert;
 import androidx.room.Query;
+import androidx.room.Update;
 
 @Dao
 public interface OtherMeaningDao {
@@ -21,4 +22,7 @@ public interface OtherMeaningDao {
 
     @Delete
     void deleteOtherMeaning(OtherMeaningModel otherMeaningModel);
+
+    @Update
+    void updateOtherMeaning(OtherMeaningModel... otherMeaningModels);
 }

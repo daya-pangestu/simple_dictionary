@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">jojoman</string>
+    <string name="title_home">awal</string>
+    <string name="favorite">favorit</string>
+    <string name="history">riwayat</string>
+    <string name="setting">pengaturan</string>
+    <string name="search">cari</string>
+    <string name="meaning">arti :</string>
+    <string name="loading">Meload…</string>
+    <string name="cancel">BATAL</string>
+    <string name="start_your_search">mulailah mencari!</string>
+    <string name="detail">Detail</string>
+    <string name="dashboard">Awal</string>
+    <string name="added_to_favvorite">" ditambahkan ke favorit"</string>
+    <string name="copied">disalin</string>
+    <string name="return_to_dashboard">kembali ke dashboard</string>
+    <string name="expanded">membuka</string>
+    <string name="collapsed">menutup</string>
+    <string name="language">Bahasa</string>
+    <string name="text_empty">teks kosong</string>
+</resources>

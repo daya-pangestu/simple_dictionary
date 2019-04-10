@@ -30,6 +30,7 @@
                 android:id="@+id/persistentSearchView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                app:queryInputHint="@string/search"
                 android:paddingStart="4dp"
                 android:paddingLeft="4dp"
                 android:paddingTop="4dp"
@@ -64,7 +65,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@id/list_empty"
         android:gravity="center"
-        android:text="start your search!"
+        android:text="@string/start_your_search"
         android:textSize="24sp" />
 
 </RelativeLayout>

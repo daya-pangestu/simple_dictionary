@@ -10,9 +10,12 @@ import android.view.ViewGroup;
 import com.daya.dictio.R;
 import com.daya.dictio.view.recyclerview_adapter.HistoryAdapter;
 import com.daya.dictio.viewmodel.HistoryViewModel;
-import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.snackbar.Snackbar;
 import com.l4digital.fastscroll.FastScroller;
+
+import org.jetbrains.annotations.NotNull;
+
+import java.util.Objects;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -31,19 +34,14 @@ import butterknife.Unbinder;
  * A simple {@link Fragment} subclass.
  */
 public class Fhistory extends Fragment {//perlu relasi
-    private static final String TAG = Fhistory.class.getSimpleName();
 
     @BindView(R.id.rv_global)
     RecyclerView rvGlobal;
     @BindView(R.id.fast_scroller_global)
     FastScroller fastScrollerGlobal;
     private Unbinder unbinder;
-
-
     private HistoryViewModel historyViewModel;
     private HistoryAdapter historyAdapter;
-    BottomNavigationView bottomNavigationView;
-
 
 
     public Fhistory() {
@@ -52,17 +50,15 @@ public class Fhistory extends Fragment {//perlu relasi
 
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NotNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_fhistory, container, false);
         unbinder = ButterKnife.bind(this, view);
         historyViewModel = ViewModelProviders.of(this).get(HistoryViewModel.class);
+        Objects.requireNonNull(((AppCompatActivity) Objects.requireNonNull(getActivity())).getSupportActionBar()).setTitle(getResources().getString(R.string.history));
         setHasOptionsMenu(true);
 
-        ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle("History");
-        bottomNavigationView = getActivity().findViewById(R.id.navigation);
-        bottomNavigationView.setVisibility(View.VISIBLE);
         historyAdapter = new HistoryAdapter();
 
         //recyclerview
@@ -70,7 +66,7 @@ public class Fhistory extends Fragment {//perlu relasi
         rvGlobal.setLayoutManager(layoutManager);
         rvGlobal.setHasFixedSize(true);
         rvGlobal.setAdapter(historyAdapter);
-        rvGlobal.addItemDecoration(new DividerItemDecoration(getContext(), DividerItemDecoration.VERTICAL));
+        rvGlobal.addItemDecoration(new DividerItemDecoration(view.getContext(), DividerItemDecoration.VERTICAL));
 
         historyViewModel.getList().observe(this, historyJoinDicts -> historyAdapter.setHistory(historyJoinDicts));
 
@@ -88,7 +84,7 @@ public class Fhistory extends Fragment {//perlu relasi
             case R.id.delete_menu_toolbar:
                 historyViewModel.deleteHistory();
                 NavHostFragment.findNavController(this).navigate(R.id.action_navigation_history_pop);
-                Snackbar.make(getView(), "return to home", Snackbar.LENGTH_LONG).setAction("OK", v -> {
+                Snackbar.make(Objects.requireNonNull(getView()), getString(R.string.return_to_dashboard), Snackbar.LENGTH_LONG).setAction(getString(R.string.ok), v -> {
                 }).show();
                 break;
         }

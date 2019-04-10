@@ -8,9 +8,12 @@ import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import com.daya.dictio.R;
 import com.daya.dictio.view.layout_thing.DialogSubmitListener;
+
+import org.jetbrains.annotations.NotNull;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -33,17 +36,23 @@ public class FDialog extends DialogFragment {
 
     private DialogSubmitListener dialogListener;
     private Unbinder unbinder;
+    private String text_edit;
 
     public FDialog() {
     }
 
-    static FDialog newInstance() {
-        FDialog fragment = new FDialog();
-        return fragment;
+    public static FDialog newInstance() {
+        return new FDialog();
     }
 
-    void setDialogListener(DialogSubmitListener dialogListener) {
+    public void setDialogListener(DialogSubmitListener dialogListener) {
         this.dialogListener = dialogListener;
+    }
+
+    public void setEditListener(DialogSubmitListener dialogListener, String text_edit) {
+        this.dialogListener = dialogListener;
+        this.text_edit = text_edit;
+
     }
 
     @Override
@@ -57,7 +66,7 @@ public class FDialog extends DialogFragment {
 
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NotNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
         View v = inflater.inflate(R.layout.fragment_blank, container, false);
@@ -74,9 +83,18 @@ public class FDialog extends DialogFragment {
                 WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
 
 
+        if (text_edit != null) {
+            edtAddMeaning.setText(text_edit);
+            edtAddMeaning.setSelection(text_edit.length());
+        }
+
         btnOk.setOnClickListener(v -> {
-            dialogListener.onfinishedDialog(edtAddMeaning.getText().toString());
-            dismiss();
+            if (edtAddMeaning.getText().toString().equals("")) {
+                Toast.makeText(view.getContext(), getString(R.string.text_empty), Toast.LENGTH_SHORT).show();
+            } else {
+                dialogListener.onfinishedDialog(edtAddMeaning.getText().toString());
+                dismiss();
+            }
         });
 
 

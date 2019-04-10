@@ -34,8 +34,6 @@ import butterknife.ButterKnife;
 
 public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.WordHolderHistory> implements FastScroller.SectionIndexer {
     private final ViewBinderHelper viewBinderHelper = new ViewBinderHelper();
-
-
     private Context context;
     private List<HistoryJoinDict> listHistoryJoin;
 
@@ -67,15 +65,6 @@ public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.WordHold
         notifyDataSetChanged();
     }
 
-    private void removeItemAt(int index) {
-        if (index != -1 && index < listHistoryJoin.size()) {
-            listHistoryJoin.remove(index);
-            notifyItemRemoved(index);
-            notifyItemRangeChanged(index, getItemCount());
-        }
-    }
-
-
     private String fapatkanItem(int position) {
         return listHistoryJoin.get(position).getWord();
     }
@@ -85,22 +74,36 @@ public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.WordHold
         return String.valueOf(fapatkanItem(position).charAt(0));
     }
 
+    private void removeItemAt(int index) {
+        if (index != -1 && index < listHistoryJoin.size()) {
+            listHistoryJoin.remove(index);
+            notifyItemRemoved(index);
+            notifyItemRangeChanged(index, getItemCount());
+        }
+    }
+
 
     public class WordHolderHistory extends RecyclerView.ViewHolder implements View.OnClickListener {
         private final HistoryViewModel historyViewModel;
         private final WordViewModel wordViewModel;
-        @BindView(R.id.switch_icon_delete_history)
-        SwitchIconView switchIconDeleteHistory;
         @BindView(R.id.back_frame_history)
         RelativeLayout backFrameHistory;
-        @BindView(R.id.recycler_kata_history)
+
+        @BindView(R.id.switch_icon_delete_history)
+        SwitchIconView switchIconDeleteHistory;
+
+        @BindView(R.id.text_kata_history)
         TextView recyclerKataHistory;
-        @BindView(R.id.recycler_penjelasan_history)
+
+        @BindView(R.id.text_penjelasan_history)
         TextView recyclerPenjelasanHistory;
+
         @BindView(R.id.front_frame_histo)
         CoordinatorLayout frontFrameHisto;
+
         @BindView(R.id.swipe_history)
         SwipeRevealLayout swipeRevealLayout;
+
         HistoryJoinDict inHolderHisJoint;
 
         WordHolderHistory(@NonNull View itemView) {
@@ -134,7 +137,6 @@ public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.WordHold
                         // hold item before removed for 0.5 sec
                         removeItemAt(getAdapterPosition());
                         historyViewModel.deleteHistoryAt(new HistoryModel(id, idOwner));
-
                     }, 300);
                     break;
                 case R.id.front_frame_histo:
@@ -142,6 +144,9 @@ public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.WordHold
                     NavController navigation = Navigation.findNavController(v);
                     navigation.navigate(R.id.action_navigation_history_to_fDetail_ragment);
                     break;
+                default:
+                    break;
+
             }
         }
     }

@@ -8,7 +8,6 @@
         android:title="Search options">
 
         <CheckBoxPreference
-            android:id="@+id/setting_title_show_id"
             android:key="setting_title_show"
             android:summaryOff="display sugestion word for mistyped word"
             android:summaryOn="this feature will aut disable when real time search active"
@@ -45,12 +44,12 @@
     <PreferenceCategory android:title="Oher">
 
         <ListPreference
-            android:dialogTitle="In App languange"
+            android:dialogTitle="@string/language"
             android:entries="@array/languange"
             android:entryValues="@array/languange"
-            android:key="language"
+            android:key="@string/language_key"
             android:summary=""
-            android:title="Languange" />
+            android:title="@string/language" />
 
         <PreferenceScreen android:title="about" />
 

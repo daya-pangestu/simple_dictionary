@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/edit_Dialog"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_gravity="center"
@@ -9,14 +8,17 @@
     android:orientation="vertical"
     tools:context=".view.FDialog">
 
+
     <EditText
         android:id="@+id/txt_add_meaning"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:ems="10"
+        android:gravity="start|top"
         android:layout_marginTop="8dp"
         android:imeOptions="actionDone"
-        android:inputType="text"
         android:paddingStart="16dp"
+        android:inputType="textMultiLine"
         android:paddingEnd="16dp" />
 
     <Button
@@ -27,7 +29,7 @@
         android:layout_below="@id/txt_add_meaning"
         android:layout_alignEnd="@id/txt_add_meaning"
         android:gravity="center"
-        android:text="OK" />
+        android:text="@string/ok" />
 
     <Button
         android:id="@+id/cancel_dialog"
@@ -37,7 +39,7 @@
         android:layout_alignTop="@id/ok_dialog"
         android:layout_toStartOf="@id/ok_dialog"
         android:gravity="center"
-        android:text="CANCEL" />
+        android:text="@string/cancel" />
 
 
 </RelativeLayout>

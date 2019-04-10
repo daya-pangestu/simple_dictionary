@@ -10,6 +10,7 @@ import java.util.List;
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
+import androidx.paging.LivePagedListBuilder;
 import androidx.paging.PagedList;
 
 public class WordViewModel extends AndroidViewModel {
@@ -17,6 +18,10 @@ public class WordViewModel extends AndroidViewModel {
     private final DictRepository dictRepository;
     private final LiveData<List<DictIndonesia>> allWord;
     private DictIndonesia sendToDetail;
+    private final PagedList.Config pagedListConfid = (new PagedList.Config.Builder()
+            .setEnablePlaceholders(true)
+            .setPrefetchDistance(10)
+            .setPageSize(20).build());
 
     public WordViewModel(@NonNull Application application) {
         super(application);
@@ -50,7 +55,12 @@ public class WordViewModel extends AndroidViewModel {
 
     //next implementation
     public LiveData<PagedList<DictIndonesia>> getSearchPaged(String s) {
-        return dictRepository.getSearchPaged(s);
+        String wildcardQueryIfNotSingle = (s.length() != 1) ? String.format("*%s*", s) : s;
+
+
+        LiveData<PagedList<DictIndonesia>> searchPaged = new LivePagedListBuilder<>(
+                dictRepository.getSearchPaged(wildcardQueryIfNotSingle), pagedListConfid).build();
+        return searchPaged;
     }
 
     public LiveData<List<DictIndonesia>> getAllWord() {

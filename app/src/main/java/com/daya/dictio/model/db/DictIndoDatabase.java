@@ -19,16 +19,6 @@ import androidx.sqlite.db.SupportSQLiteDatabase;
 @Database(entities = {DictIndonesia.class, FavoritModel.class, HistoryModel.class, SearchModelFts.class, OtherMeaningModel.class}, version = 33, exportSchema = false)
 public abstract class DictIndoDatabase extends RoomDatabase {
 
-
-    public abstract DictIdDao dictIdDao();
-
-    //i thing the problem is it in he
-    private static final Callback callback = new Callback() {
-        @Override
-        public void onCreate(@NonNull SupportSQLiteDatabase db) {
-            super.onCreate(db);
-        }
-    };
     private static final Migration migrationFTS = new Migration(33, 34) {
         @Override
         public void migrate(@NonNull SupportSQLiteDatabase database) {
@@ -48,7 +38,6 @@ public abstract class DictIndoDatabase extends RoomDatabase {
                             DictIndoDatabase.class,
                             "DictindonesiaDatabase")
                             .fallbackToDestructiveMigration()
-                            .addCallback(callback)
                             .addMigrations(migrationFTS)
                             .build();
 
@@ -57,6 +46,8 @@ public abstract class DictIndoDatabase extends RoomDatabase {
         }
         return INSTANCE;
     }
+
+    public abstract DictIdDao dictIdDao();
 
     private static DictIndoDatabase INSTANCE;
 

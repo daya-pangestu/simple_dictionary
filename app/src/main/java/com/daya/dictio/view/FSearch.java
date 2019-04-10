@@ -13,7 +13,7 @@ import android.widget.TextView;
 import com.daya.dictio.R;
 import com.daya.dictio.model.DictIndonesia;
 import com.daya.dictio.model.SENDER;
-import com.daya.dictio.view.recyclerview_adapter.WordIndAdapter;
+import com.daya.dictio.view.recyclerview_adapter.WordIndAdapterPaged;
 import com.daya.dictio.viewmodel.WordViewModel;
 import com.l4digital.fastscroll.FastScroller;
 import com.paulrybitskyi.persistentsearchview.PersistentSearchView;
@@ -23,8 +23,11 @@ import com.paulrybitskyi.persistentsearchview.listeners.OnSearchQueryChangeListe
 import com.paulrybitskyi.persistentsearchview.listeners.OnSuggestionChangeListener;
 import com.paulrybitskyi.persistentsearchview.utils.SuggestionCreationUtil;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
@@ -38,73 +41,72 @@ import butterknife.Unbinder;
 
 //TODO oncinfirmed search masih ngelag sangad
 public class FSearch extends Fragment {
-    public static final String TAG = FSearch.class.getSimpleName();
     @BindView(R.id.rv_global)
     RecyclerView rvGlobal;
     @BindView(R.id.fast_scroller_global)
     FastScroller fastScrollerGlobal;
     @BindView(R.id.persistentSearchView)
     PersistentSearchView searchView;
+
+    @BindView(R.id.list_empty)
+    ImageView listEmpty;
+    @BindView(R.id.rv_root)
+    RelativeLayout rvRoot;
     private final OnSearchQueryChangeListener onSearchQueryChangeListener = new OnSearchQueryChangeListener() {
         @Override
         public void onSearchQueryChanged(PersistentSearchView searchView, String oldQuery, String newQuery) {
             wordViewModel.getSearch(newQuery).observe(FSearch.this, FSearch.this::setSuggestion);
         }
     };
-    @BindView(R.id.list_empty)
-    ImageView listEmpty;
-    @BindView(R.id.rv_root)
-    RelativeLayout rvRoot;
-
 
     private WordViewModel wordViewModel;
+    @BindView(R.id.text_empty)
+    TextView textEmpty;
     private Unbinder unbinder;
-    private WordIndAdapter wordIndAdapter;
 
     public FSearch() {
         // Required empty public constructor
     }
 
-    @BindView(R.id.text_empty)
-    TextView textEmpty;
-    private final OnSearchConfirmedListener onSearchConfirmedListener = (searchView, query) -> startSearch(query);
+    private WordIndAdapterPaged wordIndAdapter;
+    private final OnSearchConfirmedListener onSearchConfirmedListener = (searchView, query) -> {
+        startSearch(query);
+        searchView.collapse(true);
+    };
     private final OnSuggestionChangeListener onSuggestionChangeListener = new OnSuggestionChangeListener() {
         @Override
         public void onSuggestionPicked(SuggestionItem suggestion) {
             String query = suggestion.getItemModel().getText();
-
-            wordViewModel.getSearch(query).observe(FSearch.this, (List<DictIndonesia> searchModelFts) -> {
-                setSuggestion(searchModelFts);
-            });
-
+            wordViewModel.getSearch(query).observe(FSearch.this, (List<DictIndonesia> searchModelFts) ->
+                    setSuggestion(searchModelFts));
             startSearch(query);
         }
-
         @Override
         public void onSuggestionRemoved(SuggestionItem suggestion) {
         }
     };
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NotNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-        View view = inflater.inflate(R.layout.fragment_fsearch_layout, container, false);
-        ((AppCompatActivity) getActivity()).getSupportActionBar().hide();
+        View view = inflater.inflate(R.layout.fragment_fsearch, container, false);
+        Objects.requireNonNull(((AppCompatActivity) Objects.requireNonNull(getActivity())).getSupportActionBar()).hide();
         unbinder = ButterKnife.bind(this, view);
         setHasOptionsMenu(true);
+
         wordViewModel = ViewModelProviders.of(this).get(WordViewModel.class);
+
         listEmpty.setVisibility(View.VISIBLE);
-        textEmpty.setVisibility(View.VISIBLE);
         rvRoot.setVisibility(View.GONE);
 
         //recyclerview
-        wordIndAdapter = new WordIndAdapter(SENDER.SEARCH);
+        wordIndAdapter = new WordIndAdapterPaged(SENDER.SEARCH);
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getContext());
         rvGlobal.setLayoutManager(layoutManager);
-        rvGlobal.setHasFixedSize(true);
-        rvGlobal.addItemDecoration(new DividerItemDecoration(getContext(), DividerItemDecoration.VERTICAL));
+        rvGlobal.addItemDecoration(new DividerItemDecoration(view.getContext(), DividerItemDecoration.VERTICAL));
         rvGlobal.setAdapter(wordIndAdapter);
+
 
         searchView.setOnLeftBtnClickListener(v -> getActivity().onBackPressed());
         searchView.hideRightButton();
@@ -129,18 +131,13 @@ public class FSearch extends Fragment {
         searchView.setSuggestions(suggestions, false);
     }
 
-    //bug -> if return query more then 50, it couse some lag
     private void startSearch(String query) { //call inside search
         listEmpty.setVisibility(View.GONE);
         textEmpty.setVisibility(View.GONE);
 
         rvGlobal.setAlpha(0f);
-        wordIndAdapter.setDict(null);
 
         rvRoot.setVisibility(View.VISIBLE);
-
-        List<DictIndonesia> indonesiaList = new ArrayList<>();
-        wordViewModel.getSearch(query).observe(getActivity(), indonesiaList::addAll);
 
         fastScrollerGlobal.setSectionIndexer(wordIndAdapter);
         fastScrollerGlobal.attachRecyclerView(rvGlobal);
@@ -150,7 +147,8 @@ public class FSearch extends Fragment {
             if (searchView != null) {
                 searchView.hideProgressBar(false);
                 searchView.showLeftButton();
-                wordIndAdapter.setDict(indonesiaList);
+                //wordIndAdapter.submitList(indonesiaList);
+                wordViewModel.getSearchPaged(query).observe(FSearch.this, c -> wordIndAdapter.submitList(c));
 
                 rvGlobal.animate()
                         .alpha(1f)
@@ -159,6 +157,8 @@ public class FSearch extends Fragment {
                         .start();
 
             }
+
+
         };
 
         new Handler().postDelayed(runnable, 1000L);
@@ -166,7 +166,6 @@ public class FSearch extends Fragment {
         searchView.showProgressBar();
 
     }
-
 
     @Override
     public void onDestroyView() {
@@ -177,23 +176,15 @@ public class FSearch extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        ((AppCompatActivity) getActivity()).getSupportActionBar().hide();
+        ((MainActivity) getActivity()).showHideToolbar(false);
     }
 
     @Override
     public void onPause() {
         super.onPause();
-        ((AppCompatActivity) getActivity()).getSupportActionBar().show();
-    }
+        ((MainActivity) getActivity()).showHideToolbar(true);
 
-    @Override
-    public void onStart() {
-        super.onStart();
-        ((AppCompatActivity) getActivity()).getSupportActionBar().hide();
     }
-    /*bug -> search
-     * re-searching couse some kind of troublesome lag,from what i read inlogcat, it may becouse db is still open or something*/
-
 
 
 }

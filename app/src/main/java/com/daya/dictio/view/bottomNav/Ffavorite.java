@@ -7,12 +7,14 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.daya.dictio.R;
-import com.daya.dictio.view.layout_thing.BottomNavigationBehavior;
 import com.daya.dictio.view.recyclerview_adapter.FavoritAdapter;
 import com.daya.dictio.viewmodel.FavoriteViewModel;
-import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.snackbar.Snackbar;
 import com.l4digital.fastscroll.FastScroller;
+
+import org.jetbrains.annotations.NotNull;
+
+import java.util.Objects;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -28,13 +30,11 @@ import butterknife.Unbinder;
 
 
 public class Ffavorite extends Fragment {
-    //disini butuh gimana caranya supaya bottomnavigation keliatan kalo semua favorite didelete manual
     @BindView(R.id.rv_global)
     RecyclerView rvGlobal;
     @BindView(R.id.fast_scroller_global)
     FastScroller fastScrollerGlobal;
-    FavoritAdapter adapter;
-    BottomNavigationView bottomNavigationView;
+    private FavoritAdapter adapter;
     private Unbinder unbinder;
     private FavoriteViewModel favoriteViewModel;
 
@@ -43,14 +43,13 @@ public class Ffavorite extends Fragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NotNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_ffavorite, container, false);
         unbinder = ButterKnife.bind(this, view);
         favoriteViewModel = ViewModelProviders.of(this).get(FavoriteViewModel.class);
-        bottomNavigationView = getActivity().findViewById(R.id.navigation);
-        ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle("Favorite");
+        Objects.requireNonNull(((AppCompatActivity) getActivity()).getSupportActionBar()).setTitle(getString(R.string.favorite));
         setHasOptionsMenu(true);
 
         adapter = new FavoritAdapter();
@@ -58,7 +57,7 @@ public class Ffavorite extends Fragment {
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getActivity());
         rvGlobal.setLayoutManager(layoutManager);
         rvGlobal.setHasFixedSize(true);
-        rvGlobal.addItemDecoration(new DividerItemDecoration(getContext(), DividerItemDecoration.VERTICAL));
+        rvGlobal.addItemDecoration(new DividerItemDecoration(view.getContext(), DividerItemDecoration.VERTICAL));
         rvGlobal.setAdapter(adapter);
 
 
@@ -66,11 +65,7 @@ public class Ffavorite extends Fragment {
         fastScrollerGlobal.setSectionIndexer(adapter);
         fastScrollerGlobal.attachRecyclerView(rvGlobal);
 
-        favoriteViewModel.getTotalFavorite().observe(this, integers -> {
-            if (integers == 0) {
-                new BottomNavigationBehavior().showBottomNavigationView(bottomNavigationView);
-            }
-        });
+
 
         return view;
 
@@ -85,7 +80,7 @@ public class Ffavorite extends Fragment {
                 favoriteViewModel.deleteAllFavorite();
                 adapter.clearData();
                 NavHostFragment.findNavController(this).navigate(R.id.action_navigation_fovorite_pop);
-                Snackbar.make(getView(), "return to Dashboard", Snackbar.LENGTH_LONG).setAction("OK", v -> {
+                Snackbar.make(Objects.requireNonNull(getView()), getString(R.string.return_to_dashboard), Snackbar.LENGTH_LONG).setAction(getString(R.string.ok), v -> {
                 }).show();
                 break;
         }

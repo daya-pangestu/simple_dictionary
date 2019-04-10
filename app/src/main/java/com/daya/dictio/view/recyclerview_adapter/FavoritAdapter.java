@@ -6,7 +6,6 @@ import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -26,7 +25,6 @@ import com.l4digital.fastscroll.FastScroller;
 import java.util.List;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.fragment.app.FragmentActivity;
 import androidx.lifecycle.ViewModelProviders;
@@ -35,7 +33,6 @@ import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.RecyclerView;
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import timber.log.Timber;
 
 
 public class FavoritAdapter extends RecyclerView.Adapter<FavoritAdapter.WordolderFavorite> implements FastScroller.SectionIndexer {
@@ -63,7 +60,6 @@ public class FavoritAdapter extends RecyclerView.Adapter<FavoritAdapter.Wordolde
     @Override
     public int getItemCount() {
         return (listKamus != null) ? listKamus.size() : 0;
-
     }
 
     public void setDict(List<FavoriteJoinDict> dict) {
@@ -96,29 +92,23 @@ public class FavoritAdapter extends RecyclerView.Adapter<FavoritAdapter.Wordolde
 
 
     public class WordolderFavorite extends RecyclerView.ViewHolder implements View.OnClickListener {
-        @BindView(R.id.back_frame_favo)
-        RelativeLayout backFrameFavorite;
-
-        @BindView(R.id.switch_icon_favo)
-        SwitchIconView iconDelete;
-
-        @BindView(R.id.recycler_kata_favorite)
-        TextView kataFavoriteFront;
-        @BindView(R.id.recycler_penjelasan_favorite)
-        TextView penjelasanFavoriteFront;
-        @BindView(R.id.card_view_rcycler_favorite)
-        CoordinatorLayout frontFrameFavorite;
-        @BindView(R.id.swipper_favorite)
-        SwipeRevealLayout swipperFavorite;
-
         private final WordViewModel wordViewModel;
         private final HistoryViewModel historyViewModel;
         private final FavoriteViewModel favoriteViewModel;
-        @Nullable
-        @BindView(R.id.list_empty)
-        ImageView listEmpty;
-        private FavoriteJoinDict inHolderFav;
+        @BindView(R.id.back_frame_favo)
+        RelativeLayout backFrameFavorite;
+        @BindView(R.id.card_view_rcycler_favorite)
+        CoordinatorLayout frontFrameFavorite;
+        @BindView(R.id.switch_icon_delete_favo)
+        SwitchIconView switchIconDelFavo;
+        @BindView(R.id.text_kata_favorite)
+        TextView kataFavoriteFront;
+        @BindView(R.id.text_penjelasan_favorite)
+        TextView penjelasanFavoriteFront;
+        @BindView(R.id.swipper_favorite)
+        SwipeRevealLayout swipperFavorite;
 
+        private FavoriteJoinDict inHolderFav;
 
         WordolderFavorite(View view) {
             super(view);
@@ -149,7 +139,7 @@ public class FavoritAdapter extends RecyclerView.Adapter<FavoritAdapter.Wordolde
 
             switch (v.getId()) {
                 case R.id.card_view_rcycler_favorite:
-
+                    favoriteViewModel.isFavoritExists(idOwner);
                     wordViewModel.setSendToDetail(new DictIndonesia(id, wordFavorit, meaning));
                     historyViewModel.addHistory(new HistoryModel(id));
 
@@ -157,18 +147,18 @@ public class FavoritAdapter extends RecyclerView.Adapter<FavoritAdapter.Wordolde
                     navigation.navigate(R.id.action_navigation_fovorite_to_fDetail_ragment);
                     break;
                 case R.id.back_frame_favo:
-                    iconDelete.setIconEnabled(true);
+                    switchIconDelFavo.setIconEnabled(true);
                     final Handler handler = new Handler();
                     handler.postDelayed(() -> {
                         // hold item before removed for 0.5 sec
                         removeItemAt(getAdapterPosition());
                         favoriteViewModel.deleteFavoriteAt(new FavoritModel(id, idOwner));
-                        Timber.i("onClick: sisa listkamus %s", listKamus.size());
                     }, 300);
+                    break;
+                default:
+                    break;
 
             }
         }
     }
-
-
 }

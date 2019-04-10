@@ -29,10 +29,7 @@ public class DictRepository {
     private final HistoryDao historyDao;
     private final FavoriteDao favoritDao;
     private final OtherMeaningDao otherMeaningDao;
-    private final PagedList.Config pagedListConfid = (new PagedList.Config.Builder()
-            .setEnablePlaceholders(true)
-            .setPrefetchDistance(10)
-            .setPageSize(20).build());
+    Appreferen appreferen;
 
     public DictRepository(Application application) {
         DictIndoDatabase db = DictIndoDatabase.getINSTANCE(application);
@@ -49,11 +46,7 @@ public class DictRepository {
 
     public LiveData<PagedList<DictIndonesia>> getAllWordPaged() {
 
-        new LivePagedListBuilder<>(
-                indDao.getAllPaged(), pagedListConfid).build();
-        DataSource.Factory<Integer, DictIndonesia> factory = indDao.getAllPaged();
-
-        return new LivePagedListBuilder<>(factory, pagedListConfid).build();
+        return new LivePagedListBuilder<>(indDao.getAllPaged(), 50).build();
     }
 
     public void insertTransaction(DictIndonesia dictIndonesia) {
@@ -100,6 +93,34 @@ public class DictRepository {
 
     }
 
+    public boolean isfavoritExist(int s) {
+/*
+
+         favoritDao.isfavoritExists(s).subscribe(new SingleObserver<Integer>() {
+            boolean exist;
+            @Override
+            public void onSubscribe(Disposable d) {
+
+            }
+
+            @Override
+            public void onSuccess(Integer integer) {
+                Timber.i("onSuccess: %s", integer);
+                exist = true;
+            }
+
+            @Override
+            public void onError(Throwable e) {
+                Timber.i("no data  ");
+                exist = false;
+            }
+        });
+*/
+
+
+        return false;
+    }
+
 
     //replace thos with proper code -> rxjava
     public boolean isfavoritExists(int s) {
@@ -116,19 +137,14 @@ public class DictRepository {
 
     //dictionary search
     public LiveData<List<DictIndonesia>> getSearch(String s) {
-        String wildcardQuery;
-        wildcardQuery = String.format("*%s*", s);
+        String wildcardQueryIfNotSingle = (s.length() != 1) ? String.format("*%s*", s) : s;
 
-        return indDao.getSearchQuery(wildcardQuery);
+        return indDao.getSearchQuery(wildcardQueryIfNotSingle);
     }
 
-    public LiveData<PagedList<DictIndonesia>> getSearchPaged(String s) {
-        String wildcardQuery;
-        wildcardQuery = String.format("*%s*", s);
+    public DataSource.Factory<Integer, DictIndonesia> getSearchPaged(String s) {
 
-        LiveData<PagedList<DictIndonesia>> searchPaged = new LivePagedListBuilder<>(
-                indDao.getSearchQueryPaged(wildcardQuery), pagedListConfid).build();
-        return searchPaged;
+        return indDao.getSearchQueryPaged(s);
     }
 
     //other meaning
@@ -143,6 +159,11 @@ public class DictRepository {
 
     public void deleteOtherMeaning(OtherMeaningModel otherMeaningModel) {
         AsyncTask.execute(() -> otherMeaningDao.deleteOtherMeaning(otherMeaningModel));
+    }
+
+    public void updateOtherMeaning(OtherMeaningModel... otherMeaningModels) {
+        AsyncTask.execute(() -> otherMeaningDao.updateOtherMeaning(otherMeaningModels));
+
     }
 
 

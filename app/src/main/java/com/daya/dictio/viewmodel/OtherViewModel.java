@@ -32,4 +32,8 @@ public class OtherViewModel extends AndroidViewModel {
         dictRepository.deleteOtherMeaning(otherMeaningModel);
     }
 
+    public void updateOtherMeaning(OtherMeaningModel... otherMeaningModels) {
+        dictRepository.updateOtherMeaning(otherMeaningModels);
+    }
+
 }

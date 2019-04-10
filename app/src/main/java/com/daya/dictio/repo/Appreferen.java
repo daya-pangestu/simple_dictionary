@@ -7,18 +7,19 @@ import static android.content.Context.MODE_PRIVATE;
 
 public class Appreferen {
     private final SharedPreferences sharedPreferences;
-    private final Context context;
 
     private static final String FIRST_RUN = "first_run";
+    private static final String LANGUAGE_KEY = "language_key";
+    private SharedPreferences.Editor editor;
+
 
     public Appreferen(Context context) {
         sharedPreferences = context.getSharedPreferences("preferencesDictio", MODE_PRIVATE);
 
-        this.context = context;
     }
 
     public void setFirstRun() {
-        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor = sharedPreferences.edit();
         editor.putBoolean(FIRST_RUN, false);
         editor.apply();
     }
@@ -27,5 +28,18 @@ public class Appreferen {
         return sharedPreferences.getBoolean(FIRST_RUN, true);
     }
 
+    public void setlanguage(String language) {
+        editor = sharedPreferences.edit();
+        editor.putString(LANGUAGE_KEY, language);
+        editor.apply();
+    }
 
+    public String getLanguage() {
+        return sharedPreferences.getString(LANGUAGE_KEY, null);
+    }
+
+
+    public SharedPreferences getSharedPreferences() {
+        return sharedPreferences;
+    }
 }
