@@ -11,7 +11,6 @@
 /build
 /captures
 .externalNativeBuild
-#/screenshoot
 app/libs/
 app/sampledata/
 app/src/main/gen/
