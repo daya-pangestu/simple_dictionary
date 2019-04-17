@@ -12,3 +12,8 @@
 /captures
 .externalNativeBuild
 /screenshoot
+app/libs/
+app/sampledata/
+app/src/main/gen/
+app/src/main/res/layout-v23/
+app/src/main/res/layout-v26/
