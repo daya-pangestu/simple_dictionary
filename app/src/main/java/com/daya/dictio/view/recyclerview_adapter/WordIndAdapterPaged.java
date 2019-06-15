@@ -1,11 +1,9 @@
 package com.daya.dictio.view.recyclerview_adapter;
 
 
-import android.content.ClipData;
-import android.content.ClipboardManager;
+
 import android.content.Context;
 import android.text.Html;
-import android.text.Spanned;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,29 +15,20 @@ import com.chauthai.swipereveallayout.SwipeRevealLayout;
 import com.chauthai.swipereveallayout.ViewBinderHelper;
 import com.daya.dictio.R;
 import com.daya.dictio.model.DictIndonesia;
-import com.daya.dictio.model.FavoritModel;
-import com.daya.dictio.model.HistoryModel;
-import com.daya.dictio.model.SENDER;
 import com.daya.dictio.repo.Appreferen;
 import com.daya.dictio.view.itemSelection.Details;
-import com.daya.dictio.viewmodel.FavoriteViewModel;
-import com.daya.dictio.viewmodel.HistoryViewModel;
-import com.daya.dictio.viewmodel.WordViewModel;
+import com.daya.dictio.view.layout_thing.OnItemClickListener;
 import com.github.zagum.switchicon.SwitchIconView;
-import com.google.android.material.snackbar.Snackbar;
 import com.l4digital.fastscroll.FastScroller;
 
 import androidx.annotation.NonNull;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
-import androidx.fragment.app.FragmentActivity;
-import androidx.lifecycle.ViewModelProviders;
-import androidx.navigation.NavController;
-import androidx.navigation.Navigation;
 import androidx.paging.PagedListAdapter;
 import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.RecyclerView;
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import timber.log.Timber;
 
 public class WordIndAdapterPaged extends PagedListAdapter<DictIndonesia, WordIndAdapterPaged.WordHolder> implements FastScroller.SectionIndexer {
     private static final DiffUtil.ItemCallback<DictIndonesia> diffcallBack = new DiffUtil.ItemCallback<DictIndonesia>() {
@@ -50,18 +39,17 @@ public class WordIndAdapterPaged extends PagedListAdapter<DictIndonesia, WordInd
 
         @Override
         public boolean areContentsTheSame(@NonNull DictIndonesia oldItem, @NonNull DictIndonesia newItem) {
-            return oldItem == newItem;
+            return oldItem.equals(newItem);
         }
     };
 
-    private final ViewBinderHelper viewBinderHelper = new ViewBinderHelper();
 
-    private final SENDER sender;
+    private final ViewBinderHelper viewBinderHelper = new ViewBinderHelper();
+    private OnItemClickListener mOnItemClickListener;
     private Context context;
 
-    public WordIndAdapterPaged(SENDER sender) {
+    public WordIndAdapterPaged() {
         super(diffcallBack);
-        this.sender = sender;
     }
 
     @NonNull
@@ -86,6 +74,10 @@ public class WordIndAdapterPaged extends PagedListAdapter<DictIndonesia, WordInd
 
     }
 
+    public void setOnindClickListener(OnItemClickListener onItemClickListener) {
+        this.mOnItemClickListener = onItemClickListener;
+    }
+
 
     @Override
     public long getItemId(int position) {
@@ -100,10 +92,9 @@ public class WordIndAdapterPaged extends PagedListAdapter<DictIndonesia, WordInd
 
     public class WordHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         final View viewForSnackbar;
-        private final WordViewModel wordViewModel;
-        private final HistoryViewModel historyViewModel;
         final Details details;
         final Appreferen appreferen;
+        OnItemClickListener onItemClickListener;
 
         @BindView(R.id.swipper)
         SwipeRevealLayout swipperMain;
@@ -119,24 +110,19 @@ public class WordIndAdapterPaged extends PagedListAdapter<DictIndonesia, WordInd
         ImageButton btnCopy;
         @BindView(R.id.front_frame)
         CoordinatorLayout frontFrame;
-        private final FavoriteViewModel favoriteViewModel;
         DictIndonesia inHolderDict;
 
         WordHolder(View view) {
             super(view);
             this.viewForSnackbar = view;
             ButterKnife.bind(this, view);
-
-            wordViewModel = ViewModelProviders.of((FragmentActivity) context).get(WordViewModel.class);
-            historyViewModel = ViewModelProviders.of((FragmentActivity) context).get(HistoryViewModel.class);
-            favoriteViewModel = ViewModelProviders.of((FragmentActivity) context).get(FavoriteViewModel.class);
             frontFrame.setOnClickListener(this);
             backFrame.setOnClickListener(this);
             btnCopy.setOnClickListener(this);
 
             details = new Details();
             appreferen = new Appreferen(context);
-
+            onItemClickListener = mOnItemClickListener;
 
         }
 
@@ -144,6 +130,7 @@ public class WordIndAdapterPaged extends PagedListAdapter<DictIndonesia, WordInd
             inHolderDict = dictIndonesia;
             kataFrontFrame.setText(Html.fromHtml(dictIndonesia.getWord()));
             penjelasanFrontFrame.setText(Html.fromHtml(dictIndonesia.getMeaning()));
+            Timber.i(dictIndonesia.getWord());
         }
 
         void clear() {
@@ -153,49 +140,8 @@ public class WordIndAdapterPaged extends PagedListAdapter<DictIndonesia, WordInd
 
         @Override
         public void onClick(View v) {
-            int id = inHolderDict.getIdIndo();
-            String word = inHolderDict.getWord();
-            String meaning = inHolderDict.getMeaning();
-
-            Snackbar snackbar;
-            switch (v.getId()) {
-                case R.id.front_frame:
-                    navigationFronLayout(v, id, word, meaning);
-                    break;
-                case R.id.back_frame:
-                    favoriteViewModel.addFavorite(new FavoritModel(id));
-                    snackbar = Snackbar.make(viewForSnackbar, word + itemView.getContext().getString(R.string.added_to_favvorite), Snackbar.LENGTH_LONG).setAction("OK", v1 -> {
-                    });
-                    snackbar.show();
-                    break;
-
-                case R.id.copy_content_main:
-                    Spanned stringe = Html.fromHtml(word + "\n\n" + meaning);
-                    ClipboardManager clipboard = (ClipboardManager) viewForSnackbar.getContext().getSystemService(Context.CLIPBOARD_SERVICE);
-                    ClipData clip = ClipData.newPlainText("label", stringe.toString());
-                    clipboard.setPrimaryClip(clip);
-                    snackbar = Snackbar.make(viewForSnackbar, inHolderDict.getWord() + itemView.getContext().getString(R.string.copied), Snackbar.LENGTH_SHORT);
-                    snackbar.show();
-                default:
-                    break;
-            }
-        }
-
-        void navigationFronLayout(View v, int id, String word, String meaning) {
-            NavController navigation = Navigation.findNavController(v);
-            wordViewModel.setSendToDetail(new DictIndonesia(id, word, meaning));
-            switch (sender) {
-                case DASHBOARD:
-                    historyViewModel.addHistory(new HistoryModel(id));
-                    navigation.navigate(R.id.action_navigation_home_to_fDetail_ragment2);
-                    break;
-                case SEARCH:
-                    historyViewModel.addHistory(new HistoryModel(id));
-                    navigation.navigate(R.id.action_FSearch_layout_to_fDetail_ragment);
-                    break;
-                default:
-                    break;
-            }
+            //tombol manapun yang diclik akan isi onadapterclicked dengan view, data,dan posisi
+            onItemClickListener.dashboardClicked(v, inHolderDict, getAdapterPosition());
         }
 
         public Details getDetails() {
@@ -203,5 +149,10 @@ public class WordIndAdapterPaged extends PagedListAdapter<DictIndonesia, WordInd
         }
 
     }
+
+    /*public interface OnWordIndClickListener {
+        void onAdapterClicked(View itemview, DictIndonesia dictIndonesia, int Position);
+    }*/
+
 
 }

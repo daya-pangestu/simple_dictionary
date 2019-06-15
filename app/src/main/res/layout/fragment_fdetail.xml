@@ -76,7 +76,7 @@
             android:paddingEnd="8dp"
             android:paddingBottom="8dp"
             android:src="@drawable/ic_content_copy_black_24dp"
-            android:visibility="visible"
+            android:visibility="gone"
             tools:ignore="ContentDescription" />
     </RelativeLayout>
 

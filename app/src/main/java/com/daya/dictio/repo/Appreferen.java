@@ -14,8 +14,7 @@ public class Appreferen {
 
 
     public Appreferen(Context context) {
-        sharedPreferences = context.getSharedPreferences("preferencesDictio", MODE_PRIVATE);
-
+        sharedPreferences = context.getApplicationContext().getSharedPreferences("preferencesDictio", MODE_PRIVATE);
     }
 
     public void setFirstRun() {

@@ -90,9 +90,8 @@ public class fDetail extends Fragment implements DialogSubmitListener {
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        switch (item.getItemId()) {
-            case android.R.id.home:
-                NavHostFragment.findNavController(this).navigateUp();
+        if (item.getItemId() == android.R.id.home) {
+            NavHostFragment.findNavController(this).navigateUp();
         }
 
         return super.onOptionsItemSelected(item);
@@ -170,16 +169,15 @@ public class fDetail extends Fragment implements DialogSubmitListener {
         return view;
     }
 
-    void moveFabPosition(MOVE position) {
+    private void moveFabPosition(@MOVE int  position) {
         Handler handler = new Handler();
         handler.postDelayed(new Runnable() {
             @Override
             public void run() {
                 TransitionManager.beginDelayedTransition(fDetailRoot);
                 CoordinatorLayout.LayoutParams fabPositionParams = (CoordinatorLayout.LayoutParams) fabAddMeaning.getLayoutParams();
-                fabPositionParams.gravity = (position.equals(MOVE.END)) ? (Gravity.END | Gravity.BOTTOM) : (Gravity.BOTTOM | Gravity.CENTER_HORIZONTAL);
+                fabPositionParams.gravity = (position == MOVE.END) ? (Gravity.END | Gravity.BOTTOM) : (Gravity.BOTTOM | Gravity.CENTER_HORIZONTAL);
                 fabAddMeaning.setLayoutParams(fabPositionParams);
-
             }
         }, 500L);
     }
@@ -192,6 +190,7 @@ public class fDetail extends Fragment implements DialogSubmitListener {
         penjelasanDetail.setVisibility(visibility ? View.VISIBLE : View.GONE);
         tex.setVisibility(visibility ? View.VISIBLE : View.GONE);
         btnCopyDetail.setVisibility(visibility ? View.VISIBLE : View.GONE);
+
         Snackbar snackbar = Snackbar.make(view, visibility ? getString(R.string.expanded) : getString(R.string.collapsed), Snackbar.LENGTH_LONG);
         snackbar.show();
 

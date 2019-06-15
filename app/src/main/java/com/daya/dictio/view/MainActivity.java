@@ -1,13 +1,16 @@
 package com.daya.dictio.view;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
 import com.akexorcist.localizationactivity.ui.LocalizationActivity;
 import com.daya.dictio.R;
+import com.daya.dictio.model.DictIndonesia;
 import com.daya.dictio.view.layout_thing.BottomNavigationBehavior;
+import com.daya.dictio.viewmodel.WordViewModel;
 import com.google.android.material.appbar.AppBarLayout;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
@@ -15,11 +18,16 @@ import java.util.Objects;
 
 import androidx.appcompat.widget.Toolbar;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProviders;
 import androidx.navigation.Navigation;
 import androidx.navigation.fragment.NavHostFragment;
 import androidx.navigation.ui.NavigationUI;
+import androidx.paging.PagedList;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import timber.log.Timber;
 
 public class MainActivity extends LocalizationActivity {
 
@@ -58,6 +66,7 @@ public class MainActivity extends LocalizationActivity {
         CoordinatorLayout.LayoutParams paramsBottomNav = (CoordinatorLayout.LayoutParams) navigation.getLayoutParams();
         paramsBottomNav.setBehavior(new BottomNavigationBehavior());
 
+        WordViewModel wordViewModel = ViewModelProviders.of(this).get(WordViewModel.class);
 
     }
     @Override

@@ -58,9 +58,8 @@ public class WordViewModel extends AndroidViewModel {
         String wildcardQueryIfNotSingle = (s.length() != 1) ? String.format("*%s*", s) : s;
 
 
-        LiveData<PagedList<DictIndonesia>> searchPaged = new LivePagedListBuilder<>(
+        return  new LivePagedListBuilder<>(
                 dictRepository.getSearchPaged(wildcardQueryIfNotSingle), pagedListConfid).build();
-        return searchPaged;
     }
 
     public LiveData<List<DictIndonesia>> getAllWord() {

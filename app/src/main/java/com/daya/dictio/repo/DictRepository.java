@@ -143,7 +143,6 @@ public class DictRepository {
     }
 
     public DataSource.Factory<Integer, DictIndonesia> getSearchPaged(String s) {
-
         return indDao.getSearchQueryPaged(s);
     }
 

@@ -1,43 +1,53 @@
 package com.daya.dictio.view;
 
+import android.content.ClipData;
+import android.content.ClipboardManager;
+import android.content.Context;
 import android.os.Bundle;
 import android.os.Handler;
+import android.text.Html;
+import android.text.Spanned;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.LinearInterpolator;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.daya.dictio.R;
-import com.daya.dictio.model.DictIndonesia;
-import com.daya.dictio.model.SENDER;
-import com.daya.dictio.view.recyclerview_adapter.WordIndAdapterPaged;
-import com.daya.dictio.viewmodel.WordViewModel;
-import com.l4digital.fastscroll.FastScroller;
-import com.paulrybitskyi.persistentsearchview.PersistentSearchView;
-import com.paulrybitskyi.persistentsearchview.adapters.model.SuggestionItem;
-import com.paulrybitskyi.persistentsearchview.listeners.OnSearchConfirmedListener;
-import com.paulrybitskyi.persistentsearchview.listeners.OnSearchQueryChangeListener;
-import com.paulrybitskyi.persistentsearchview.listeners.OnSuggestionChangeListener;
-import com.paulrybitskyi.persistentsearchview.utils.SuggestionCreationUtil;
-
-import org.jetbrains.annotations.NotNull;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
-
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
+import androidx.navigation.Navigation;
+import androidx.paging.PagedList;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.daya.dictio.R;
+import com.daya.dictio.model.DictIndonesia;
+import com.daya.dictio.model.FavoritModel;
+import com.daya.dictio.model.HistoryModel;
+import com.daya.dictio.view.layout_thing.OnItemClickListener;
+import com.daya.dictio.view.recyclerview_adapter.WordIndAdapterPaged;
+import com.daya.dictio.viewmodel.FavoriteViewModel;
+import com.daya.dictio.viewmodel.HistoryViewModel;
+import com.daya.dictio.viewmodel.WordViewModel;
+import com.google.android.material.snackbar.Snackbar;
+import com.l4digital.fastscroll.FastScroller;
+import com.lapism.searchview.Search;
+import com.lapism.searchview.widget.SearchView;
+
+import org.jetbrains.annotations.NotNull;
+
+import java.util.Objects;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
+import timber.log.Timber;
 
 //TODO oncinfirmed search masih ngelag sangad
 public class FSearch extends Fragment {
@@ -45,21 +55,18 @@ public class FSearch extends Fragment {
     RecyclerView rvGlobal;
     @BindView(R.id.fast_scroller_global)
     FastScroller fastScrollerGlobal;
-    @BindView(R.id.persistentSearchView)
-    PersistentSearchView searchView;
-
     @BindView(R.id.list_empty)
     ImageView listEmpty;
     @BindView(R.id.rv_root)
     RelativeLayout rvRoot;
-    private final OnSearchQueryChangeListener onSearchQueryChangeListener = new OnSearchQueryChangeListener() {
-        @Override
-        public void onSearchQueryChanged(PersistentSearchView searchView, String oldQuery, String newQuery) {
-            wordViewModel.getSearch(newQuery).observe(FSearch.this, FSearch.this::setSuggestion);
-        }
-    };
+    @BindView(R.id.searchView_fsearch)
+    SearchView searchView;
+    @BindView(R.id.progress_f_search)
+    ProgressBar progressFSearch;
 
-    private WordViewModel wordViewModel;
+    private FavoriteViewModel mFavoritViewModel;
+    private WordViewModel mWordViewModel;
+    private HistoryViewModel mHistoryViewModel;
     @BindView(R.id.text_empty)
     TextView textEmpty;
     private Unbinder unbinder;
@@ -69,22 +76,7 @@ public class FSearch extends Fragment {
     }
 
     private WordIndAdapterPaged wordIndAdapter;
-    private final OnSearchConfirmedListener onSearchConfirmedListener = (searchView, query) -> {
-        startSearch(query);
-        searchView.collapse(true);
-    };
-    private final OnSuggestionChangeListener onSuggestionChangeListener = new OnSuggestionChangeListener() {
-        @Override
-        public void onSuggestionPicked(SuggestionItem suggestion) {
-            String query = suggestion.getItemModel().getText();
-            wordViewModel.getSearch(query).observe(FSearch.this, (List<DictIndonesia> searchModelFts) ->
-                    setSuggestion(searchModelFts));
-            startSearch(query);
-        }
-        @Override
-        public void onSuggestionRemoved(SuggestionItem suggestion) {
-        }
-    };
+
 
     @Override
     public View onCreateView(@NotNull LayoutInflater inflater, ViewGroup container,
@@ -95,76 +87,115 @@ public class FSearch extends Fragment {
         unbinder = ButterKnife.bind(this, view);
         setHasOptionsMenu(true);
 
-        wordViewModel = ViewModelProviders.of(this).get(WordViewModel.class);
-
-        listEmpty.setVisibility(View.VISIBLE);
         rvRoot.setVisibility(View.GONE);
 
+        //viewmodel
+        mWordViewModel = ViewModelProviders.of(this).get(WordViewModel.class);
+        mFavoritViewModel = ViewModelProviders.of(this).get(FavoriteViewModel.class);
+        mHistoryViewModel = ViewModelProviders.of(this).get(HistoryViewModel.class);
+
+
+        searchView.setOnQueryTextListener(new Search.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(CharSequence query) {
+                startSearch(query.toString());
+
+                searchView.close();
+
+                return true;
+            }
+
+            @Override
+            public void onQueryTextChange(CharSequence newText) {
+
+            }
+        });
+        searchView.setOnLogoClickListener(new Search.OnLogoClickListener() {
+            @Override
+            public void onLogoClick() {
+                Navigation.findNavController(view).navigateUp();
+            }
+        });
+
+
         //recyclerview
-        wordIndAdapter = new WordIndAdapterPaged(SENDER.SEARCH);
+        wordIndAdapter = new WordIndAdapterPaged();
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getContext());
         rvGlobal.setLayoutManager(layoutManager);
         rvGlobal.addItemDecoration(new DividerItemDecoration(view.getContext(), DividerItemDecoration.VERTICAL));
         rvGlobal.setAdapter(wordIndAdapter);
 
+        wordIndAdapter.setOnindClickListener(new OnItemClickListener() {
+            @Override
+            public void dashboardClicked(View view, DictIndonesia dictIndonesia, int position) {
+                int id = dictIndonesia.getIdIndo();
+                String word = dictIndonesia.getWord();
+                String meaning = dictIndonesia.getMeaning();
 
-        searchView.setOnLeftBtnClickListener(v -> getActivity().onBackPressed());
-        searchView.hideRightButton();
+                Snackbar snackbar;
+                switch (view.getId()) {
+                    case R.id.front_frame:
+                        Navigation.findNavController(view).navigate(R.id.action_FSearch_layout_to_fDetail_ragment);
+                        mHistoryViewModel.addHistory(new HistoryModel(id));
+                        break;
+                    case R.id.back_frame:
+                        mFavoritViewModel.addFavorite(new FavoritModel(id));
+                        snackbar = Snackbar.make(view, word + getString(R.string.added_to_favvorite), Snackbar.LENGTH_LONG).setAction("OK", v1 -> {
+                        });
+                        snackbar.show();
+                        break;
 
-        searchView.setOnSearchConfirmedListener(onSearchConfirmedListener);
-        searchView.setOnSearchQueryChangeListener(onSearchQueryChangeListener);
-        searchView.setOnSuggestionChangeListener(onSuggestionChangeListener);
+                    case R.id.copy_content_main:
+                        Spanned stringe = Html.fromHtml(word + "\n\n" + meaning);
+                        ClipboardManager clipboard = (ClipboardManager) getContext().getSystemService(Context.CLIPBOARD_SERVICE);
+                        ClipData clip = ClipData.newPlainText("label", stringe.toString());
+                        clipboard.setPrimaryClip(clip);
+                        snackbar = Snackbar.make(view, dictIndonesia.getWord() + getString(R.string.copied), Snackbar.LENGTH_SHORT);
+                        snackbar.show();
+                    default:
+                        break;
+                }
+            }
+        });
 
         return view;
     }
 
 
-    private void setSuggestion(List<DictIndonesia> query) throws IllegalStateException {
-        List<String> queryString = new ArrayList<>();
-
-        for (DictIndonesia uery : query) {
-            queryString.add(uery.getWord());
-        }
-
-        List<SuggestionItem> suggestions = SuggestionCreationUtil.asRegularSearchSuggestions(queryString);
-
-        searchView.setSuggestions(suggestions, false);
-    }
-
     private void startSearch(String query) { //call inside search
+        progressFSearch.setVisibility(View.VISIBLE);
         listEmpty.setVisibility(View.GONE);
         textEmpty.setVisibility(View.GONE);
 
         rvGlobal.setAlpha(0f);
-
         rvRoot.setVisibility(View.VISIBLE);
 
         fastScrollerGlobal.setSectionIndexer(wordIndAdapter);
         fastScrollerGlobal.attachRecyclerView(rvGlobal);
 
-        searchView.showProgressBar();
         Runnable runnable = () -> {
-            if (searchView != null) {
-                searchView.hideProgressBar(false);
-                searchView.showLeftButton();
-                //wordIndAdapter.submitList(indonesiaList);
-                wordViewModel.getSearchPaged(query).observe(FSearch.this, c -> wordIndAdapter.submitList(c));
 
-                rvGlobal.animate()
-                        .alpha(1f)
-                        .setInterpolator(new LinearInterpolator())
-                        .setDuration(300L)
-                        .start();
+
+            if (searchView != null) {
+
+                mWordViewModel.getSearchPaged(query).observe(getViewLifecycleOwner(), new Observer<PagedList<DictIndonesia>>() {
+                    @Override
+                    public void onChanged(PagedList<DictIndonesia> dictIndonesias) {
+                        wordIndAdapter.submitList(dictIndonesias);
+                        Timber.i("startSearch: %s", dictIndonesias.size());
+                    }
+                });
 
             }
-
-
+            rvGlobal.animate()
+                    .alpha(1f)
+                    .setInterpolator(new LinearInterpolator())
+                    .setDuration(300L)
+                    .start();
+            progressFSearch.setVisibility(View.GONE);
         };
 
         new Handler().postDelayed(runnable, 1000L);
-        searchView.hideLeftButton(false);
-        searchView.showProgressBar();
-
     }
 
     @Override

@@ -40,8 +40,8 @@ public class Fhistory extends Fragment {//perlu relasi
     @BindView(R.id.fast_scroller_global)
     FastScroller fastScrollerGlobal;
     private Unbinder unbinder;
-    private HistoryViewModel historyViewModel;
-    private HistoryAdapter historyAdapter;
+    private HistoryViewModel mHistoryViewModel;
+    private HistoryAdapter mHistoryAdapter;
 
 
     public Fhistory() {
@@ -52,27 +52,31 @@ public class Fhistory extends Fragment {//perlu relasi
     @Override
     public View onCreateView(@NotNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
+
         View view = inflater.inflate(R.layout.fragment_fhistory, container, false);
+
         unbinder = ButterKnife.bind(this, view);
-        historyViewModel = ViewModelProviders.of(this).get(HistoryViewModel.class);
+
+        //viewmodel
+        mHistoryViewModel = ViewModelProviders.of(this).get(HistoryViewModel.class);
+
+        //toolbar
         Objects.requireNonNull(((AppCompatActivity) Objects.requireNonNull(getActivity())).getSupportActionBar()).setTitle(getResources().getString(R.string.history));
         setHasOptionsMenu(true);
 
-        historyAdapter = new HistoryAdapter();
 
         //recyclerview
+        mHistoryAdapter = new HistoryAdapter();
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getContext());
         rvGlobal.setLayoutManager(layoutManager);
         rvGlobal.setHasFixedSize(true);
-        rvGlobal.setAdapter(historyAdapter);
+        rvGlobal.setAdapter(mHistoryAdapter);
         rvGlobal.addItemDecoration(new DividerItemDecoration(view.getContext(), DividerItemDecoration.VERTICAL));
 
-        historyViewModel.getList().observe(this, historyJoinDicts -> historyAdapter.setHistory(historyJoinDicts));
+        mHistoryViewModel.getList().observe(this, historyJoinDicts -> mHistoryAdapter.setHistory(historyJoinDicts));
 
-        fastScrollerGlobal.setSectionIndexer(historyAdapter);
+        fastScrollerGlobal.setSectionIndexer(mHistoryAdapter);
         fastScrollerGlobal.attachRecyclerView(rvGlobal);
-
 
         return view;
     }
@@ -82,7 +86,7 @@ public class Fhistory extends Fragment {//perlu relasi
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()) {
             case R.id.delete_menu_toolbar:
-                historyViewModel.deleteHistory();
+                mHistoryViewModel.deleteHistory();
                 NavHostFragment.findNavController(this).navigate(R.id.action_navigation_history_pop);
                 Snackbar.make(Objects.requireNonNull(getView()), getString(R.string.return_to_dashboard), Snackbar.LENGTH_LONG).setAction(getString(R.string.ok), v -> {
                 }).show();
