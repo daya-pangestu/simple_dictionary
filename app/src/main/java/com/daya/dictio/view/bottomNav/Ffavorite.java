@@ -91,8 +91,7 @@ public class Ffavorite extends Fragment {
         if (item.getItemId() == R.id.delete_menu_toolbar) {
             mFavoriteViewModel.deleteAllFavorite();
             mFavoritAdapter.clearData();
-            NavHostFragment.findNavController(this).navigate(R.id.action_navigation_fovorite_pop);
-            Snackbar.make(Objects.requireNonNull(getView()), getString(R.string.return_to_dashboard), Snackbar.LENGTH_LONG).setAction(getString(R.string.ok), v -> {
+            Snackbar.make(Objects.requireNonNull(getView()),"deleted", Snackbar.LENGTH_LONG).setAction(getString(R.string.ok), v -> {
             }).show();
         }
 

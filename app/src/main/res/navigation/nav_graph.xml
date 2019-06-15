@@ -2,20 +2,7 @@
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    app:startDestination="@id/navigation_home">
-    <fragment
-        android:id="@+id/navigation_home"
-        android:name="com.daya.dictio.view.bottomNav.Fdashboard"
-        android:label="fragment_fdashboard"
-        tools:layout="@layout/fragment_fdashboard">
-        <action
-            android:id="@+id/action_navigation_home_to_fDetail_ragment2"
-            app:enterAnim="@anim/nav_default_enter_anim"
-            app:exitAnim="@anim/nav_default_exit_anim"
-            app:popEnterAnim="@anim/nav_default_pop_enter_anim"
-            app:popExitAnim="@anim/nav_default_pop_exit_anim"
-            app:destination="@id/fDetail" />
-    </fragment>
+    app:startDestination="@id/navigation_history">
     <fragment
         android:id="@+id/navigation_fovorite"
         android:name="com.daya.dictio.view.bottomNav.Ffavorite"
@@ -78,8 +65,4 @@
         app:popEnterAnim="@anim/nav_default_pop_enter_anim"
         app:popExitAnim="@anim/nav_default_pop_exit_anim"
         app:destination="@id/FSearch" />
-    <fragment
-        android:id="@+id/navigation_settings"
-        android:name="com.daya.dictio.view.bottomNav.Fpreferences"
-        android:label="Fpreferences" />
 </navigation>

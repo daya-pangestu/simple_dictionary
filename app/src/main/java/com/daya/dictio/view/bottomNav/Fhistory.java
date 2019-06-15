@@ -87,8 +87,7 @@ public class Fhistory extends Fragment {//perlu relasi
         switch (item.getItemId()) {
             case R.id.delete_menu_toolbar:
                 mHistoryViewModel.deleteHistory();
-                NavHostFragment.findNavController(this).navigate(R.id.action_navigation_history_pop);
-                Snackbar.make(Objects.requireNonNull(getView()), getString(R.string.return_to_dashboard), Snackbar.LENGTH_LONG).setAction(getString(R.string.ok), v -> {
+                Snackbar.make(Objects.requireNonNull(getView()), "deleted", Snackbar.LENGTH_LONG).setAction(getString(R.string.ok), v -> {
                 }).show();
                 break;
         }

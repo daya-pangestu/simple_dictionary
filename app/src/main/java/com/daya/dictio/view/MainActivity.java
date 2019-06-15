@@ -62,11 +62,10 @@ public class MainActivity extends LocalizationActivity {
         if (navHostFragment != null) {
             NavigationUI.setupWithNavController(navigation, navHostFragment.getNavController());
         }
+        //aktifkan ini kalau mau efek bottomnav terscroll
+      /*  CoordinatorLayout.LayoutParams paramsBottomNav = (CoordinatorLayout.LayoutParams) navigation.getLayoutParams();
+        paramsBottomNav.setBehavior(new BottomNavigationBehavior());*/
 
-        CoordinatorLayout.LayoutParams paramsBottomNav = (CoordinatorLayout.LayoutParams) navigation.getLayoutParams();
-        paramsBottomNav.setBehavior(new BottomNavigationBehavior());
-
-        WordViewModel wordViewModel = ViewModelProviders.of(this).get(WordViewModel.class);
 
     }
     @Override
