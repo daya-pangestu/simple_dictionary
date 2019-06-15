@@ -1,22 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">jojoman</string>
-    <string name="title_home">dashboard</string>
     <string name="favorite">paborito</string>
     <string name="history">kasaysayan</string>
-    <string name="setting">" mga setting"</string>
     <string name="search">Paghahanap</string>
     <string name="meaning">ibig sabihin</string>
     <string name="loading">load...</string>
     <string name="cancel">CANCEL</string>
     <string name="start_your_search">simulan ang paghahanap</string>
     <string name="detail">detalye</string>
-    <string name="dashboard">Dashboard</string>
     <string name="added_to_favvorite">idinagdag sa paborito</string>
     <string name="copied">copied</string>
-    <string name="return_to_dashboard">bumalik sa Dashboard</string>
     <string name="expanded">pinalawak</string>
     <string name="collapsed">gumuho</string>
-    <string name="language">wika</string>
     <string name="text_empty">text walang laman</string>
 </resources>

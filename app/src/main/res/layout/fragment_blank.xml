@@ -4,12 +4,23 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_gravity="center"
-
     android:orientation="vertical"
     tools:context=".view.FDialog">
 
+    <TextView
+        android:id="@+id/txt_title_dialog"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="add another meaning"
+        android:textSize="32sp"
+        android:layout_marginStart="16dp"
+        style="@style/MaterialAlertDialog.MaterialComponents.Title.Text"
+        android:textColor="@color/colorPrimaryDark"
+        />
+
 
     <EditText
+        android:layout_below="@id/txt_title_dialog"
         android:id="@+id/txt_add_meaning"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -29,6 +40,7 @@
         android:layout_below="@id/txt_add_meaning"
         android:layout_alignEnd="@id/txt_add_meaning"
         android:gravity="center"
+        android:textColor="@color/colorPrimary"
         android:text="@string/ok" />
 
     <Button
@@ -39,6 +51,8 @@
         android:layout_alignTop="@id/ok_dialog"
         android:layout_toStartOf="@id/ok_dialog"
         android:gravity="center"
+        android:textColor="@color/colorPrimary"
+
         android:text="@string/cancel" />
 
 

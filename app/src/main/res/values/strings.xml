@@ -1,9 +1,7 @@
 <resources>
     <string name="app_name">jojoman</string>
-    <string name="title_home">Home</string>
     <string name="favorite">favorite</string>
     <string name="history">history</string>
-    <string name="setting">settings</string>
 
 
     <!-- TODO: Remove or change this placeholder text -->
@@ -13,36 +11,16 @@
     <string name="cancel">Cancel</string>
     <string name="start_your_search">start your search!</string>
     <string name="detail">Detail</string>
-    <string name="dashboard">Dashboard</string>
     <string name="added_to_favvorite">added to favorite</string>
     <string name="copied">copied</string>
-    <string name="return_to_dashboard">return to Dashboard</string>
     <string name="expanded">expanded</string>
     <string name="collapsed">collapsed</string>
 
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="search">Search</string>
-    <string name="language">language</string>
-
-    <string-array name="size_snackbar">
-
-        <item>small</item>
-        <item>medium</item>
-        <item>large</item>
-
-    </string-array>
-
-    <string-array name="languange">
-
-        <item>English</item>
-        <item>indonesia</item>
-        <item> filipino </item>
-
-    </string-array>
 
 
-    <string name="language_key" translatable="false">LANGUAGE_KEY</string>
     <string name="text_empty">text empty</string>
     <string name="delete_all">delete all</string>
 
