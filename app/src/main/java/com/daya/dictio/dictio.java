@@ -3,6 +3,13 @@ package com.daya.dictio;
 import android.app.Application;
 import android.content.Context;
 import android.content.res.Configuration;
+import android.view.Gravity;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.widget.TextView;
+import android.widget.Toast;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.akexorcist.localizationactivity.core.LocalizationApplicationDelegate;
 import com.squareup.leakcanary.LeakCanary;
@@ -45,5 +52,18 @@ public class dictio extends Application {
     @Override
     public Context getApplicationContext() {
         return localizationDelegate.getApplicationContext(super.getApplicationContext());
+    }
+
+    public static void showtoast(Context context,String toast_text) {
+        LayoutInflater inflater = LayoutInflater.from(context);
+        View layout = inflater.inflate(R.layout.custom_toast_layout, ((AppCompatActivity)context).findViewById(R.id.cutom_toast_layout));
+        TextView text = layout.findViewById(R.id.customToastText);
+        text.setText(toast_text);
+
+        Toast toast = new Toast(context.getApplicationContext());
+        toast.setGravity(Gravity.CENTER_HORIZONTAL,0 , 160 );
+        toast.setDuration(Toast.LENGTH_SHORT);
+        toast.setView(layout);
+        toast.show();
     }
 }

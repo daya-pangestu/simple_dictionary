@@ -14,4 +14,5 @@
     <string name="expanded">membuka</string>
     <string name="collapsed">menutup</string>
     <string name="text_empty">teks kosong</string>
+    <string name="item_removed">item dihapus</string>
 </resources>

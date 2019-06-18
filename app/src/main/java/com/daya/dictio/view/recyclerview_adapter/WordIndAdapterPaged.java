@@ -2,8 +2,11 @@ package com.daya.dictio.view.recyclerview_adapter;
 
 
 
+import android.content.ClipData;
+import android.content.ClipboardManager;
 import android.content.Context;
 import android.text.Html;
+import android.text.Spanned;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,15 +17,24 @@ import android.widget.TextView;
 import com.chauthai.swipereveallayout.SwipeRevealLayout;
 import com.chauthai.swipereveallayout.ViewBinderHelper;
 import com.daya.dictio.R;
+import com.daya.dictio.dictio;
 import com.daya.dictio.model.DictIndonesia;
+import com.daya.dictio.model.FavoritModel;
+import com.daya.dictio.model.HistoryModel;
 import com.daya.dictio.repo.Appreferen;
 import com.daya.dictio.view.itemSelection.Details;
 import com.daya.dictio.view.layout_thing.OnItemClickListener;
+import com.daya.dictio.viewmodel.FavoriteViewModel;
+import com.daya.dictio.viewmodel.HistoryViewModel;
+import com.daya.dictio.viewmodel.WordViewModel;
 import com.github.zagum.switchicon.SwitchIconView;
 import com.l4digital.fastscroll.FastScroller;
 
 import androidx.annotation.NonNull;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
+import androidx.fragment.app.FragmentActivity;
+import androidx.lifecycle.ViewModelProviders;
+import androidx.navigation.Navigation;
 import androidx.paging.PagedListAdapter;
 import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.RecyclerView;
@@ -39,13 +51,12 @@ public class WordIndAdapterPaged extends PagedListAdapter<DictIndonesia, WordInd
 
         @Override
         public boolean areContentsTheSame(@NonNull DictIndonesia oldItem, @NonNull DictIndonesia newItem) {
-            return oldItem.equals(newItem);
+            return oldItem == newItem;
         }
     };
 
 
     private final ViewBinderHelper viewBinderHelper = new ViewBinderHelper();
-    private OnItemClickListener mOnItemClickListener;
     private Context context;
 
     public WordIndAdapterPaged() {
@@ -74,9 +85,7 @@ public class WordIndAdapterPaged extends PagedListAdapter<DictIndonesia, WordInd
 
     }
 
-    public void setOnindClickListener(OnItemClickListener onItemClickListener) {
-        this.mOnItemClickListener = onItemClickListener;
-    }
+
 
 
     @Override
@@ -90,7 +99,7 @@ public class WordIndAdapterPaged extends PagedListAdapter<DictIndonesia, WordInd
     }
 
 
-    public class WordHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+    public class WordHolder extends RecyclerView.ViewHolder{
         final View viewForSnackbar;
         final Details details;
         final Appreferen appreferen;
@@ -111,19 +120,38 @@ public class WordIndAdapterPaged extends PagedListAdapter<DictIndonesia, WordInd
         @BindView(R.id.front_frame)
         CoordinatorLayout frontFrame;
         DictIndonesia inHolderDict;
+        HistoryViewModel mHistoryViewModel;
+        WordViewModel mWordViewModel;
+        FavoriteViewModel mFavoriteViewModel;
 
         WordHolder(View view) {
             super(view);
             this.viewForSnackbar = view;
             ButterKnife.bind(this, view);
-            frontFrame.setOnClickListener(this);
-            backFrame.setOnClickListener(this);
-            btnCopy.setOnClickListener(this);
-
+            mHistoryViewModel = ViewModelProviders.of((FragmentActivity) context).get(HistoryViewModel.class);
+            mWordViewModel = ViewModelProviders.of((FragmentActivity) context).get(WordViewModel.class);
             details = new Details();
             appreferen = new Appreferen(context);
-            onItemClickListener = mOnItemClickListener;
 
+
+            frontFrame.setOnClickListener(v -> {
+                mHistoryViewModel.addHistory(new HistoryModel(inHolderDict.getIdIndo()));
+                mWordViewModel.setSendToDetail(inHolderDict);
+                Navigation.findNavController(v).navigate(R.id.action_FSearch_layout_to_fDetail_ragment);
+            });
+            backFrame.setOnClickListener(v -> {
+
+                mFavoriteViewModel.addFavorite(new FavoritModel(inHolderDict.getIdIndo()));
+                dictio.showtoast(v.getContext(),inHolderDict.getWord()+" "+v.getContext().getString(R.string.added_to_favvorite));
+
+            });
+            btnCopy.setOnClickListener(v -> {
+                Spanned stringe = Html.fromHtml(inHolderDict.getWord() + "\n\n" + inHolderDict.getMeaning());
+                ClipboardManager clipboard = (ClipboardManager) v.getContext().getSystemService(Context.CLIPBOARD_SERVICE);
+                ClipData clip = ClipData.newPlainText("label", stringe.toString());
+                clipboard.setPrimaryClip(clip);
+                dictio.showtoast(v.getContext(),inHolderDict.getWord()+" "+v.getContext().getString(R.string.copied));
+            });
         }
 
         void bindTo(DictIndonesia dictIndonesia) {
@@ -138,11 +166,28 @@ public class WordIndAdapterPaged extends PagedListAdapter<DictIndonesia, WordInd
             penjelasanFrontFrame.invalidate();
         }
 
-        @Override
+      /*  @Override
         public void onClick(View v) {
             //tombol manapun yang diclik akan isi onadapterclicked dengan view, data,dan posisi
-            onItemClickListener.dashboardClicked(v, inHolderDict, getAdapterPosition());
-        }
+            //onItemClickListener.dashboardClicked(v, inHolderDict, getAdapterPosition());
+
+            int id = inHolderDict.getIdIndo();
+            String word = inHolderDict.getWord();
+            String meaning = inHolderDict.getMeaning();
+            switch (v.getId()) {
+                case R.id.front_frame:
+
+                    break;
+                case R.id.back_frame: break;
+
+                case R.id.copy_content_main:
+
+
+                default:
+                    break;
+            }
+
+        }*/
 
         public Details getDetails() {
             return details;
@@ -150,9 +195,6 @@ public class WordIndAdapterPaged extends PagedListAdapter<DictIndonesia, WordInd
 
     }
 
-    /*public interface OnWordIndClickListener {
-        void onAdapterClicked(View itemview, DictIndonesia dictIndonesia, int Position);
-    }*/
 
 
 }

@@ -12,6 +12,7 @@ import android.widget.TextView;
 import com.chauthai.swipereveallayout.SwipeRevealLayout;
 import com.chauthai.swipereveallayout.ViewBinderHelper;
 import com.daya.dictio.R;
+import com.daya.dictio.dictio;
 import com.daya.dictio.model.DictIndonesia;
 import com.daya.dictio.model.HistoryModel;
 import com.daya.dictio.model.join.HistoryJoinDict;
@@ -82,6 +83,10 @@ public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.WordHold
         }
     }
 
+    public int getListSize() {
+        return listHistoryJoin.size();
+    }
+
 
     public class WordHolderHistory extends RecyclerView.ViewHolder implements View.OnClickListener {
         private final HistoryViewModel historyViewModel;
@@ -138,6 +143,7 @@ public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.WordHold
                         removeItemAt(getAdapterPosition());
                         historyViewModel.deleteHistoryAt(new HistoryModel(id, idOwner));
                     }, 300);
+                    dictio.showtoast(v.getContext(),context.getString(R.string.item_removed));
                     break;
                 case R.id.front_frame_histo:
                     wordViewModel.setSendToDetail(new DictIndonesia(id, wordHistory, meaning));

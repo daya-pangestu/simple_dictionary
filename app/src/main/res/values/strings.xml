@@ -22,6 +22,7 @@
 
 
     <string name="text_empty">text empty</string>
-    <string name="delete_all">delete all</string>
+    <string name="delete_all" translatable="false">delete all</string>
+    <string name="item_removed">item removed</string>
 
 </resources>

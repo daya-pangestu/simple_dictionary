@@ -29,7 +29,6 @@ public class DictRepository {
     private final HistoryDao historyDao;
     private final FavoriteDao favoritDao;
     private final OtherMeaningDao otherMeaningDao;
-    Appreferen appreferen;
 
     public DictRepository(Application application) {
         DictIndoDatabase db = DictIndoDatabase.getINSTANCE(application);

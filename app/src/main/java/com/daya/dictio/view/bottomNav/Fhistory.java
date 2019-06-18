@@ -78,6 +78,8 @@ public class Fhistory extends Fragment {//perlu relasi
         fastScrollerGlobal.setSectionIndexer(mHistoryAdapter);
         fastScrollerGlobal.attachRecyclerView(rvGlobal);
 
+
+
         return view;
     }
 

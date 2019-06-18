@@ -12,6 +12,7 @@ public class DictIndonesia {
     private
     int idIndo;
     private String word;
+    private String kin;
     private String meaning;
 
     @Ignore
@@ -26,8 +27,9 @@ public class DictIndonesia {
         this.meaning = penjelasn;
     }
 
-    public DictIndonesia(String word, String meaning) {
+    public DictIndonesia(String word, String kin, String meaning) {
         this.word = word;
+        this.kin = kin;
         this.meaning = meaning;
     }
 
@@ -49,6 +51,15 @@ public class DictIndonesia {
 
     public void setWord(String kata) {
         this.word = kata;
+    }
+
+
+    public String getKin() {
+        return kin;
+    }
+
+    public void setKin(String kin) {
+        this.kin = kin;
     }
 
     public String getMeaning() {

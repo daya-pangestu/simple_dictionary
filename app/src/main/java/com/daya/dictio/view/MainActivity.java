@@ -1,29 +1,31 @@
 package com.daya.dictio.view;
 
+import android.Manifest;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Toast;
 
 import com.akexorcist.localizationactivity.ui.LocalizationActivity;
+import com.android.dbexporterlibrary.ExportDbUtil;
+import com.android.dbexporterlibrary.ExporterListener;
 import com.daya.dictio.R;
-import com.daya.dictio.model.DictIndonesia;
 import com.daya.dictio.view.layout_thing.BottomNavigationBehavior;
-import com.daya.dictio.viewmodel.WordViewModel;
 import com.google.android.material.appbar.AppBarLayout;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
-import java.util.Objects;
-
 import androidx.appcompat.widget.Toolbar;
-import androidx.coordinatorlayout.widget.CoordinatorLayout;
-import androidx.lifecycle.Observer;
-import androidx.lifecycle.ViewModelProviders;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.navigation.Navigation;
 import androidx.navigation.fragment.NavHostFragment;
 import androidx.navigation.ui.NavigationUI;
-import androidx.paging.PagedList;
+
+import org.jetbrains.annotations.NotNull;
+
+import java.util.Objects;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -70,10 +72,32 @@ public class MainActivity extends LocalizationActivity {
     }
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.searchBar_bar:
-                Navigation.findNavController(Objects.requireNonNull(navHostFragment.getView())).navigate(R.id.action_global_FSearch_layout);
-                break;
+        if (item.getItemId() == R.id.searchBar_bar) {
+            Navigation.findNavController(Objects.requireNonNull(navHostFragment.getView())).navigate(R.id.action_global_FSearch_layout);
+
+              /*  if (ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                        != PackageManager.PERMISSION_GRANTED) {
+                        ActivityCompat.requestPermissions(this,
+                                new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 23);
+                } else {
+
+                    ExportDbUtil exportDbUtil = new ExportDbUtil(this, "databases/DictindonesiaDatabase", "backup", new ExporterListener() {
+                        @Override
+                        public void success(@NotNull String s) {
+                            Toast.makeText(MainActivity.this, "sukses", Toast.LENGTH_SHORT).show();
+                            Timber.i(s);
+                        }
+
+                        @Override
+                        public void fail(@NotNull String s, @NotNull String s1) {
+                            Timber.i("fail: " + s);
+
+                        }
+                    });
+
+                exportDbUtil.exportDb("/data/com.daya.jojoman/databases/");
+                }
+*/
         }
         return super.onOptionsItemSelected(item);
     }
@@ -85,11 +109,12 @@ public class MainActivity extends LocalizationActivity {
         setUpButton(false);
     }
 
-    public void initViewDetailOnResume() {
+    public boolean initViewDetailOnResume() {
         setToolbarScroled(false);
         viewNavigation(false);
         setUpButton(true);
         showHideToolbar(true);
+        return true;
     }
 
     //menagtur bisa tidaknya toolbar ter hiden jika scroll dilakukan

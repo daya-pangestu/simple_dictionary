@@ -3,18 +3,24 @@ package com.daya.dictio.view;
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
+import android.graphics.Rect;
 import android.os.Bundle;
 import android.os.Handler;
 import android.text.Html;
 import android.text.Spanned;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
+import android.view.Window;
 import android.view.animation.LinearInterpolator;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
@@ -27,6 +33,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.daya.dictio.R;
+import com.daya.dictio.dictio;
 import com.daya.dictio.model.DictIndonesia;
 import com.daya.dictio.model.FavoritModel;
 import com.daya.dictio.model.HistoryModel;
@@ -110,12 +117,7 @@ public class FSearch extends Fragment {
 
             }
         });
-        searchView.setOnLogoClickListener(new Search.OnLogoClickListener() {
-            @Override
-            public void onLogoClick() {
-                Navigation.findNavController(view).navigateUp();
-            }
-        });
+        searchView.setOnLogoClickListener(() -> Navigation.findNavController(view).navigateUp());
 
 
         //recyclerview
@@ -125,41 +127,13 @@ public class FSearch extends Fragment {
         rvGlobal.addItemDecoration(new DividerItemDecoration(view.getContext(), DividerItemDecoration.VERTICAL));
         rvGlobal.setAdapter(wordIndAdapter);
 
-        wordIndAdapter.setOnindClickListener(new OnItemClickListener() {
-            @Override
-            public void dashboardClicked(View view, DictIndonesia dictIndonesia, int position) {
-                int id = dictIndonesia.getIdIndo();
-                String word = dictIndonesia.getWord();
-                String meaning = dictIndonesia.getMeaning();
 
-                Snackbar snackbar;
-                switch (view.getId()) {
-                    case R.id.front_frame:
-                        Navigation.findNavController(view).navigate(R.id.action_FSearch_layout_to_fDetail_ragment);
-                        mHistoryViewModel.addHistory(new HistoryModel(id));
-                        break;
-                    case R.id.back_frame:
-                        mFavoritViewModel.addFavorite(new FavoritModel(id));
-                        snackbar = Snackbar.make(view, word + getString(R.string.added_to_favvorite), Snackbar.LENGTH_LONG).setAction("OK", v1 -> {
-                        });
-                        snackbar.show();
-                        break;
 
-                    case R.id.copy_content_main:
-                        Spanned stringe = Html.fromHtml(word + "\n\n" + meaning);
-                        ClipboardManager clipboard = (ClipboardManager) getContext().getSystemService(Context.CLIPBOARD_SERVICE);
-                        ClipData clip = ClipData.newPlainText("label", stringe.toString());
-                        clipboard.setPrimaryClip(clip);
-                        snackbar = Snackbar.make(view, dictIndonesia.getWord() + getString(R.string.copied), Snackbar.LENGTH_SHORT);
-                        snackbar.show();
-                    default:
-                        break;
-                }
-            }
-        });
 
         return view;
     }
+
+
 
 
     private void startSearch(String query) { //call inside search
@@ -178,12 +152,9 @@ public class FSearch extends Fragment {
 
             if (searchView != null) {
 
-                mWordViewModel.getSearchPaged(query).observe(getViewLifecycleOwner(), new Observer<PagedList<DictIndonesia>>() {
-                    @Override
-                    public void onChanged(PagedList<DictIndonesia> dictIndonesias) {
-                        wordIndAdapter.submitList(dictIndonesias);
-                        Timber.i("startSearch: %s", dictIndonesias.size());
-                    }
+                mWordViewModel.getSearchPaged(query).observe(getViewLifecycleOwner(), dictIndonesias -> {
+                    wordIndAdapter.submitList(dictIndonesias);
+                    Timber.i("startSearch: %s", dictIndonesias.size());
                 });
 
             }

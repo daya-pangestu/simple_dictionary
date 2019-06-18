@@ -5,9 +5,21 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.TextView;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProviders;
+import androidx.recyclerview.widget.DividerItemDecoration;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.daya.dictio.R;
 import com.daya.dictio.model.join.FavoriteJoinDict;
+import com.daya.dictio.view.layout_thing.OnItemPopulated;
 import com.daya.dictio.view.recyclerview_adapter.FavoritAdapter;
 import com.daya.dictio.viewmodel.FavoriteViewModel;
 import com.google.android.material.snackbar.Snackbar;
@@ -18,25 +30,23 @@ import org.jetbrains.annotations.NotNull;
 import java.util.List;
 import java.util.Objects;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.Fragment;
-import androidx.lifecycle.Observer;
-import androidx.lifecycle.ViewModelProviders;
-import androidx.navigation.fragment.NavHostFragment;
-import androidx.recyclerview.widget.DividerItemDecoration;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
+import timber.log.Timber;
 
 
-public class Ffavorite extends Fragment {
+public class Ffavorite extends Fragment  {
     @BindView(R.id.rv_global)
     RecyclerView rvGlobal;
     @BindView(R.id.fast_scroller_global)
     FastScroller mFastScrollerGlobal;
+    @BindView(R.id.list_empty_f_favorite)
+    ImageView listEmptyFFavorite;
+    @BindView(R.id.text_empty_f_favorite)
+    TextView textEmptyFFavorite;
+
+
     private FavoritAdapter mFavoritAdapter;
     private Unbinder unbinder;
     private FavoriteViewModel mFavoriteViewModel;
@@ -68,30 +78,23 @@ public class Ffavorite extends Fragment {
 
 
         //ambil list favorit dari db
-        mFavoriteViewModel.getList().observe(this, new Observer<List<FavoriteJoinDict>>() {
-            @Override
-            public void onChanged(List<FavoriteJoinDict> favoriteJoinDicts) {
-                mFavoritAdapter.setDict(favoriteJoinDicts);
-            }
-        });
+        mFavoriteViewModel.getList().observe(this, favoriteJoinDicts -> mFavoritAdapter.setDict(favoriteJoinDicts));
+
 
         //fastscroll
         mFastScrollerGlobal.setSectionIndexer(mFavoritAdapter);
         mFastScrollerGlobal.attachRecyclerView(rvGlobal);
 
-
-
         return view;
 
     }
-
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         if (item.getItemId() == R.id.delete_menu_toolbar) {
             mFavoriteViewModel.deleteAllFavorite();
             mFavoritAdapter.clearData();
-            Snackbar.make(Objects.requireNonNull(getView()),"deleted", Snackbar.LENGTH_LONG).setAction(getString(R.string.ok), v -> {
+            Snackbar.make(Objects.requireNonNull(getView()), "deleted", Snackbar.LENGTH_LONG).setAction(getString(R.string.ok), v -> {
             }).show();
         }
 
@@ -103,6 +106,7 @@ public class Ffavorite extends Fragment {
         unbinder.unbind();
         super.onDestroy();
     }
+
 
 
 }

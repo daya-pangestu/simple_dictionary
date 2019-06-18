@@ -3,6 +3,7 @@ package com.daya.dictio.view.recyclerview_adapter;
 import android.content.Context;
 import android.os.Handler;
 import android.text.Html;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,10 +13,12 @@ import android.widget.TextView;
 import com.chauthai.swipereveallayout.SwipeRevealLayout;
 import com.chauthai.swipereveallayout.ViewBinderHelper;
 import com.daya.dictio.R;
+import com.daya.dictio.dictio;
 import com.daya.dictio.model.DictIndonesia;
 import com.daya.dictio.model.FavoritModel;
 import com.daya.dictio.model.HistoryModel;
 import com.daya.dictio.model.join.FavoriteJoinDict;
+import com.daya.dictio.view.layout_thing.OnItemPopulated;
 import com.daya.dictio.viewmodel.FavoriteViewModel;
 import com.daya.dictio.viewmodel.HistoryViewModel;
 import com.daya.dictio.viewmodel.WordViewModel;
@@ -33,13 +36,16 @@ import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.RecyclerView;
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import timber.log.Timber;
+
+import static androidx.constraintlayout.widget.Constraints.TAG;
 
 
 public class FavoritAdapter extends RecyclerView.Adapter<FavoritAdapter.WordolderFavorite> implements FastScroller.SectionIndexer {
     private final ViewBinderHelper viewBinderHelper = new ViewBinderHelper();
     private List<FavoriteJoinDict> listKamus;
     private Context context;
-
+    private OnItemPopulated mOnItemPopulated;
 
     @NonNull
     @Override
@@ -60,6 +66,10 @@ public class FavoritAdapter extends RecyclerView.Adapter<FavoritAdapter.Wordolde
     @Override
     public int getItemCount() {
         return (listKamus != null) ? listKamus.size() : 0;
+    }
+
+    public void onListSizeListener(OnItemPopulated onItemPopulated) {
+        mOnItemPopulated = onItemPopulated;
     }
 
     public void setDict(List<FavoriteJoinDict> dict) {
@@ -91,7 +101,9 @@ public class FavoritAdapter extends RecyclerView.Adapter<FavoritAdapter.Wordolde
     }
 
 
-    public class WordolderFavorite extends RecyclerView.ViewHolder implements View.OnClickListener {
+
+
+    protected class WordolderFavorite extends RecyclerView.ViewHolder implements View.OnClickListener {
         private final WordViewModel wordViewModel;
         private final HistoryViewModel historyViewModel;
         private final FavoriteViewModel favoriteViewModel;
@@ -154,6 +166,8 @@ public class FavoritAdapter extends RecyclerView.Adapter<FavoritAdapter.Wordolde
                         removeItemAt(getAdapterPosition());
                         favoriteViewModel.deleteFavoriteAt(new FavoritModel(id, idOwner));
                     }, 300);
+                    dictio.showtoast(v.getContext(),context.getString(R.string.item_removed));
+
                     break;
                 default:
                     break;
