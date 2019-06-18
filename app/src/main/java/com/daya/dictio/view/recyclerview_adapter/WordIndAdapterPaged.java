@@ -57,7 +57,6 @@ public class WordIndAdapterPaged extends PagedListAdapter<DictIndonesia, WordInd
 
 
     private final ViewBinderHelper viewBinderHelper = new ViewBinderHelper();
-    private Context context;
 
     public WordIndAdapterPaged() {
         super(diffcallBack);
@@ -67,7 +66,6 @@ public class WordIndAdapterPaged extends PagedListAdapter<DictIndonesia, WordInd
     @Override
     public WordHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.recycler, parent, false);
-        this.context = parent.getContext();
         viewBinderHelper.setOpenOnlyOne(true);
         return new WordHolder(itemView);
     }
@@ -128,11 +126,11 @@ public class WordIndAdapterPaged extends PagedListAdapter<DictIndonesia, WordInd
             super(view);
             this.viewForSnackbar = view;
             ButterKnife.bind(this, view);
-            mHistoryViewModel = ViewModelProviders.of((FragmentActivity) context).get(HistoryViewModel.class);
-            mWordViewModel = ViewModelProviders.of((FragmentActivity) context).get(WordViewModel.class);
+            mHistoryViewModel = ViewModelProviders.of((FragmentActivity) view.getContext()).get(HistoryViewModel.class);
+            mWordViewModel = ViewModelProviders.of((FragmentActivity) view.getContext()).get(WordViewModel.class);
+            mFavoriteViewModel = ViewModelProviders.of((FragmentActivity) view.getContext()).get(FavoriteViewModel.class);
             details = new Details();
-            appreferen = new Appreferen(context);
-
+            appreferen = new Appreferen(view.getContext());
 
             frontFrame.setOnClickListener(v -> {
                 mHistoryViewModel.addHistory(new HistoryModel(inHolderDict.getIdIndo()));
@@ -165,30 +163,6 @@ public class WordIndAdapterPaged extends PagedListAdapter<DictIndonesia, WordInd
             kataFrontFrame.invalidate();
             penjelasanFrontFrame.invalidate();
         }
-
-      /*  @Override
-        public void onClick(View v) {
-            //tombol manapun yang diclik akan isi onadapterclicked dengan view, data,dan posisi
-            //onItemClickListener.dashboardClicked(v, inHolderDict, getAdapterPosition());
-
-            int id = inHolderDict.getIdIndo();
-            String word = inHolderDict.getWord();
-            String meaning = inHolderDict.getMeaning();
-            switch (v.getId()) {
-                case R.id.front_frame:
-
-                    break;
-                case R.id.back_frame: break;
-
-                case R.id.copy_content_main:
-
-
-                default:
-                    break;
-            }
-
-        }*/
-
         public Details getDetails() {
             return details;
         }

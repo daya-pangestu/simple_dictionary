@@ -49,6 +49,7 @@ public class MainActivity extends LocalizationActivity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setTheme(R.style.AppTheme);
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
 
@@ -64,9 +65,6 @@ public class MainActivity extends LocalizationActivity {
         if (navHostFragment != null) {
             NavigationUI.setupWithNavController(navigation, navHostFragment.getNavController());
         }
-        //aktifkan ini kalau mau efek bottomnav terscroll
-      /*  CoordinatorLayout.LayoutParams paramsBottomNav = (CoordinatorLayout.LayoutParams) navigation.getLayoutParams();
-        paramsBottomNav.setBehavior(new BottomNavigationBehavior());*/
 
 
     }
@@ -74,30 +72,6 @@ public class MainActivity extends LocalizationActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == R.id.searchBar_bar) {
             Navigation.findNavController(Objects.requireNonNull(navHostFragment.getView())).navigate(R.id.action_global_FSearch_layout);
-
-              /*  if (ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)
-                        != PackageManager.PERMISSION_GRANTED) {
-                        ActivityCompat.requestPermissions(this,
-                                new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 23);
-                } else {
-
-                    ExportDbUtil exportDbUtil = new ExportDbUtil(this, "databases/DictindonesiaDatabase", "backup", new ExporterListener() {
-                        @Override
-                        public void success(@NotNull String s) {
-                            Toast.makeText(MainActivity.this, "sukses", Toast.LENGTH_SHORT).show();
-                            Timber.i(s);
-                        }
-
-                        @Override
-                        public void fail(@NotNull String s, @NotNull String s1) {
-                            Timber.i("fail: " + s);
-
-                        }
-                    });
-
-                exportDbUtil.exportDb("/data/com.daya.jojoman/databases/");
-                }
-*/
         }
         return super.onOptionsItemSelected(item);
     }
