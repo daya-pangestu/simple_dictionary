@@ -59,7 +59,7 @@ public class MainActivity extends LocalizationActivity {
 
         toolbarScroled = (AppBarLayout.LayoutParams) toolbarMain.getLayoutParams();
 
-        setToolbarScroled(true);
+        setToolbarScroled(false);
 
         navHostFragment = (NavHostFragment) getSupportFragmentManager().findFragmentById(R.id.fragment_nav_host);
         if (navHostFragment != null) {

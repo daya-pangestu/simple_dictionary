@@ -22,8 +22,6 @@
             android:background="?attr/colorPrimary"
             app:titleTextColor="@color/putih"
             app:contentInsetStart="0dp">
-
-
         </androidx.appcompat.widget.Toolbar>
 
     </com.google.android.material.appbar.AppBarLayout>
@@ -35,7 +33,6 @@
         app:navGraph="@navigation/nav_graph"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-
         app:layout_behavior="@string/appbar_scrolling_view_behavior"
         tools:layout_editor_absoluteX="8dp" />
 
