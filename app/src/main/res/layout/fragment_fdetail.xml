@@ -95,8 +95,7 @@
         android:layout_height="wrap_content"
         android:layout_marginBottom="100dp"
         app:layout_anchor="@id/divider"
-        app:layout_dodgeInsetEdges="top" /> <!--bug : ada 100dp dari recyclerview yang tidak terscroll-->
-
+        app:layout_dodgeInsetEdges="top" /> <!--bug : ada 400dp dari recyclerview yang tidak terscroll-->
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/fab_detail_add_meaning"

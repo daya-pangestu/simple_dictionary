@@ -59,7 +59,6 @@ public class MainActivity extends LocalizationActivity {
 
         toolbarScroled = (AppBarLayout.LayoutParams) toolbarMain.getLayoutParams();
 
-        setToolbarScroled(false);
 
         navHostFragment = (NavHostFragment) getSupportFragmentManager().findFragmentById(R.id.fragment_nav_host);
         if (navHostFragment != null) {
@@ -78,27 +77,18 @@ public class MainActivity extends LocalizationActivity {
 
 
     public void initViewDetailOnPause() {
-        setToolbarScroled(true);
         viewNavigation(true);
         setUpButton(false);
     }
 
     public boolean initViewDetailOnResume() {
-        setToolbarScroled(false);
         viewNavigation(false);
         setUpButton(true);
         showHideToolbar(true);
         return true;
     }
 
-    //menagtur bisa tidaknya toolbar ter hiden jika scroll dilakukan
-    private void setToolbarScroled(boolean scrollingToolbar) {
-        if (scrollingToolbar) {
-            toolbarScroled.setScrollFlags(AppBarLayout.LayoutParams.SCROLL_FLAG_SCROLL | AppBarLayout.LayoutParams.SCROLL_FLAG_ENTER_ALWAYS | AppBarLayout.LayoutParams.SCROLL_FLAG_SNAP);
-        } else {
-            toolbarScroled.setScrollFlags(0);
-        }
-    }
+
 
     //mengur tampil tidaknya bottomnavigationview
     private void viewNavigation(boolean viewOrHide) {

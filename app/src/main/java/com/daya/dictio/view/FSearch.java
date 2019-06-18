@@ -46,6 +46,7 @@ import com.google.android.material.snackbar.Snackbar;
 import com.l4digital.fastscroll.FastScroller;
 import com.lapism.searchview.Search;
 import com.lapism.searchview.widget.SearchView;
+import com.squareup.haha.perflib.Main;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -179,14 +180,13 @@ public class FSearch extends Fragment {
     public void onResume() {
         super.onResume();
         ((MainActivity) getActivity()).showHideToolbar(false);
+        ((MainActivity)getActivity()).navigation.setVisibility(View.GONE);
     }
 
     @Override
     public void onPause() {
         super.onPause();
         ((MainActivity) getActivity()).showHideToolbar(true);
-
+        ((MainActivity)getActivity()).navigation.setVisibility(View.VISIBLE);
     }
-
-
 }

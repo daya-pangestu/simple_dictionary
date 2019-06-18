@@ -151,16 +151,18 @@ public class fDetail extends Fragment implements DialogSubmitListener {
         recyclerDetail.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
             public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
-                if (dy > 0 || dy < 0 && fabAddMeaning.isShown()) {
+                if (dy > 0 && fabAddMeaning.isShown()) {
                     fabAddMeaning.hide();
+                } else {
+                    fabAddMeaning.show();
                 }
             }
 
             @Override
             public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
-                if (newState == RecyclerView.SCROLL_STATE_IDLE) {
+                /*if (newState == RecyclerView.SCROLL_STATE_IDLE) {
                     fabAddMeaning.show();
-                }
+                }*/
 
                 super.onScrollStateChanged(recyclerView, newState);
             }
@@ -208,15 +210,12 @@ public class fDetail extends Fragment implements DialogSubmitListener {
         super.onPause();
         ((MainActivity) getActivity()).initViewDetailOnPause();
         ((MainActivity) getActivity()).animateNavShown();
-
     }
 
     @Override
     public void onResume() {
         super.onResume();
         ((MainActivity) getActivity()).initViewDetailOnResume();
-
-
     }
 
     @Override
