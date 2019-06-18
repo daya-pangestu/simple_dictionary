@@ -14,16 +14,15 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
-        <activity android:name="com.daya.dictio.view.Splashscreen">
+        <activity
+            android:name="com.daya.dictio.view.MainActivity"
+            android:label="@string/app_name">
+
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-        </activity>
-        <activity
-            android:name="com.daya.dictio.view.MainActivity"
-            android:label="@string/app_name">
 
         </activity>
     </application>
