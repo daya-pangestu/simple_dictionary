@@ -57,6 +57,7 @@ public class WordIndAdapterPaged extends PagedListAdapter<DictIndonesia, WordInd
 
 
     private final ViewBinderHelper viewBinderHelper = new ViewBinderHelper();
+    private static OnItemClickListener onItemClickListener;
 
     public WordIndAdapterPaged() {
         super(diffcallBack);
@@ -84,7 +85,9 @@ public class WordIndAdapterPaged extends PagedListAdapter<DictIndonesia, WordInd
     }
 
 
-
+    public void setOnItemClicked(OnItemClickListener onItemClicked) {
+        onItemClickListener = onItemClicked;
+    }
 
     @Override
     public long getItemId(int position) {
@@ -97,10 +100,9 @@ public class WordIndAdapterPaged extends PagedListAdapter<DictIndonesia, WordInd
     }
 
 
-    public class WordHolder extends RecyclerView.ViewHolder{
+    public class WordHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
         final View viewForSnackbar;
         final Details details;
-        final Appreferen appreferen;
         OnItemClickListener onItemClickListener;
 
         @BindView(R.id.swipper)
@@ -117,39 +119,22 @@ public class WordIndAdapterPaged extends PagedListAdapter<DictIndonesia, WordInd
         ImageButton btnCopy;
         @BindView(R.id.front_frame)
         CoordinatorLayout frontFrame;
+
         DictIndonesia inHolderDict;
-        HistoryViewModel mHistoryViewModel;
-        WordViewModel mWordViewModel;
-        FavoriteViewModel mFavoriteViewModel;
+
 
         WordHolder(View view) {
             super(view);
             this.viewForSnackbar = view;
             ButterKnife.bind(this, view);
-            mHistoryViewModel = ViewModelProviders.of((FragmentActivity) view.getContext()).get(HistoryViewModel.class);
-            mWordViewModel = ViewModelProviders.of((FragmentActivity) view.getContext()).get(WordViewModel.class);
-            mFavoriteViewModel = ViewModelProviders.of((FragmentActivity) view.getContext()).get(FavoriteViewModel.class);
             details = new Details();
-            appreferen = new Appreferen(view.getContext());
 
-            frontFrame.setOnClickListener(v -> {
-                mHistoryViewModel.addHistory(new HistoryModel(inHolderDict.getIdIndo()));
-                mWordViewModel.setSendToDetail(inHolderDict);
-                Navigation.findNavController(v).navigate(R.id.action_FSearch_layout_to_fDetail_ragment);
-            });
-            backFrame.setOnClickListener(v -> {
+            this.onItemClickListener = WordIndAdapterPaged.onItemClickListener;
 
-                mFavoriteViewModel.addFavorite(new FavoritModel(inHolderDict.getIdIndo()));
-                dictio.showtoast(v.getContext(),inHolderDict.getWord()+" "+v.getContext().getString(R.string.added_to_favvorite));
+            frontFrame.setOnClickListener(this);
+            backFrame.setOnClickListener(this);
+            btnCopy.setOnClickListener(this);
 
-            });
-            btnCopy.setOnClickListener(v -> {
-                Spanned stringe = Html.fromHtml(inHolderDict.getWord() + "\n\n" + inHolderDict.getMeaning());
-                ClipboardManager clipboard = (ClipboardManager) v.getContext().getSystemService(Context.CLIPBOARD_SERVICE);
-                ClipData clip = ClipData.newPlainText("label", stringe.toString());
-                clipboard.setPrimaryClip(clip);
-                dictio.showtoast(v.getContext(),inHolderDict.getWord()+" "+v.getContext().getString(R.string.copied));
-            });
         }
 
         void bindTo(DictIndonesia dictIndonesia) {
@@ -163,12 +148,16 @@ public class WordIndAdapterPaged extends PagedListAdapter<DictIndonesia, WordInd
             kataFrontFrame.invalidate();
             penjelasanFrontFrame.invalidate();
         }
+
         public Details getDetails() {
             return details;
         }
 
+
+        @Override
+        public void onClick(View v) {
+            onItemClickListener.dashboardClicked(v,inHolderDict,getAdapterPosition());
+        }
     }
-
-
 
 }

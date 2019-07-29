@@ -26,7 +26,9 @@ public abstract class DictIdDao {
     public abstract LiveData<List<DictIndonesia>> getSearchQuery(String word);
 
 
-    @Query("SELECT DictIndonesia.* FROM DictIndonesia JOIN SearchModelFts ON (DictIndonesia.idIndo = SearchModelFts.`rowid`) WHERE SearchModelFts.word MATCH  :word LIMIT 500 ")
+    @Query("SELECT DictIndonesia.* FROM DictIndonesia JOIN " +
+            "SearchModelFts ON (DictIndonesia.idIndo = SearchModelFts.`rowid`) " +
+            "WHERE SearchModelFts.word MATCH  :word LIMIT 500 ")
     public abstract DataSource.Factory<Integer, DictIndonesia> getSearchQueryPaged(String word);
 
 

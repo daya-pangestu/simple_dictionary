@@ -10,14 +10,15 @@ import java.util.List;
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
+import androidx.lifecycle.MutableLiveData;
 import androidx.paging.LivePagedListBuilder;
 import androidx.paging.PagedList;
 
 public class WordViewModel extends AndroidViewModel {
 
+    private MutableLiveData<DictIndonesia> sendToDetail;
     private final DictRepository dictRepository;
     private final LiveData<List<DictIndonesia>> allWord;
-    private DictIndonesia sendToDetail;
     private final PagedList.Config pagedListConfid = (new PagedList.Config.Builder()
             .setEnablePlaceholders(true)
             .setPrefetchDistance(10)
@@ -27,6 +28,9 @@ public class WordViewModel extends AndroidViewModel {
         super(application);
         dictRepository = new DictRepository(application);
         allWord = dictRepository.getAllWord();
+        if (sendToDetail == null) {
+            sendToDetail = new MutableLiveData<>();
+        }
 
     }
     public LiveData<List<DictIndonesia>> getSearch(String s) {
@@ -45,13 +49,6 @@ public class WordViewModel extends AndroidViewModel {
 
     }
 
-    public DictIndonesia getSendToDetail() {
-        return sendToDetail;
-    }
-
-    public void setSendToDetail(DictIndonesia sendToDetail) {
-        this.sendToDetail = sendToDetail;
-    }
 
     //next implementation
     public LiveData<PagedList<DictIndonesia>> getSearchPaged(String s) {

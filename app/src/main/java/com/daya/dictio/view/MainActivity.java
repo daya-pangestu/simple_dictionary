@@ -84,15 +84,14 @@ public class MainActivity extends LocalizationActivity {
     public boolean initViewDetailOnResume() {
         viewNavigation(false);
         setUpButton(true);
-        showHideToolbar(true);
         return true;
     }
 
 
 
     //mengur tampil tidaknya bottomnavigationview
-    private void viewNavigation(boolean viewOrHide) {
-        if (viewOrHide) {
+    private void viewNavigation(boolean showNav) {
+        if (showNav) {
             navigation.setVisibility(View.VISIBLE);
         } else {
             navigation.setVisibility(View.GONE);

@@ -11,7 +11,10 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.daya.dictio.R;
+import com.daya.dictio.model.OtherMeaningModel;
 import com.daya.dictio.view.layout_thing.DialogSubmitListener;
+import com.daya.dictio.viewmodel.OtherViewModel;
+import com.daya.dictio.viewmodel.SharedDataViewModel;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -19,6 +22,8 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProviders;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
@@ -35,14 +40,24 @@ public class FDialog extends DialogFragment {
     Button btnCancel;
 
     private DialogSubmitListener dialogListener;
+    private SharedDataViewModel mSharedDataViewModel;
     private Unbinder unbinder;
     private String text_edit;
+
+    private OtherViewModel mOtherViewModel;
+
 
     public FDialog() {
     }
 
-    public static FDialog newInstance() {
-        return new FDialog();
+    static FDialog INSTANCE;
+
+    public static FDialog Instance() {
+        if (INSTANCE == null) {
+            return new FDialog();
+        } else {
+            return INSTANCE;
+        }
     }
 
     public void setDialogListener(DialogSubmitListener dialogListener) {
@@ -71,6 +86,7 @@ public class FDialog extends DialogFragment {
 
         View v = inflater.inflate(R.layout.fragment_blank, container, false);
         unbinder = ButterKnife.bind(this, v);
+        mSharedDataViewModel = ViewModelProviders.of(this).get(SharedDataViewModel.class);
 
         return v;
     }

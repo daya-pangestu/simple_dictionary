@@ -22,7 +22,7 @@ import com.daya.dictio.model.OtherMeaningModel;
 import com.daya.dictio.view.layout_thing.DialogSubmitListener;
 import com.daya.dictio.view.recyclerview_adapter.OtherDetailAdapter;
 import com.daya.dictio.viewmodel.OtherViewModel;
-import com.daya.dictio.viewmodel.WordViewModel;
+import com.daya.dictio.viewmodel.SharedDataViewModel;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 
@@ -31,10 +31,12 @@ import org.jetbrains.annotations.NotNull;
 import java.util.Objects;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
+import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.navigation.fragment.NavHostFragment;
 import androidx.recyclerview.widget.DividerItemDecoration;
@@ -69,7 +71,7 @@ public class fDetail extends Fragment implements DialogSubmitListener {
     CoordinatorLayout fDetailRoot;
 
 
-    private WordViewModel wordViewModel;
+    private SharedDataViewModel mSharedDataViewModel;
 
     private OtherViewModel otherViewModel;
     private OtherDetailAdapter otherDetailAdapter;
@@ -98,6 +100,13 @@ public class fDetail extends Fragment implements DialogSubmitListener {
     }
 
     @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+
+
+    }
+
+    @Override
     public View onCreateView(@NotNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
@@ -106,21 +115,20 @@ public class fDetail extends Fragment implements DialogSubmitListener {
         unbinder = ButterKnife.bind(this, view);
         setHasOptionsMenu(true);
 
-        otherViewModel = ViewModelProviders.of(this).get(OtherViewModel.class);
-        wordViewModel = ViewModelProviders.of(getActivity()).get(WordViewModel.class);
+        otherViewModel = ViewModelProviders.of(getActivity()).get(OtherViewModel.class);
+        mSharedDataViewModel = ViewModelProviders.of(getActivity()).get(SharedDataViewModel.class);
+        return view;
+    }
 
-        dict = wordViewModel.getSendToDetail();
-
-        textDetail.setText(dict.getWord());
-
-        penjelasanDetail.setText(Html.fromHtml(dict.getMeaning()));
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
 
         cardDetail.setOnClickListener(this::expandCollapseCardView);
 
-
         fabAddMeaning.setOnClickListener(v -> {
             FragmentManager fm = getFragmentManager();
-            FDialog dialog = FDialog.newInstance();
+            FDialog dialog = FDialog.Instance();
             dialog.setDialogListener(fDetail.this);
             if (fm != null) {
                 dialog.show(fm, "dialog");
@@ -136,18 +144,6 @@ public class fDetail extends Fragment implements DialogSubmitListener {
         recyclerDetail.setAdapter(otherDetailAdapter);
 
 
-        otherViewModel.getOtherMeaning(dict.getIdIndo()).observe(this, otherMeaningModels -> {
-            if (!otherMeaningModels.isEmpty()) {
-                otherDetailAdapter.addOtherMeaning(otherMeaningModels);
-            }
-            if (otherMeaningModels.size() >= 7) {
-                moveFabPosition(MOVE.START);
-            } else {
-                moveFabPosition(MOVE.END);
-            }
-        });
-
-
         recyclerDetail.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
             public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
@@ -160,27 +156,45 @@ public class fDetail extends Fragment implements DialogSubmitListener {
 
             @Override
             public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
-                /*if (newState == RecyclerView.SCROLL_STATE_IDLE) {
-                    fabAddMeaning.show();
-                }*/
 
                 super.onScrollStateChanged(recyclerView, newState);
             }
         });
 
-        return view;
+        mSharedDataViewModel.getDictIndonesia().observe(getViewLifecycleOwner(), object -> {
+            dict = object;
+            textDetail.setText(object.getWord());
+            penjelasanDetail.setText(Html.fromHtml(object.getMeaning()));
+            setAnotherMeaning(object.getIdIndo());
+        });
+
+
+
     }
+
+    private void setAnotherMeaning(int s) {
+        otherViewModel.getOtherMeaning(s).observe(getViewLifecycleOwner(), otherMeaningModels -> {
+            if (!otherMeaningModels.isEmpty()) {
+                otherDetailAdapter.addOtherMeaning(otherMeaningModels);
+            }
+            if (otherMeaningModels.size() >= 7) {
+                moveFabPosition(MOVE.START);
+            } else {
+                moveFabPosition(MOVE.END);
+            }
+        });
+    }
+
+
 
     private void moveFabPosition(@MOVE int  position) {
         Handler handler = new Handler();
-        handler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
+        handler.postDelayed(()  -> {
                 TransitionManager.beginDelayedTransition(fDetailRoot);
                 CoordinatorLayout.LayoutParams fabPositionParams = (CoordinatorLayout.LayoutParams) fabAddMeaning.getLayoutParams();
                 fabPositionParams.gravity = (position == MOVE.END) ? (Gravity.END | Gravity.BOTTOM) : (Gravity.BOTTOM | Gravity.CENTER_HORIZONTAL);
                 fabAddMeaning.setLayoutParams(fabPositionParams);
-            }
+
         }, 500L);
     }
 
@@ -201,11 +215,11 @@ public class fDetail extends Fragment implements DialogSubmitListener {
 
     @Override
     public void onfinishedDialog(String text) {
-        Toast.makeText(getActivity(), text, Toast.LENGTH_SHORT).show();
+        Toast.makeText(getActivity(), text + " added", Toast.LENGTH_SHORT).show();
         otherViewModel.addMeaning(new OtherMeaningModel(text, dict.getIdIndo()));
     }
 
-    @Override
+/*    @Override
     public void onPause() {
         super.onPause();
         ((MainActivity) getActivity()).initViewDetailOnPause();
@@ -216,7 +230,7 @@ public class fDetail extends Fragment implements DialogSubmitListener {
     public void onResume() {
         super.onResume();
         ((MainActivity) getActivity()).initViewDetailOnResume();
-    }
+    }*/
 
     @Override
     public void onDestroyView() {

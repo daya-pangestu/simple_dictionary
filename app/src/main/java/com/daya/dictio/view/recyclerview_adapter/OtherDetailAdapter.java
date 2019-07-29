@@ -126,7 +126,7 @@ public class OtherDetailAdapter extends RecyclerView.Adapter<OtherDetailAdapter.
                     break;
                 case R.id.btn_edit_other_detail:
                     FragmentManager fragmentManager = ((AppCompatActivity) context).getSupportFragmentManager();
-                    FDialog dialog = FDialog.newInstance();
+                    FDialog dialog = FDialog.Instance();
                     dialog.setEditListener(this, inHolderOtherMeaning.getOther());
                     dialog.show(fragmentManager, "dialog");
                     swipeOtherMeaning.close(true);

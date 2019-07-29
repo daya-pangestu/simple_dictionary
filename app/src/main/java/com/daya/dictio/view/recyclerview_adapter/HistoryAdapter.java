@@ -16,6 +16,7 @@ import com.daya.dictio.dictio;
 import com.daya.dictio.model.DictIndonesia;
 import com.daya.dictio.model.HistoryModel;
 import com.daya.dictio.model.join.HistoryJoinDict;
+import com.daya.dictio.view.layout_thing.OnItemClickListener;
 import com.daya.dictio.viewmodel.HistoryViewModel;
 import com.daya.dictio.viewmodel.WordViewModel;
 import com.github.zagum.switchicon.SwitchIconView;
@@ -35,15 +36,14 @@ import butterknife.ButterKnife;
 
 public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.WordHolderHistory> implements FastScroller.SectionIndexer {
     private final ViewBinderHelper viewBinderHelper = new ViewBinderHelper();
-    private Context context;
     private List<HistoryJoinDict> listHistoryJoin;
+    private static OnItemClickListener mOnitemClickListener;
 
 
     @NonNull
     @Override
     public WordHolderHistory onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.recycler_history, parent, false);
-        this.context = parent.getContext();
         viewBinderHelper.setOpenOnlyOne(true);
         return new WordHolderHistory(itemView);
     }
@@ -83,14 +83,14 @@ public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.WordHold
         }
     }
 
-    public int getListSize() {
-        return listHistoryJoin.size();
+    public void setOnitemClickListener(OnItemClickListener onitemClickListener) {
+        mOnitemClickListener = onitemClickListener;
     }
 
 
     public class WordHolderHistory extends RecyclerView.ViewHolder implements View.OnClickListener {
         private final HistoryViewModel historyViewModel;
-        private final WordViewModel wordViewModel;
+
         @BindView(R.id.back_frame_history)
         RelativeLayout backFrameHistory;
 
@@ -110,12 +110,13 @@ public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.WordHold
         SwipeRevealLayout swipeRevealLayout;
 
         HistoryJoinDict inHolderHisJoint;
+        private OnItemClickListener onItemClickListener;
 
         WordHolderHistory(@NonNull View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);
-            historyViewModel = ViewModelProviders.of((FragmentActivity) context).get(HistoryViewModel.class);
-            wordViewModel = ViewModelProviders.of((FragmentActivity) context).get(WordViewModel.class);
+            historyViewModel = ViewModelProviders.of((FragmentActivity) itemView.getContext()).get(HistoryViewModel.class);
+            this.onItemClickListener =  HistoryAdapter.mOnitemClickListener;
 
             backFrameHistory.setOnClickListener(this);
             frontFrameHisto.setOnClickListener(this);
@@ -132,10 +133,10 @@ public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.WordHold
         public void onClick(View v) {
             int id = inHolderHisJoint.getId();
             int idOwner = inHolderHisJoint.getIdOwner();
-            String wordHistory = inHolderHisJoint.getWord();
-            String meaning = inHolderHisJoint.getMeaning();
             switch (v.getId()) {
                 case R.id.back_frame_history:
+
+                    //TODO change switch icon to standart item delete, so you can use move this into Fhistory instead
                     switchIconDeleteHistory.setIconEnabled(true);
                     final Handler handler = new Handler();
                     handler.postDelayed(() -> {
@@ -143,17 +144,14 @@ public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.WordHold
                         removeItemAt(getAdapterPosition());
                         historyViewModel.deleteHistoryAt(new HistoryModel(id, idOwner));
                     }, 300);
-                    dictio.showtoast(v.getContext(),context.getString(R.string.item_removed));
-                    break;
-                case R.id.front_frame_histo:
-                    wordViewModel.setSendToDetail(new DictIndonesia(id, wordHistory, meaning));
-                    NavController navigation = Navigation.findNavController(v);
-                    navigation.navigate(R.id.action_navigation_history_to_fDetail_ragment);
+                    dictio.showtoast(v.getContext(),v.getContext().getString(R.string.item_removed));
                     break;
                 default:
                     break;
 
             }
+
+            onItemClickListener.historyClicked(v, inHolderHisJoint, getAdapterPosition());
         }
     }
 }

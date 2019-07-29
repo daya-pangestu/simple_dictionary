@@ -18,6 +18,7 @@ import com.daya.dictio.model.DictIndonesia;
 import com.daya.dictio.model.FavoritModel;
 import com.daya.dictio.model.HistoryModel;
 import com.daya.dictio.model.join.FavoriteJoinDict;
+import com.daya.dictio.view.layout_thing.OnItemClickListener;
 import com.daya.dictio.view.layout_thing.OnItemPopulated;
 import com.daya.dictio.viewmodel.FavoriteViewModel;
 import com.daya.dictio.viewmodel.HistoryViewModel;
@@ -46,6 +47,7 @@ public class FavoritAdapter extends RecyclerView.Adapter<FavoritAdapter.Wordolde
     private List<FavoriteJoinDict> listKamus;
     private Context context;
     private OnItemPopulated mOnItemPopulated;
+    private OnItemClickListener mOnItemClickListener;
 
     @NonNull
     @Override
@@ -100,6 +102,10 @@ public class FavoritAdapter extends RecyclerView.Adapter<FavoritAdapter.Wordolde
         }
     }
 
+    public void setOnItemClickListener(OnItemClickListener onItemClickListener) {
+        mOnItemClickListener = onItemClickListener;
+    }
+
 
 
 
@@ -121,6 +127,8 @@ public class FavoritAdapter extends RecyclerView.Adapter<FavoritAdapter.Wordolde
         SwipeRevealLayout swipperFavorite;
 
         private FavoriteJoinDict inHolderFav;
+        private OnItemClickListener onItemClickListener;
+
 
         WordolderFavorite(View view) {
             super(view);
@@ -130,11 +138,13 @@ public class FavoritAdapter extends RecyclerView.Adapter<FavoritAdapter.Wordolde
             wordViewModel = ViewModelProviders.of((FragmentActivity) context).get(WordViewModel.class);
             favoriteViewModel = ViewModelProviders.of((FragmentActivity) context).get(FavoriteViewModel.class);
 
+            this.onItemClickListener = mOnItemClickListener;
+
+
             frontFrameFavorite.setOnClickListener(this);
             backFrameFavorite.setOnClickListener(this);
 
         }
-
 
         void bindTo(FavoriteJoinDict favoriteJoinDict) {
             kataFavoriteFront.setText(Html.fromHtml(favoriteJoinDict.getWord()));
@@ -146,19 +156,10 @@ public class FavoritAdapter extends RecyclerView.Adapter<FavoritAdapter.Wordolde
         public void onClick(View v) {
             int id = inHolderFav.getId();
             int idOwner = inHolderFav.getIdOwner();
-            String wordFavorit = inHolderFav.getWord();
-            String meaning = inHolderFav.getMeaning();
 
             switch (v.getId()) {
-                case R.id.card_view_rcycler_favorite:
-                    favoriteViewModel.isFavoritExists(idOwner);
-                    wordViewModel.setSendToDetail(new DictIndonesia(id, wordFavorit, meaning));
-                    historyViewModel.addHistory(new HistoryModel(id));
-
-                    NavController navigation = Navigation.findNavController(v);
-                    navigation.navigate(R.id.action_navigation_fovorite_to_fDetail_ragment);
-                    break;
                 case R.id.back_frame_favo:
+                    //TODO change switch icon to standart item delete, so you can use move this into Ffavorit instead
                     switchIconDelFavo.setIconEnabled(true);
                     final Handler handler = new Handler();
                     handler.postDelayed(() -> {
@@ -167,12 +168,12 @@ public class FavoritAdapter extends RecyclerView.Adapter<FavoritAdapter.Wordolde
                         favoriteViewModel.deleteFavoriteAt(new FavoritModel(id, idOwner));
                     }, 300);
                     dictio.showtoast(v.getContext(),context.getString(R.string.item_removed));
-
                     break;
                 default:
                     break;
 
             }
+            onItemClickListener.favoriteClicked(v,inHolderFav,getAdapterPosition());
         }
     }
 }

@@ -1,6 +1,7 @@
 package com.daya.dictio.view.bottomNav;
 
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -13,15 +14,26 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
+import androidx.navigation.NavController;
+import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.daya.dictio.R;
+import com.daya.dictio.dictio;
+import com.daya.dictio.model.DictIndonesia;
+import com.daya.dictio.model.FavoritModel;
+import com.daya.dictio.model.HistoryModel;
 import com.daya.dictio.model.join.FavoriteJoinDict;
+import com.daya.dictio.model.join.HistoryJoinDict;
+import com.daya.dictio.view.layout_thing.OnItemClickListener;
 import com.daya.dictio.view.layout_thing.OnItemPopulated;
 import com.daya.dictio.view.recyclerview_adapter.FavoritAdapter;
 import com.daya.dictio.viewmodel.FavoriteViewModel;
+import com.daya.dictio.viewmodel.HistoryViewModel;
+import com.daya.dictio.viewmodel.SharedDataViewModel;
+import com.daya.dictio.viewmodel.WordViewModel;
 import com.google.android.material.snackbar.Snackbar;
 import com.l4digital.fastscroll.FastScroller;
 
@@ -50,6 +62,10 @@ public class Ffavorite extends Fragment  {
     private FavoritAdapter mFavoritAdapter;
     private Unbinder unbinder;
     private FavoriteViewModel mFavoriteViewModel;
+    private WordViewModel mWordViewModel;
+    private HistoryViewModel mHistoryViewModel;
+    private SharedDataViewModel mSharedDataViewModel;
+
 
     public Ffavorite() {
         // Required empty public constructor
@@ -63,8 +79,12 @@ public class Ffavorite extends Fragment  {
 
         //viewmodel
         mFavoriteViewModel = ViewModelProviders.of(this).get(FavoriteViewModel.class);
+        mWordViewModel = ViewModelProviders.of(this).get(WordViewModel.class);
+        mHistoryViewModel = ViewModelProviders.of(this).get(HistoryViewModel.class);
+        mSharedDataViewModel = ViewModelProviders.of(this).get(SharedDataViewModel.class);
 
         //toolbar
+        Objects.requireNonNull(((AppCompatActivity) getActivity()).getSupportActionBar()).show();
         Objects.requireNonNull(((AppCompatActivity) getActivity()).getSupportActionBar()).setTitle(getString(R.string.favorite));
         setHasOptionsMenu(true);
 
@@ -75,6 +95,35 @@ public class Ffavorite extends Fragment  {
         rvGlobal.setHasFixedSize(true);
         rvGlobal.addItemDecoration(new DividerItemDecoration(view.getContext(), DividerItemDecoration.VERTICAL));
         rvGlobal.setAdapter(mFavoritAdapter);
+        mFavoritAdapter.setOnItemClickListener(new OnItemClickListener() {
+            @Override
+            public void dashboardClicked(View view, DictIndonesia dictIndonesia, int position) {
+                //do nothing
+            }
+
+            @Override
+            public void historyClicked(View view, HistoryJoinDict historyJoinDict, int position) {
+                //do nothing
+            }
+
+            @Override
+            public void favoriteClicked(View view, FavoriteJoinDict favoriteJoinDict, int position) {
+                switch (view.getId()) {
+                    case R.id.card_view_rcycler_favorite:
+                        mFavoriteViewModel.isFavoritExists(favoriteJoinDict.getIdOwner());
+                        mSharedDataViewModel.setDictIndonesia(new DictIndonesia(favoriteJoinDict.getId(), favoriteJoinDict.getWord(), favoriteJoinDict.getMeaning()));
+                        mHistoryViewModel.addHistory(new HistoryModel(favoriteJoinDict.getId()));
+                        NavController navigation = Navigation.findNavController(view);
+                        navigation.navigate(R.id.action_navigation_fovorite_to_fDetail_ragment);
+                        break;
+
+                    default:
+                        break;
+
+                }
+            }
+        });
+
 
 
         //ambil list favorit dari db
