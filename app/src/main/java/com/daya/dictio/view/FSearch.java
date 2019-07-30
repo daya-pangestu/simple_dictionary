@@ -30,6 +30,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.SearchView;
+import androidx.core.view.MenuItemCompat;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
@@ -71,17 +72,17 @@ import static androidx.constraintlayout.widget.Constraints.TAG;
 
 //TODO oncinfirmed search masih ngelag sangad
 public class FSearch extends Fragment {
-   /* @BindView(R.id.rv_global)
+    @BindView(R.id.rv_global)
     RecyclerView rvGlobal;
     @BindView(R.id.fast_scroller_global)
-    FastScroller fastScrollerGlobal;*/
+    FastScroller fastScrollerGlobal;
     @BindView(R.id.list_empty)
     ImageView listEmpty;
-    /*@BindView(R.id.rv_root)
+
+/*    @BindView(R.id.rv_rot)
     RelativeLayout rvRoot;*/
-/*
     @BindView(R.id.progress_f_search)
-    ProgressBar progressFSearch;*/
+    ProgressBar progressFSearch;
 
     private FavoriteViewModel mFavoritViewModel;
     private WordViewModel mWordViewModel;
@@ -109,7 +110,7 @@ public class FSearch extends Fragment {
         unbinder = ButterKnife.bind(this, view);
         setHasOptionsMenu(true);
 
-        //rvRoot.setVisibility(View.GONE);
+        rvGlobal.setVisibility(View.GONE);
 
         //viewmodel
         mWordViewModel = ViewModelProviders.of(this).get(WordViewModel.class);
@@ -217,7 +218,6 @@ public class FSearch extends Fragment {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         Objects.requireNonNull(getActivity()).invalidateOptionsMenu();
-
     }
 
 
@@ -226,7 +226,21 @@ public class FSearch extends Fragment {
     public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
         menu.clear();
         inflater.inflate(R.menu.search_toolbar, menu);
-        super.onCreateOptionsMenu(menu, inflater);
+        //super.onCreateOptionsMenu(menu, inflater);
+        MenuItem searchMenu = menu.findItem(R.id.searchview_toolbar);
+        searchMenu.expandActionView();
+        searchMenu.setOnActionExpandListener(new MenuItem.OnActionExpandListener() {
+            @Override
+            public boolean onMenuItemActionExpand(MenuItem item) {
+                return false;
+            }
+
+            @Override
+            public boolean onMenuItemActionCollapse(MenuItem item) {
+                //dang
+                return false;
+            }
+        });
     }
 
     @Override
