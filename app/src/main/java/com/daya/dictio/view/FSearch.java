@@ -27,6 +27,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.SearchView;
 import androidx.fragment.app.Fragment;
@@ -104,7 +105,7 @@ public class FSearch extends Fragment {
         View view = inflater.inflate(R.layout.fragment_fsearch, container, false);
 
         Objects.requireNonNull(((AppCompatActivity) Objects.requireNonNull(getActivity())).getSupportActionBar()).show();
-
+        ((AppCompatActivity)getActivity()).getSupportActionBar().setTitle(R.string.search);
         unbinder = ButterKnife.bind(this, view);
         setHasOptionsMenu(true);
 
@@ -211,10 +212,21 @@ public class FSearch extends Fragment {
         new Handler().postDelayed(runnable, 1000L);*/
     }
 
+
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        Objects.requireNonNull(getActivity()).invalidateOptionsMenu();
+
+    }
+
+
+
     @Override
     public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
-        super.onCreateOptionsMenu(menu, inflater);
+        menu.clear();
         inflater.inflate(R.menu.search_toolbar, menu);
+        super.onCreateOptionsMenu(menu, inflater);
     }
 
     @Override
