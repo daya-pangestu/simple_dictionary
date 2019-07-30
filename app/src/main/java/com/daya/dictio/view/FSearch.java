@@ -238,6 +238,7 @@ public class FSearch extends Fragment {
             @Override
             public boolean onMenuItemActionCollapse(MenuItem item) {
                 //dang
+                Navigation.findNavController(getView()).navigateUp();
                 return false;
             }
         });
