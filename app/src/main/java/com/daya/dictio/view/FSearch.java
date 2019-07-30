@@ -67,6 +67,7 @@ import butterknife.Unbinder;
 import timber.log.Timber;
 
 import static android.view.View.GONE;
+import static android.view.View.INVISIBLE;
 import static android.view.View.VISIBLE;
 import static androidx.constraintlayout.widget.Constraints.TAG;
 
@@ -111,6 +112,7 @@ public class FSearch extends Fragment {
         setHasOptionsMenu(true);
 
         rvGlobal.setVisibility(View.GONE);
+        progressFSearch.setVisibility(GONE);
 
         //viewmodel
         mWordViewModel = ViewModelProviders.of(this).get(WordViewModel.class);
@@ -119,24 +121,12 @@ public class FSearch extends Fragment {
         mSharedDataViewModel = ViewModelProviders.of(this).get(SharedDataViewModel.class);
 
 
-      /*  searchView.setOnLogoClickListener(() -> Navigation.findNavController(view).navigateUp());
-
-        searchView.onActionViewExpanded();
-
-        searchView.setOnSearchClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startSearch(searchView.getQuery().toString());
-            }
-        });*/
-
-
         //recyclerview
         wordIndAdapter = new WordIndAdapterPaged();
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getContext());
-       /* rvGlobal.setLayoutManager(layoutManager);
+        rvGlobal.setLayoutManager(layoutManager);
         rvGlobal.addItemDecoration(new DividerItemDecoration(view.getContext(), DividerItemDecoration.VERTICAL));
-        rvGlobal.setAdapter(wordIndAdapter);*/
+        rvGlobal.setAdapter(wordIndAdapter);
         wordIndAdapter.setOnItemClicked(new OnItemClickListener() {
             @Override
             public void dashboardClicked(View view, DictIndonesia dictIndonesia, int position) {
@@ -179,29 +169,26 @@ public class FSearch extends Fragment {
 
 
     private void startSearch(String query) { //call inside search
-        //progressFSearch.setVisibility(View.VISIBLE);
+        progressFSearch.setVisibility(View.VISIBLE);
         placeholder(GONE);
-   /*
+
         rvGlobal.setAlpha(0f);
-        //rvRoot.setVisibility(View.VISIBLE);
 
         fastScrollerGlobal.setSectionIndexer(wordIndAdapter);
         fastScrollerGlobal.attachRecyclerView(rvGlobal);
 
     Runnable runnable = () -> {
-            if (searchView != null) {
 
                 mWordViewModel.getSearchPaged(query).observe(getViewLifecycleOwner(), dictIndonesias -> {
                     wordIndAdapter.submitList(dictIndonesias);
                     Timber.i("startSearch: %s", dictIndonesias.size());
                     if (dictIndonesias.size() == 0) {
-                        placeholder(VISIBLE);
+                        placeholder(INVISIBLE);
                     } else {
                         resultEmpty();
                     }
                 });
 
-            }
             rvGlobal.animate()
                     .alpha(1f)
                     .setInterpolator(new LinearInterpolator())
@@ -210,7 +197,7 @@ public class FSearch extends Fragment {
             progressFSearch.setVisibility(View.GONE);
         };
 
-        new Handler().postDelayed(runnable, 1000L);*/
+        new Handler().postDelayed(runnable, 1000L);
     }
 
 
@@ -219,8 +206,6 @@ public class FSearch extends Fragment {
         super.onActivityCreated(savedInstanceState);
         Objects.requireNonNull(getActivity()).invalidateOptionsMenu();
     }
-
-
 
     @Override
     public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
@@ -242,6 +227,21 @@ public class FSearch extends Fragment {
                 return false;
             }
         });
+
+        SearchView searchView = (SearchView) searchMenu.getActionView();
+
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                startSearch(query);
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                return false;
+            }
+        });
     }
 
     @Override
@@ -258,8 +258,6 @@ public class FSearch extends Fragment {
         super.onDestroyView();
         unbinder.unbind();
     }
-
-
 
     void placeholder(int visibility) {
         if (visibility == View.GONE || visibility == View.VISIBLE || visibility == View.INVISIBLE) {
